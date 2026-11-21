@@ -1,0 +1,160 @@
+---
+import Base from "../layouts/Base.astro";
+import "../styles/forms.css";
+import { offers } from "../data/content";
+const eur = (n: number) => n.toLocaleString("fr-FR", { minimumFractionDigits: 0, maximumFractionDigits: 2 }) + " €";
+---
+<Base
+  title="Commander une formule et régler l'acompte | Motion Eleven"
+  description="Commandez votre formule Starter, Business ou E-commerce et réglez l'acompte de 50 % en ligne par paiement sécurisé Stripe."
+  crumbs={[{ name: "Tarifs", href: "/tarifs/" }, { name: "Commander", href: "/commander/" }]}
+>
+  <section class="co">
+    <div class="wrap co__grid">
+      <div>
+        <h1>Commander votre site</h1>
+        <p class="lede">Pour une formule standard, vous pouvez commander dès maintenant et régler l'acompte en ligne. Pour un projet particulier, préférez la <a class="link" href="/devis/">demande de devis</a>.</p>
+
+        <form class="fm co__form" data-checkout>
+          <fieldset>
+            <legend>Formule</legend>
+            <div class="co__plans">
+              {offers.map((o, i) => (
+                <label class="co__plan">
+                  <input type="radio" name="offer" value={o.key} required checked={i === 1} data-setup={o.setup} data-monthly={o.monthly} data-name={o.name} />
+                  <span>
+                    <strong>{o.name}</strong>
+                    <em>{eur(o.setup)} HT puis {o.monthly} € HT / mois</em>
+                  </span>
+                </label>
+              ))}
+            </div>
+          </fieldset>
+          <div class="fm__row">
+            <div class="fm__field">
+              <label class="fm__label" for="c-name">Nom et prénom</label>
+              <input id="c-name" type="text" name="name" required maxlength="120" autocomplete="name" />
+            </div>
+            <div class="fm__field">
+              <label class="fm__label" for="c-company">Entreprise</label>
+              <input id="c-company" type="text" name="company" required maxlength="160" autocomplete="organization" />
+            </div>
+          </div>
+          <div class="fm__row">
+            <div class="fm__field">
+              <label class="fm__label" for="c-email">E-mail</label>
+              <input id="c-email" type="email" name="email" required maxlength="160" autocomplete="email" />
+            </div>
+            <div class="fm__field">
+              <label class="fm__label" for="c-phone">Téléphone</label>
+              <input id="c-phone" type="tel" name="phone" required maxlength="30" autocomplete="tel" />
+            </div>
+          </div>
+          <label class="fm__consent">
+            <input type="checkbox" name="accept_cgv" value="oui" required />
+            <span>J'ai lu et j'accepte les <a href="/cgv/" target="_blank">conditions générales de vente</a>, dont l'engagement de 12 mois sur l'abonnement à compter de la mise en ligne.</span>
+          </label>
+          <p class="fm__error" data-form-error tabindex="-1" hidden></p>
+          <div class="fm__submit">
+            <button class="btn" type="submit" data-pay-btn>Payer l'acompte</button>
+            <p class="fm__legal">Vous êtes redirigé vers la page de paiement sécurisée Stripe. Aucun montant n'est débité avant que vous ayez validé le paiement sur cette page.</p>
+          </div>
+        </form>
+      </div>
+
+      <aside class="co__sum" aria-live="polite">
+        <p class="co__sum-h">Récapitulatif</p>
+        <div class="co__line"><span>Formule</span><strong data-s-name>Business</strong></div>
+        <div class="co__line"><span>Création</span><span data-s-setup></span></div>
+        <div class="co__line co__line--total"><span>Acompte à régler aujourd'hui (50 %)</span><strong data-s-deposit></strong></div>
+        <div class="co__line"><span>Solde à la mise en ligne</span><span data-s-rest></span></div>
+        <div class="co__line"><span>Abonnement, à partir de la mise en ligne</span><span data-s-monthly></span></div>
+        <p class="co__fine">Montants hors taxes. Après le paiement, nous vous contactons sous 24 h ouvrées pour lancer le projet. Si nous ne pouvons pas réaliser votre projet dans le cadre de la formule, l'acompte vous est intégralement remboursé.</p>
+      </aside>
+    </div>
+  </section>
+</Base>
+
+<script>
+  const form = document.querySelector<HTMLFormElement>("[data-checkout]")!;
+  const fmt = (n: number) => n.toLocaleString("fr-FR", { maximumFractionDigits: 2 }) + " €";
+  const set = (sel: string, v: string) => { const el = document.querySelector(sel); if (el) el.textContent = v; };
+
+  const params = new URLSearchParams(location.search);
+  const pre = params.get("formule");
+  if (pre) {
+    const r = form.querySelector<HTMLInputElement>(`input[name=offer][value="${CSS.escape(pre)}"]`);
+    if (r) r.checked = true;
+  }
+  if (params.get("annule")) {
+    const box = form.querySelector<HTMLElement>("[data-form-error]")!;
+    box.textContent = "Le paiement a été annulé. Aucun montant n'a été débité. Vous pouvez réessayer quand vous le souhaitez.";
+    box.hidden = false;
+  }
+
+  function update() {
+    const r = form.querySelector<HTMLInputElement>("input[name=offer]:checked");
+    if (!r) return;
+    const setup = Number(r.dataset.setup), monthly = Number(r.dataset.monthly);
+    const deposit = Math.round(setup * 50) / 100;
+    set("[data-s-name]", r.dataset.name!);
+    set("[data-s-setup]", fmt(setup) + " HT");
+    set("[data-s-deposit]", fmt(deposit) + " HT");
+    set("[data-s-rest]", fmt(setup - deposit) + " HT");
+    set("[data-s-monthly]", `${monthly} € HT / mois`);
+    const btn = form.querySelector("[data-pay-btn]");
+    if (btn) btn.textContent = `Payer l'acompte de ${fmt(deposit)}`;
+  }
+  form.addEventListener("change", update);
+  update();
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    if (!form.checkValidity()) { form.reportValidity(); return; }
+    const err = form.querySelector<HTMLElement>("[data-form-error]")!;
+    err.hidden = true;
+    const btn = form.querySelector<HTMLButtonElement>("[data-pay-btn]")!;
+    const label = btn.textContent;
+    btn.disabled = true;
+    btn.textContent = "Redirection vers le paiement…";
+    const data = Object.fromEntries(new FormData(form).entries());
+    window.meTrack?.("begin_checkout", { offer: String(data.offer) });
+    try {
+      const res = await fetch("/api/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+      const json = await res.json().catch(() => ({}));
+      if (res.ok && json.url) { location.href = json.url; return; }
+      throw new Error(json.error || "Le paiement en ligne n'est pas disponible pour le moment.");
+    } catch (ex) {
+      btn.disabled = false;
+      btn.textContent = label;
+      err.innerHTML = `${(ex as Error).message} Vous pouvez <a href="/devis/?formule=${encodeURIComponent(String(data.offer))}">envoyer une demande de devis</a> : nous vous transmettrons un lien de paiement.`;
+      err.hidden = false;
+      err.focus();
+    }
+  });
+</script>
+
+<style>
+  .co { padding: clamp(1.5rem, 4vw, 3rem) 0 var(--section); }
+  .co__grid { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 0.8fr); gap: clamp(2rem, 6vw, 5rem); align-items: start; }
+  .co h1 { font-size: var(--t-xl); margin-bottom: 1rem; }
+  .co .lede { margin-bottom: 2.5rem; max-width: 52ch; }
+  .co__plans { display: grid; gap: 0.6rem; }
+  .co__plan { position: relative; display: block; }
+  .co__plan input { position: absolute; opacity: 0; inset: 0; margin: 0; cursor: pointer; }
+  .co__plan span { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.25rem 1rem; padding: 1rem 1.15rem; border: 1.5px solid var(--line); border-radius: var(--r-ui); background: #fff; cursor: pointer; }
+  .co__plan em { font-style: normal; color: var(--ink-soft); font-size: var(--t-sm); }
+  .co__plan input:checked + span { border-color: var(--cobalt); box-shadow: 0 0 0 3px var(--cobalt-tint); }
+  .co__plan input:focus-visible + span { outline: 3px solid var(--cobalt); outline-offset: 2px; }
+  .co__sum { position: sticky; top: 110px; background: var(--ink); color: #e8ebf4; border-radius: var(--r-frame); padding: 1.75rem; display: grid; gap: 0.9rem; }
+  .co__sum-h { font-weight: 700; color: #fff; margin: 0 0 0.25rem; font-stretch: 115%; }
+  .co__line { display: flex; justify-content: space-between; gap: 1rem; font-size: var(--t-sm); padding-bottom: 0.9rem; border-bottom: 1px solid var(--line-dark); }
+  .co__line--total { font-size: var(--t-base); color: #fff; }
+  .co__line--total strong { color: #8f9cff; }
+  .co__fine { font-size: var(--t-xs); color: #aab3cc; margin: 0.25rem 0 0; }
+  @media (max-width: 960px) { .co__grid { grid-template-columns: 1fr; } .co__sum { position: static; order: -1; } }
+</style>

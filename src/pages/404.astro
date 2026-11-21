@@ -1,0 +1,23 @@
+---
+import Base from "../layouts/Base.astro";
+---
+<Base title="Page introuvable | Motion Eleven" description="Cette page n'existe pas ou a été déplacée." noindex>
+  <section class="nf">
+    <div class="wrap nf__inner">
+      <p class="nf__code" aria-hidden="true">404</p>
+      <h1>Cette page n'existe pas, ou plus.</h1>
+      <p class="lede">Le site a été entièrement repensé : la page que vous cherchez a peut-être changé d'adresse.</p>
+      <div class="btns">
+        <a class="btn" href="/">Retour à l'accueil</a>
+        <a class="btn btn--ghost" href="/devis/">Demander un devis</a>
+        <a class="btn btn--ghost" href="/tarifs/">Voir les tarifs</a>
+      </div>
+    </div>
+  </section>
+</Base>
+<style>
+  .nf { padding: clamp(4rem, 10vw, 8rem) 0; }
+  .nf__inner { display: grid; gap: 1.5rem; justify-items: start; }
+  .nf__code { margin: 0; font-size: clamp(5rem, 18vw, 12rem); font-weight: 780; font-stretch: 125%; letter-spacing: -0.06em; line-height: 0.85; color: var(--cobalt); }
+  .nf h1 { font-size: var(--t-xl); max-width: 18ch; }
+</style>

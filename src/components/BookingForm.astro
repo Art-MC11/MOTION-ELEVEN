@@ -1,0 +1,86 @@
+---
+import "../styles/forms.css";
+import { site } from "../data/site";
+const slots = ["Matin (9 h – 12 h)", "Midi (12 h – 14 h)", "Après-midi (14 h – 18 h)", "Soir (18 h – 20 h)"];
+const modes = ["Téléphone", "Visio", "WhatsApp"];
+---
+<form
+  class="fm"
+  name="rendez-vous"
+  method="POST"
+  action="/merci/?type=rendez-vous"
+  data-netlify="true"
+  netlify-honeypot="bot_field"
+  data-lead-form
+>
+  <input type="hidden" name="form-name" value="rendez-vous" />
+  <input type="hidden" name="page" value="" />
+  <input type="hidden" name="utm" value="" />
+  <p class="hp" aria-hidden="true"><label>Ne pas remplir <input name="bot_field" tabindex="-1" autocomplete="off" /></label></p>
+
+  {site.calUrl && (
+    <p class="fm__note">Vous préférez choisir un créneau précis ? <a href={site.calUrl} target="_blank" rel="noopener" data-track="book_appointment" data-label="cal_link">Réservez directement dans l'agenda</a>.</p>
+  )}
+
+  <div class="fm__row">
+    <div class="fm__field">
+      <label class="fm__label" for="b-date">Jour souhaité</label>
+      <input id="b-date" type="date" name="appointment_date" required data-min-tomorrow />
+    </div>
+    <div class="fm__field">
+      <label class="fm__label" for="b-slot">Créneau</label>
+      <select id="b-slot" name="appointment_slot" required>
+        <option value="">Choisir</option>
+        {slots.map((s) => <option value={s}>{s}</option>)}
+      </select>
+    </div>
+  </div>
+
+  <fieldset>
+    <legend>Comment préférez-vous échanger ?</legend>
+    <div class="chips">
+      {modes.map((m, i) => (
+        <label class="chip"><input type="radio" name="appointment_mode" value={m} required={i === 0} checked={i === 0} /><span>{m}</span></label>
+      ))}
+    </div>
+  </fieldset>
+
+  <div class="fm__row">
+    <div class="fm__field">
+      <label class="fm__label" for="b-name">Nom et prénom</label>
+      <input id="b-name" type="text" name="name" required maxlength="120" autocomplete="name" />
+    </div>
+    <div class="fm__field">
+      <label class="fm__label" for="b-phone">Téléphone</label>
+      <input id="b-phone" type="tel" name="phone" required maxlength="30" autocomplete="tel" pattern="[0-9+().\s-]{8,}" />
+    </div>
+  </div>
+  <div class="fm__field">
+    <label class="fm__label" for="b-email">E-mail</label>
+    <input id="b-email" type="email" name="email" required maxlength="160" autocomplete="email" />
+  </div>
+  <div class="fm__field">
+    <label class="fm__label" for="b-msg">Sujet de l'appel <span class="fm__hint">facultatif</span></label>
+    <textarea id="b-msg" name="message" maxlength="1500" style="min-height: 96px"></textarea>
+  </div>
+
+  <label class="fm__consent">
+    <input type="checkbox" name="consent" value="oui" required />
+    <span>J'accepte que Motion Eleven utilise ces informations pour organiser cet échange. <a href="/confidentialite/">Politique de confidentialité</a></span>
+  </label>
+
+  <p class="fm__error" data-form-error tabindex="-1" hidden></p>
+  <div class="fm__submit">
+    <button class="btn" type="submit">Demander ce rendez-vous</button>
+    <p class="fm__legal">Nous confirmons l'horaire exact par e-mail ou par message sous 24 h ouvrées.</p>
+  </div>
+</form>
+
+<script>
+  import "../scripts/forms";
+  const d = document.querySelector<HTMLInputElement>("[data-min-tomorrow]");
+  if (d) {
+    const t = new Date(); t.setDate(t.getDate() + 1);
+    d.min = t.toISOString().slice(0, 10);
+  }
+</script>

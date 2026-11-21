@@ -1,0 +1,146 @@
+---
+import Base from "../layouts/Base.astro";
+import PageHero from "./PageHero.astro";
+import PoleGlyph from "./PoleGlyph.astro";
+import ProjectVisual from "./ProjectVisual.astro";
+import Faq from "./Faq.astro";
+import CtaFinal from "./CtaFinal.astro";
+import { projects } from "../data/content";
+import { site } from "../data/site";
+import type { PageData } from "../data/pages";
+
+interface Props { data: PageData; }
+const { data } = Astro.props;
+const project = data.project ? projects.find((p) => p.slug === data.project) : undefined;
+const heroProject = data.visual.project ? projects.find((p) => p.slug === data.visual.project) : undefined;
+const devisHref = `/devis/?projet=${encodeURIComponent(data.slug)}`;
+
+const serviceSchema = {
+  "@context": "https://schema.org",
+  "@type": "Service",
+  serviceType: data.serviceType,
+  name: data.title,
+  description: data.seoDescription,
+  provider: { "@id": `${site.url}/#organisation` },
+  areaServed: { "@type": "AdministrativeArea", name: "Île-de-France" },
+  url: new URL(Astro.url.pathname, site.url).href,
+};
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: data.faq.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })),
+};
+---
+<Base title={data.seoTitle} description={data.seoDescription} crumbs={data.crumbs} schema={[serviceSchema, faqSchema]}>
+  <PageHero
+    kicker={data.kicker}
+    title={data.title}
+    lede={data.lede}
+    primary={{ label: "Parler de mon projet", href: devisHref }}
+    secondary={{ label: "Voir les tarifs", href: "/tarifs/" }}
+  >
+    {heroProject ? <ProjectVisual project={heroProject} /> : data.visual.pole && <div class="st__glyph"><PoleGlyph kind={data.visual.pole} /></div>}
+  </PageHero>
+
+  <section class="section section--chalk">
+    <div class="wrap">
+      <div class="head"><h2>{data.problemsTitle}</h2></div>
+      <div class="st__problems">
+        {data.problems.map((p) => (
+          <div class="st__problem">
+            <h3>{p.t}</h3>
+            <p>{p.d}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap st__build">
+      <div class="st__build-head">
+        <h2>{data.buildTitle}</h2>
+        {data.fit && (
+          <div class="st__fit">
+            <p class="st__fit-h">C'est pour vous si…</p>
+            <ul class="ticks">{data.fit.map((f) => <li>{f}</li>)}</ul>
+          </div>
+        )}
+      </div>
+      <div class="st__groups">
+        {data.build.map((g) => (
+          <div class="st__group">
+            <h3>{g.group}</h3>
+            <ul class="ticks">{g.items.map((i) => <li>{i}</li>)}</ul>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  {project && (
+    <section class="section section--chalk">
+      <div class:list={["wrap", "st__case", { "st__case--text": project.slug === heroProject?.slug }]}>
+        {project.slug !== heroProject?.slug && <ProjectVisual project={project} />}
+        <div>
+          <p class="st__case-k">Réalisation</p>
+          <h2>{project.name}</h2>
+          <p class="lede">{project.summary}</p>
+          <a class="link" href={`/realisations/${project.slug}/`}>Lire l'étude de cas</a>
+        </div>
+      </div>
+    </section>
+  )}
+
+  <section class="section section--tight">
+    <div class="wrap st__offer">
+      <div>
+        <h2>{data.offerTitle}</h2>
+        <p class="lede">{data.offerText}</p>
+      </div>
+      <div class="btns">
+        <a class="btn" href={data.offerKey ? `/devis/?formule=${data.offerKey}&projet=${data.slug}` : devisHref} data-track="cta_click" data-label={`offre_${data.slug}`}>Obtenir mon devis gratuit</a>
+        <a class="btn btn--ghost" href="/tarifs/">Comparer les formules</a>
+        {data.slug === "motion-design" && (
+          <a class="btn btn--ghost" href={site.portfolioMotion} target="_blank" rel="noopener">Voir le portfolio motion</a>
+        )}
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--chalk">
+    <div class="wrap"><Faq items={data.faq} /></div>
+  </section>
+
+  <CtaFinal title={data.ctaTitle} />
+</Base>
+
+<style>
+  .st__glyph :global(.pg) { padding: clamp(1.5rem, 4vw, 3rem); border-radius: var(--r-frame); }
+
+  .st__problems { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(1.5rem, 4vw, 3.5rem); }
+  .st__problem { border-top: 2px solid var(--ink); padding-top: 1.5rem; }
+  .st__problem h3 { margin-bottom: 0.9rem; }
+  .st__problem p { color: var(--ink-soft); }
+  @media (max-width: 900px) { .st__problems { grid-template-columns: 1fr; } }
+
+  .st__build { display: grid; grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.4fr); gap: clamp(2rem, 6vw, 6rem); }
+  .st__build-head h2 { margin-bottom: 2rem; }
+  .st__fit { background: var(--cobalt-tint); border-radius: 14px; padding: 1.5rem; }
+  .st__fit-h { font-weight: 660; margin-bottom: 0.8rem; }
+  .st__groups { display: grid; gap: 2.5rem; }
+  .st__group h3 { padding-bottom: 1rem; margin-bottom: 1.25rem; border-bottom: 1px solid var(--line); }
+  @media (max-width: 900px) { .st__build { grid-template-columns: 1fr; } }
+
+  .st__case { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: clamp(2rem, 5vw, 5rem); align-items: center; }
+  .st__case h2 { margin: 0.4rem 0 1.25rem; }
+  .st__case .lede { margin-bottom: 1.5rem; }
+  .st__case--text { grid-template-columns: minmax(0, 1fr); }
+  .st__case--text > div { max-width: 46rem; }
+  .st__case-k { color: var(--cobalt); font-weight: 620; margin: 0; }
+  @media (max-width: 900px) { .st__case { grid-template-columns: 1fr; } }
+
+  .st__offer { display: grid; grid-template-columns: minmax(0, 1.3fr) auto; gap: 2rem 4rem; align-items: end; }
+  .st__offer h2 { font-size: var(--t-lg); margin-bottom: 1rem; }
+  @media (max-width: 900px) { .st__offer { grid-template-columns: 1fr; } }
+</style>

@@ -1,0 +1,69 @@
+---
+import Base from "../layouts/Base.astro";
+import PageHero from "../components/PageHero.astro";
+import PoleGlyph from "../components/PoleGlyph.astro";
+import Method from "../components/Method.astro";
+import CtaFinal from "../components/CtaFinal.astro";
+import { poles } from "../data/content";
+---
+<Base
+  title="Nos services : sites internet, e-commerce, automatisation, motion design | Motion Eleven"
+  description="Quatre pôles d'expertise pour accompagner votre entreprise de A à Z : web design et développement, e-commerce, automatisation et IA, motion design."
+  crumbs={[{ name: "Services", href: "/services/" }]}
+>
+  <PageHero
+    title="Tout ce dont votre entreprise a besoin pour avancer en ligne."
+    lede="Un site qui inspire confiance, des outils pour vendre et réserver, des automatisations qui font gagner du temps, une image qui se remarque. Un seul interlocuteur pour l'ensemble."
+    secondary={{ label: "Voir les réalisations", href: "/realisations/" }}
+  />
+
+  <section class="section section--chalk">
+    <div class="wrap sv">
+      {poles.map((p) => (
+        <article class="sv__row">
+          <PoleGlyph kind={p.key} />
+          <div class="sv__main">
+            <h2>{p.title}</h2>
+            <p class="lede">{p.promise}</p>
+            <a class="btn btn--ghost btn--sm" href={p.href}>Découvrir ce pôle</a>
+          </div>
+          <ul class="ticks sv__list">{p.items.map((i) => <li>{i}</li>)}</ul>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="head">
+        <h2>Sur mesure, pour les projets plus ambitieux</h2>
+        <p class="lede">Plateforme de réservation, espace client, outil interne, application web : nous étudions votre besoin et vous remettons un devis détaillé sous 48 h, avec un périmètre et un planning précis.</p>
+      </div>
+      <a class="btn" href="/devis/?projet=sur-mesure">Décrire mon projet</a>
+    </div>
+  </section>
+
+  <section class="section section--ink">
+    <div class="wrap">
+      <div class="head"><h2>Notre façon de travailler</h2></div>
+      <Method />
+    </div>
+  </section>
+
+  <CtaFinal />
+</Base>
+
+<style>
+  .sv { display: grid; gap: 0; }
+  .sv__row {
+    display: grid; grid-template-columns: 220px minmax(0, 1.2fr) minmax(0, 1fr); gap: clamp(1.5rem, 4vw, 3.5rem);
+    padding-block: clamp(2rem, 4vw, 3rem); border-top: 1px solid var(--line); align-items: start;
+  }
+  .sv__row:first-child { border-top: 0; padding-top: 0; }
+  .sv__row :global(.pg) { background: #fff; }
+  .sv__main h2 { font-size: var(--t-lg); margin-bottom: 0.9rem; }
+  .sv__main .lede { margin-bottom: 1.5rem; font-size: var(--t-base); }
+  .sv__list { font-size: var(--t-sm); }
+  @media (max-width: 960px) { .sv__row { grid-template-columns: 160px minmax(0, 1fr); } .sv__list { grid-column: 2; } }
+  @media (max-width: 600px) { .sv__row { grid-template-columns: 1fr; } .sv__row :global(.pg) { max-width: 220px; } .sv__list { grid-column: auto; } }
+</style>

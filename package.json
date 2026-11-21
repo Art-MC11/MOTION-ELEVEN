@@ -1,0 +1,20 @@
+{
+  "name": "motion-eleven",
+  "version": "2.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Site de Motion Eleven — Digital Agency & Technology (Île-de-France)",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "@astrojs/sitemap": "^3.7.6",
+    "astro": "^7.4.13"
+  },
+  "devDependencies": {
+    "@netlify/functions": "^6.1.1"
+  }
+}

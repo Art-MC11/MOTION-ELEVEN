@@ -1,0 +1,35 @@
+---
+const steps = [
+  { t: "Échange et compréhension du besoin", d: "Un appel de 30 minutes pour comprendre votre activité, vos clients et ce que le site doit vous apporter." },
+  { t: "Proposition et validation", d: "Vous recevez un devis clair sous 48 h : contenu, fonctionnalités, délai, prix. Rien ne démarre sans votre accord." },
+  { t: "Design et développement", d: "Nous concevons la maquette, vous la validez, puis nous développons. Vous suivez l'avancement sur un lien de prévisualisation." },
+  { t: "Livraison et accompagnement", d: "Mise en ligne, prise en main, puis suivi mensuel : maintenance, modifications et conseils pour faire grandir votre activité." },
+];
+---
+<ol class="me">
+  {steps.map((s, i) => (
+    <li class="me__step">
+      <span class="me__n">{i + 1}</span>
+      <h3>{s.t}</h3>
+      <p>{s.d}</p>
+    </li>
+  ))}
+</ol>
+
+<style>
+  .me { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0; counter-reset: me; }
+  .me__step { position: relative; padding: 2rem 1.75rem 0 0; border-top: 1px solid var(--line-dark); }
+  .me__step::before {
+    content: ""; position: absolute; top: -5px; left: 0; width: 9px; height: 9px; border-radius: 50%; background: #8f9cff;
+  }
+  .me__n { display: block; font-size: 3.5rem; font-weight: 760; font-stretch: 125%; letter-spacing: -0.04em; line-height: 1; color: #fff; margin-bottom: 1.25rem; }
+  .me__step h3 { color: #fff; margin-bottom: 0.75rem; }
+  .me__step p { color: #aab3cc; font-size: var(--t-sm); }
+  @media (max-width: 900px) {
+    .me { grid-template-columns: 1fr 1fr; row-gap: 2.5rem; }
+  }
+  @media (max-width: 560px) {
+    .me { grid-template-columns: 1fr; }
+    .me__step { padding-right: 0; }
+  }
+</style>

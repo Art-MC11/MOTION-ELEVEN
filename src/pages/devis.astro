@@ -1,0 +1,53 @@
+---
+import Base from "../layouts/Base.astro";
+import LeadForm from "../components/LeadForm.astro";
+import { site, whatsappLink } from "../data/site";
+---
+<Base
+  title="Demander un devis gratuit pour votre site internet | Motion Eleven"
+  description="Décrivez votre projet de site internet, boutique en ligne ou automatisation. Devis gratuit et sans engagement, proposition chiffrée sous 48 h."
+  crumbs={[{ name: "Demander un devis", href: "/devis/" }]}
+>
+  <section class="dv">
+    <div class="wrap dv__grid">
+      <aside class="dv__aside">
+        <h1>Parlons de votre projet.</h1>
+        <p class="lede">Deux minutes pour nous décrire votre besoin. Vous recevez une proposition claire et chiffrée sous 48 h.</p>
+        <ol class="dv__next">
+          <li><strong>Nous lisons votre demande</strong> et vous recontactons sous 24 h ouvrées.</li>
+          <li><strong>Un échange de 30 minutes</strong> pour préciser le besoin, par téléphone ou en visio.</li>
+          <li><strong>Vous recevez le devis</strong> : contenu, délai, prix. Vous décidez sans pression.</li>
+        </ol>
+        <div class="dv__alt">
+          <p>Vous préférez en parler directement ?</p>
+          <a class="btn btn--ghost btn--sm" href={whatsappLink("Bonjour, je souhaite un devis pour mon projet.")} target="_blank" rel="noopener">WhatsApp</a>
+          <a class="btn btn--ghost btn--sm" href={site.phoneHref}>{site.phone}</a>
+          <a class="btn btn--ghost btn--sm" href="/contact/#rendez-vous">Prendre rendez-vous</a>
+        </div>
+      </aside>
+      <div class="dv__form"><LeadForm /></div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .dv { padding: clamp(1.5rem, 4vw, 3rem) 0 var(--section); }
+  .dv__grid { display: grid; grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.3fr); gap: clamp(2rem, 6vw, 6rem); align-items: start; }
+  .dv__aside { position: sticky; top: 110px; display: grid; gap: 1.5rem; }
+  .dv__aside h1 { font-size: var(--t-xl); }
+  .dv__next { padding: 0; margin: 0; list-style: none; counter-reset: s; display: grid; gap: 1rem; }
+  .dv__next li { counter-increment: s; position: relative; padding-left: 2.5rem; color: var(--ink-soft); font-size: var(--t-sm); }
+  .dv__next li::before {
+    content: counter(s); position: absolute; left: 0; top: -1px; width: 1.7rem; height: 1.7rem; border-radius: 50%;
+    background: var(--ink); color: #fff; font-size: var(--t-xs); font-weight: 700; display: grid; place-items: center;
+  }
+  .dv__next strong { color: var(--ink); }
+  .dv__alt { display: flex; flex-wrap: wrap; gap: 0.5rem; padding-top: 1.5rem; border-top: 1px solid var(--line); }
+  .dv__alt p { width: 100%; margin: 0 0 0.25rem; font-weight: 600; }
+  .dv__form { background: var(--chalk); border-radius: var(--r-frame); padding: clamp(1.25rem, 4vw, 2.5rem); }
+  @media (max-width: 960px) {
+    .dv__grid { grid-template-columns: 1fr; }
+    .dv__aside { position: static; }
+    .dv__alt { display: none; }
+  }
+</style>

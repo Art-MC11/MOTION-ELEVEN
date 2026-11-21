@@ -1,0 +1,48 @@
+---
+import Legal from "../components/Legal.astro";
+import { site } from "../data/site";
+import { offers, subscriptionTerms } from "../data/content";
+---
+<Legal title="Conditions générales de vente" slug="cgv" updated="22 novembre 2026" description="Conditions générales de vente des prestations de Motion Eleven : création de sites, abonnement, paiement, délais, propriété.">
+  <h2>1. Objet</h2>
+  <p>Les présentes conditions régissent les prestations de {site.name} ({site.founder}, entrepreneur individuel, SIRET {site.siret}) : création de sites internet et de boutiques en ligne, automatisations, motion design, ainsi que l'abonnement d'hébergement et de maintenance associé. Toute commande implique leur acceptation.</p>
+
+  <h2>2. Formules et prix</h2>
+  <p>Les prix sont indiqués en euros hors taxes. Les formules standard sont :</p>
+  <ul>
+    {offers.map((o) => (
+      <li>Formule {o.name} : {o.setup.toLocaleString("fr-FR")} € HT de création, puis {o.monthly} € HT par mois.</li>
+    ))}
+  </ul>
+  <p>Le contenu détaillé de chaque formule, ses limites et les options sont décrits sur la <a href="/tarifs/">page Tarifs</a>, qui fait partie intégrante des présentes conditions. Les projets hors formule font l'objet d'un devis, valable 30 jours.</p>
+
+  <h2>3. Commande et paiement de la création</h2>
+  <p>La commande est ferme à la signature du devis ou au paiement de l'acompte en ligne. La création est payable à hauteur de 50 % à la commande et 50 % à la mise en ligne. Le paiement en ligne est traité par Stripe. Aucun paiement n'est déclenché sans validation explicite du client.</p>
+  <p>Si le projet décrit par le client ne peut pas être réalisé dans le cadre de la formule commandée, {site.name} en informe le client dans les 5 jours ouvrés ; le client choisit alors entre un devis adapté et le remboursement intégral de l'acompte.</p>
+
+  <h2>4. Délais et obligations du client</h2>
+  <p>Les délais indiqués courent à compter de la réception de l'ensemble des contenus (textes, photos, logo, accès). Le client fournit des contenus dont il détient les droits. Un retard dans la transmission des contenus ou des validations décale d'autant la livraison.</p>
+  <p>Le nombre d'allers-retours de corrections sur la maquette est précisé pour chaque formule. Les demandes supplémentaires font l'objet d'un devis.</p>
+
+  <h2>5. Abonnement d'hébergement et de maintenance</h2>
+  <p>L'abonnement démarre à la mise en ligne du site et est facturé mensuellement.</p>
+  <ul>{subscriptionTerms.rules.map((r) => <li>{r}</li>)}</ul>
+  <p>Il comprend : {subscriptionTerms.included.join(", ").toLowerCase()}.</p>
+  <p>Il ne comprend pas : {subscriptionTerms.excluded.join(", ").toLowerCase()}.</p>
+  <p>En cas d'impayé de plus de 30 jours après relance, {site.name} peut suspendre l'hébergement jusqu'à régularisation.</p>
+
+  <h2>6. Propriété</h2>
+  <p>Le nom de domaine est enregistré au nom du client. Les textes, images et données fournis par le client restent sa propriété. À l'issue de la période d'engagement et sous réserve du paiement intégral des sommes dues, le client peut résilier l'abonnement et obtenir la remise des fichiers de son site. Les outils, composants et méthodes génériques développés par {site.name} restent sa propriété et sont concédés au client pour l'usage de son site.</p>
+
+  <h2>7. Droit de rétractation</h2>
+  <p>Les prestations s'adressent principalement aux professionnels. Lorsque le client est un consommateur, ou un professionnel employant cinq salariés au plus qui contracte en dehors de son champ d'activité principale, il dispose d'un délai de rétractation de 14 jours à compter de la commande. S'il demande expressément le démarrage des travaux avant la fin de ce délai, les prestations déjà réalisées restent dues au prorata.</p>
+
+  <h2>8. Responsabilité</h2>
+  <p>{site.name} est tenu à une obligation de moyens. Sa responsabilité ne saurait être engagée pour les interruptions dues aux prestataires techniques (hébergeur, registraire, prestataire de paiement) ni pour les contenus fournis par le client. Elle est limitée, en tout état de cause, au montant payé par le client au titre des douze derniers mois.</p>
+
+  <h2>9. Références</h2>
+  <p>Sauf refus écrit du client, {site.name} peut citer le nom du client et présenter le site réalisé dans ses références.</p>
+
+  <h2>10. Litiges</h2>
+  <p>Les présentes conditions sont soumises au droit français. En cas de litige, les parties recherchent une solution amiable. Le client consommateur peut recourir gratuitement à un médiateur de la consommation. À défaut d'accord, les tribunaux compétents sont ceux du ressort du domicile de l'éditeur, sauf disposition légale contraire.</p>
+</Legal>

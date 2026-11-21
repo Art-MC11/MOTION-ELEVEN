@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /merci/
+Disallow: /api/
+
+Sitemap: https://motion-eleven.fr/sitemap-index.xml

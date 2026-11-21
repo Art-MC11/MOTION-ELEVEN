@@ -1,0 +1,19 @@
+---
+import Base from "../layouts/Base.astro";
+interface Props { title: string; description: string; slug: string; updated: string; }
+const { title, description, slug, updated } = Astro.props;
+---
+<Base title={`${title} | Motion Eleven`} description={description} crumbs={[{ name: title, href: `/${slug}/` }]}>
+  <section class="section lg">
+    <div class="wrap">
+      <h1>{title}</h1>
+      <p class="muted small lg__upd">Dernière mise à jour : {updated}</p>
+      <div class="prose"><slot /></div>
+    </div>
+  </section>
+</Base>
+<style>
+  .lg { padding-top: clamp(1.5rem, 4vw, 3rem); }
+  .lg h1 { font-size: var(--t-xl); margin-bottom: 0.75rem; }
+  .lg__upd { margin-bottom: 2.5rem; }
+</style>

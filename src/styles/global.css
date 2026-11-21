@@ -1,0 +1,197 @@
+/* ==========================================================
+   Motion Eleven — design tokens
+   Ink (encre) / Chalk (craie) / Cobalt (signal) / Lead (vert)
+   ========================================================== */
+@font-face {
+  font-family: "Archivo";
+  src: url("/fonts/archivo.woff2") format("woff2");
+  font-weight: 100 900;
+  font-stretch: 62% 125%;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  --ink: #0c1530;
+  --ink-2: #18234a;
+  --ink-soft: #5a6378;
+  --chalk: #eef0f4;
+  --paper: #ffffff;
+  --line: #d6dbe5;
+  --line-dark: #2a3560;
+  --cobalt: #2f45ff;
+  --cobalt-deep: #2236d9;
+  --cobalt-tint: #e6e9ff;
+  --lead: #12a874;
+  --lead-tint: #dff5ec;
+  --warn: #c2410c;
+
+  --font: "Archivo", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+
+  /* Échelle typographique (quarte ~1.333) */
+  --t-xs: 0.8125rem;
+  --t-sm: 0.9375rem;
+  --t-base: 1.0625rem;
+  --t-md: 1.3125rem;
+  --t-lg: clamp(1.5rem, 1.2rem + 1.2vw, 2rem);
+  --t-xl: clamp(2rem, 1.4rem + 2.6vw, 3.25rem);
+  --t-2xl: clamp(2.5rem, 1.5rem + 4.4vw, 5.25rem);
+
+  --wrap: 1240px;
+  --gutter: clamp(1.25rem, 4vw, 2.5rem);
+  --section: clamp(4.5rem, 9vw, 8.5rem);
+
+  --r-frame: 18px;
+  --r-ui: 10px;
+  --r-pill: 999px;
+
+  --ease: cubic-bezier(0.2, 0.7, 0.1, 1);
+}
+
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+  scroll-padding-top: 96px;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font);
+  font-size: var(--t-base);
+  line-height: 1.6;
+  color: var(--ink);
+  background: var(--paper);
+  font-stretch: 100%;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+img, svg, video { display: block; max-width: 100%; height: auto; }
+
+a { color: inherit; text-decoration-thickness: 1px; text-underline-offset: 0.2em; }
+a:hover { color: var(--cobalt); }
+
+:focus-visible {
+  outline: 3px solid var(--cobalt);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+h1, h2, h3, h4 {
+  margin: 0;
+  font-weight: 720;
+  font-stretch: 125%;
+  letter-spacing: -0.025em;
+  line-height: 1.04;
+  text-wrap: balance;
+}
+h1 { font-size: var(--t-2xl); }
+h2 { font-size: var(--t-xl); }
+h3 { font-size: var(--t-md); letter-spacing: -0.015em; line-height: 1.2; }
+p { margin: 0 0 1em; text-wrap: pretty; }
+p:last-child { margin-bottom: 0; }
+ul { margin: 0; padding: 0; }
+
+.skip {
+  position: absolute; left: 1rem; top: -100px; z-index: 100;
+  background: var(--ink); color: #fff; padding: 0.75rem 1rem; border-radius: var(--r-ui);
+}
+.skip:focus { top: 1rem; }
+
+.wrap { width: 100%; max-width: var(--wrap); margin: 0 auto; padding: 0 var(--gutter); }
+
+/* Sections — un seul niveau de spécificité pour éviter les conflits */
+.section { padding-block: var(--section); }
+.section--chalk { background: var(--chalk); }
+.section--ink { background: var(--ink); color: #e8ebf4; }
+.section--ink a:hover { color: #fff; }
+.section--tight { padding-block: clamp(3rem, 6vw, 5rem); }
+
+.lede { font-size: var(--t-md); line-height: 1.5; color: var(--ink-soft); max-width: 40ch; }
+.section--ink .lede { color: #aab3cc; }
+.muted { color: var(--ink-soft); }
+.small { font-size: var(--t-sm); }
+
+.head { display: grid; gap: 1.25rem; max-width: 52rem; margin-bottom: clamp(2.5rem, 5vw, 4rem); }
+.head--split {
+  max-width: none;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+  align-items: end;
+  gap: 2rem 4rem;
+}
+@media (max-width: 860px) { .head--split { grid-template-columns: 1fr; } }
+
+/* Boutons */
+.btn {
+  --btn-bg: var(--cobalt);
+  --btn-fg: #fff;
+  display: inline-flex; align-items: center; justify-content: center; gap: 0.6rem;
+  min-height: 52px; padding: 0 1.5rem;
+  border: 1.5px solid var(--btn-bg); border-radius: var(--r-ui);
+  background: var(--btn-bg); color: var(--btn-fg);
+  font: inherit; font-weight: 620; font-size: var(--t-base); line-height: 1;
+  text-decoration: none; cursor: pointer;
+  transition: background-color 0.2s var(--ease), border-color 0.2s var(--ease), color 0.2s var(--ease);
+}
+.btn:hover { --btn-bg: var(--cobalt-deep); color: var(--btn-fg); }
+.btn--ghost { --btn-bg: transparent; --btn-fg: var(--ink); border-color: var(--ink); }
+.btn--ghost:hover { --btn-bg: var(--ink); --btn-fg: #fff; border-color: var(--ink); }
+.section--ink .btn--ghost { --btn-fg: #fff; border-color: #7d88ad; }
+.section--ink .btn--ghost:hover { --btn-bg: #fff; --btn-fg: var(--ink); border-color: #fff; }
+.btn--light { --btn-bg: #fff; --btn-fg: var(--ink); }
+.btn--light:hover { --btn-bg: var(--cobalt-tint); --btn-fg: var(--ink); }
+.btn--sm { min-height: 42px; padding: 0 1.1rem; font-size: var(--t-sm); }
+.btn[disabled] { opacity: 0.6; cursor: progress; }
+.btns { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+
+.link { font-weight: 620; text-decoration: underline; text-decoration-color: var(--cobalt); text-decoration-thickness: 2px; }
+
+/* Listes à coches */
+.ticks { list-style: none; display: grid; gap: 0.55rem; }
+.ticks li { position: relative; padding-left: 1.65rem; }
+.ticks li::before {
+  content: ""; position: absolute; left: 0; top: 0.5em;
+  width: 0.85rem; height: 0.5rem;
+  border-left: 2px solid var(--cobalt); border-bottom: 2px solid var(--cobalt);
+  transform: rotate(-45deg) translateY(-2px);
+}
+.ticks--neutral li::before { border-color: var(--ink-soft); }
+.section--ink .ticks li::before { border-color: #8f9cff; }
+
+/* Grille utilitaire */
+.grid-2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(1.5rem, 4vw, 4rem); }
+.grid-3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(1.25rem, 3vw, 2rem); }
+@media (max-width: 900px) { .grid-3 { grid-template-columns: 1fr; } }
+@media (max-width: 760px) { .grid-2 { grid-template-columns: 1fr; } }
+
+/* Prose (pages légales, études de cas) */
+.prose { max-width: 68ch; }
+.prose h2 { font-size: var(--t-lg); margin: 2.5rem 0 1rem; }
+.prose h3 { margin: 1.75rem 0 0.75rem; }
+.prose ul { padding-left: 1.2rem; margin-bottom: 1em; }
+.prose li { margin-bottom: 0.35em; }
+
+/* Fil d'Ariane */
+.crumbs { font-size: var(--t-sm); color: var(--ink-soft); margin-bottom: 1.5rem; }
+.crumbs ol { list-style: none; display: flex; flex-wrap: wrap; gap: 0.4rem; padding: 0; margin: 0; }
+.crumbs li:not(:last-child)::after { content: "/"; margin-left: 0.4rem; color: var(--line); }
+.crumbs a { text-decoration: none; }
+
+/* Révélation unique (respecte reduced-motion) */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+.visually-hidden {
+  position: absolute !important; width: 1px; height: 1px; overflow: hidden;
+  clip: rect(0 0 0 0); white-space: nowrap;
+}

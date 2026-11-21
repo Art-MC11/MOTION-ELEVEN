@@ -1,0 +1,109 @@
+---
+import type { Project } from "../data/content";
+interface Props { project: Project; size?: "lg" | "md"; }
+const { project, size = "md" } = Astro.props;
+---
+<figure class:list={["pv", `pv--${size}`, `pv--${project.slug}`]}>
+  {project.image ? (
+    <img src={project.image} alt={`Capture du site ${project.name}`} loading="lazy" width="1200" height="800" />
+  ) : project.slug === "la-photo-minute" ? (
+    <div class="pv__browser" aria-hidden="true">
+      <div class="pv__chrome"><span></span><span></span><span></span><em>{project.urlLabel}</em></div>
+      <div class="pv__book">
+        <div class="pv__steps">
+          <b class="on">1</b><b class="on">2</b><b class="on">3</b><b>4</b><b>5</b>
+        </div>
+        <div class="pv__cols">
+          <div class="pv__cal">
+            <p>Choisissez votre date</p>
+            <div class="pv__grid">
+              {Array.from({ length: 28 }).map((_, i) => (
+                <i class:list={{ busy: [3, 9, 10, 17, 24].includes(i), sel: i === 13 }}></i>
+              ))}
+            </div>
+            <div class="pv__legend"><span><i></i>Libre, à confirmer</span><span><i class="busy"></i>Déjà réservé</span></div>
+          </div>
+          <div class="pv__sum">
+            <p>Récapitulatif</p>
+            <div class="pv__row"><span>Formule Signature</span><span>450 €</span></div>
+            <div class="pv__row pv__row--muted"><span>3 heures</span></div>
+            <div class="pv__row pv__total"><span>Acompte 30 %</span><span>135 €</span></div>
+            <div class="pv__pay">Payer l'acompte</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  ) : (
+    <div class="pv__phone" aria-hidden="true">
+      <div class="pv__notch"></div>
+      <div class="pv__app">
+        <div class="pv__brand">{project.name}</div>
+        <div class="pv__tabs"><span class="on">Burgers</span><span>Menus</span><span>Boissons</span></div>
+        {[0, 1, 2, 3].map(() => (
+          <div class="pv__item"><i class="pv__thumb"></i><div><i class="pv__t"></i><i class="pv__s"></i></div><i class="pv__add">+</i></div>
+        ))}
+        <div class="pv__order">Commander</div>
+      </div>
+    </div>
+  )}
+  {!project.image && <figcaption>Schéma de l'interface réalisée</figcaption>}
+</figure>
+
+<style>
+  .pv { margin: 0; position: relative; }
+  .pv figcaption { margin-top: 0.75rem; font-size: var(--t-xs); color: var(--ink-soft); }
+  .pv img { border-radius: var(--r-frame); border: 1px solid var(--line); }
+
+  /* Navigateur — La Photo Minute */
+  .pv__browser {
+    background: #fff; border-radius: var(--r-frame); border: 1px solid var(--line); overflow: hidden;
+    box-shadow: 0 30px 60px -36px rgba(12, 21, 48, 0.5);
+  }
+  .pv__chrome { display: flex; align-items: center; gap: 6px; height: 34px; padding: 0 12px; background: #f7f8fa; border-bottom: 1px solid var(--line); }
+  .pv__chrome span { width: 8px; height: 8px; border-radius: 50%; background: var(--line); }
+  .pv__chrome em { font-style: normal; font-size: 11px; color: var(--ink-soft); margin-left: 10px; }
+  .pv__book { padding: 1.25rem; background: #1b1717; color: #f3ede4; }
+  .pv__steps { display: flex; gap: 6px; margin-bottom: 1rem; }
+  .pv__steps b { width: 22px; height: 22px; border-radius: 50%; display: grid; place-items: center; font-size: 10px; font-weight: 600; border: 1px solid #5b524a; color: #a99d8f; }
+  .pv__steps b.on { background: #d8b56d; border-color: #d8b56d; color: #1b1717; }
+  .pv__cols { display: grid; grid-template-columns: 1.3fr 1fr; gap: 1rem; }
+  .pv__cal p, .pv__sum p { font-size: 11px; margin: 0 0 0.6rem; color: #d9cfc2; font-weight: 600; }
+  .pv__grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
+  .pv__grid i { aspect-ratio: 1; border-radius: 4px; background: #2c2623; }
+  .pv__grid i.busy { background: #4a3c37; opacity: 0.55; background-image: repeating-linear-gradient(45deg, transparent 0 3px, #2c2623 3px 6px); }
+  .pv__grid i.sel { background: #d8b56d; }
+  .pv__legend { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 0.6rem; font-size: 9.5px; color: #a99d8f; }
+  .pv__legend span { display: inline-flex; align-items: center; gap: 4px; }
+  .pv__legend i { width: 8px; height: 8px; border-radius: 2px; background: #2c2623; border: 1px solid #5b524a; }
+  .pv__legend i.busy { background: #4a3c37; }
+  .pv__sum { background: #24201e; border-radius: 10px; padding: 0.8rem; display: grid; gap: 0.35rem; align-content: start; }
+  .pv__row { display: flex; justify-content: space-between; font-size: 11px; }
+  .pv__row--muted { color: #a99d8f; }
+  .pv__total { border-top: 1px solid #3d3531; padding-top: 0.45rem; margin-top: 0.2rem; font-weight: 700; color: #d8b56d; }
+  .pv__pay { margin-top: 0.5rem; background: #d8b56d; color: #1b1717; border-radius: 6px; text-align: center; font-size: 11px; font-weight: 700; padding: 0.5rem; }
+
+  /* Téléphone — Danky's Burger */
+  .pv__phone {
+    width: min(270px, 78%); margin: 0 auto; aspect-ratio: 9 / 18.5; border-radius: 34px;
+    background: #121212; padding: 10px; position: relative;
+    box-shadow: 0 30px 60px -30px rgba(12, 21, 48, 0.6);
+  }
+  .pv__notch { position: absolute; top: 16px; left: 50%; transform: translateX(-50%); width: 70px; height: 18px; border-radius: 10px; background: #000; z-index: 2; }
+  .pv__app { height: 100%; border-radius: 26px; background: #fff8ef; padding: 44px 14px 14px; display: flex; flex-direction: column; gap: 10px; overflow: hidden; }
+  .pv__brand { font-weight: 800; font-stretch: 125%; letter-spacing: -0.03em; font-size: 1.05rem; color: #2a1608; }
+  .pv__tabs { display: flex; gap: 6px; }
+  .pv__tabs span { font-size: 10px; padding: 5px 9px; border-radius: 99px; background: #f1e4d2; color: #6b4a2e; font-weight: 600; }
+  .pv__tabs span.on { background: #e5482a; color: #fff; }
+  .pv__item { display: grid; grid-template-columns: 46px 1fr 24px; gap: 10px; align-items: center; background: #fff; border-radius: 12px; padding: 8px; border: 1px solid #f1e4d2; }
+  .pv__thumb { width: 46px; height: 46px; border-radius: 9px; background: #f6c98b; display: block; }
+  .pv__t { display: block; height: 7px; width: 80%; background: #2a1608; border-radius: 3px; margin-bottom: 6px; }
+  .pv__s { display: block; height: 5px; width: 50%; background: #e2d3c0; border-radius: 3px; }
+  .pv__add { width: 24px; height: 24px; border-radius: 50%; background: #e5482a; color: #fff; font-style: normal; font-weight: 700; display: grid; place-items: center; font-size: 14px; }
+  .pv__order { margin-top: auto; background: #2a1608; color: #fff; border-radius: 12px; text-align: center; padding: 11px; font-size: 12px; font-weight: 700; }
+
+  .pv--la-photo-minute { background: linear-gradient(160deg, #efe6d8, #e3d5c0); border-radius: var(--r-frame); padding: clamp(1.25rem, 4vw, 2.5rem); }
+  .pv--la-photo-minute figcaption { color: #5c5042; }
+  @media (max-width: 520px) { .pv__cols { grid-template-columns: 1fr; } .pv__row { white-space: nowrap; } }
+  .pv--dankys-burger { background: linear-gradient(160deg, #fbe9d7, #f6dcc4); border-radius: var(--r-frame); padding: 2rem 1rem; }
+  .pv--dankys-burger figcaption { text-align: center; }
+</style>

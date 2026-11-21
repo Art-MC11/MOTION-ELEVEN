@@ -1,0 +1,84 @@
+---
+import { offers } from "../data/content";
+interface Props { detailed?: boolean; }
+const { detailed = false } = Astro.props;
+const eur = (n: number) => n.toLocaleString("fr-FR") + " €";
+---
+<div class="of">
+  {offers.map((o) => (
+    <article class:list={["of__plan", { "of__plan--featured": o.featured }]} id={`formule-${o.key}`}>
+      <header class="of__head">
+        <div class="of__name">
+          <h3>{o.name}</h3>
+          {o.featured && <span class="of__tag">La plus choisie</span>}
+        </div>
+        <p class="of__for">{o.forWho}</p>
+        <p class="of__price">
+          <span class="of__setup">{eur(o.setup)}</span>
+          <span class="of__unit">de création HT</span>
+        </p>
+        <p class="of__monthly">puis <strong>{o.monthly} € HT / mois</strong> tout compris</p>
+        <p class="of__delay">{o.delay}</p>
+      </header>
+      <ul class="ticks of__list">
+        {o.included.map((i) => <li>{i}</li>)}
+      </ul>
+      {detailed && (
+        <div class="of__limits">
+          <p class="of__lh">Bon à savoir</p>
+          <ul class="ticks ticks--neutral">{o.limits.map((l) => <li>{l}</li>)}</ul>
+        </div>
+      )}
+      <div class="of__cta">
+        <a href={`/devis/?formule=${o.key}`} class:list={["btn", { "btn--ghost": !o.featured }]} data-track="cta_click" data-label={`offre_${o.key}_devis`}>
+          Choisir {o.name}
+        </a>
+        {detailed && (
+          <a href={`/commander/?formule=${o.key}`} class="of__buy" data-track="cta_click" data-label={`offre_${o.key}_commande`}>Commander et payer l'acompte en ligne</a>
+        )}
+      </div>
+    </article>
+  ))}
+</div>
+{!detailed && (
+  <p class="of__more">Engagement de 12 mois sur l'abonnement, puis résiliable chaque mois. <a class="link" href="/tarifs/">Détail des formules, options et conditions</a></p>
+)}
+
+<style>
+  .of { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0; border: 1px solid var(--line); border-radius: var(--r-frame); background: #fff; overflow: hidden; }
+  .of__plan { display: flex; flex-direction: column; gap: 1.5rem; padding: clamp(1.5rem, 3vw, 2.25rem); border-left: 1px solid var(--line); }
+  .of__plan:first-child { border-left: 0; }
+  .of__plan--featured { background: var(--ink); color: #e8ebf4; }
+  .of__name { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+  .of__name h3 { font-size: var(--t-lg); }
+  .of__tag { font-size: var(--t-xs); font-weight: 600; padding: 0.3rem 0.65rem; border-radius: var(--r-pill); background: var(--cobalt); color: #fff; white-space: nowrap; }
+  .of__for { color: var(--ink-soft); margin: 0.75rem 0 1.5rem; font-size: var(--t-sm); min-height: 3.2em; }
+  .of__plan--featured .of__for { color: #aab3cc; }
+  .of__price { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.2rem 0.6rem; margin: 0; }
+  .of__setup { white-space: nowrap; font-size: clamp(2.2rem, 1.7rem + 1.6vw, 2.9rem); font-weight: 740; font-stretch: 125%; letter-spacing: -0.04em; line-height: 1; }
+  .of__unit { font-size: var(--t-sm); color: var(--ink-soft); }
+  .of__plan--featured .of__unit { color: #aab3cc; }
+  .of__monthly { margin: 0.5rem 0 0; font-size: var(--t-sm); }
+  .of__delay { margin: 0.35rem 0 0; font-size: var(--t-xs); color: var(--ink-soft); }
+  .of__plan--featured .of__delay { color: #aab3cc; }
+  .of__list { font-size: var(--t-sm); flex: 1; align-content: start; }
+  .of__plan--featured .ticks li::before { border-color: #8f9cff; }
+  .of__limits { border-top: 1px solid var(--line); padding-top: 1.25rem; font-size: var(--t-sm); }
+  .of__plan--featured .of__limits { border-color: var(--line-dark); }
+  .of__lh { font-weight: 640; margin-bottom: 0.6rem; }
+  .of__plan--featured .ticks--neutral li::before { border-color: #7d88ad; }
+  .of__cta { display: grid; gap: 0.9rem; }
+  .of__cta .btn { width: 100%; }
+  .of__plan--featured .btn { --btn-bg: #fff; --btn-fg: var(--ink); border-color: #fff; }
+  .of__plan--featured .btn:hover { --btn-bg: var(--cobalt-tint); }
+  .of__buy { font-size: var(--t-sm); font-weight: 600; text-align: center; }
+  .of__plan--featured .of__buy { color: #fff; }
+  .of__more { margin-top: 1.5rem; font-size: var(--t-sm); color: var(--ink-soft); }
+
+  @media (max-width: 980px) {
+    .of { grid-template-columns: 1fr; }
+    .of__plan { border-left: 0; border-top: 1px solid var(--line); }
+    .of__plan:first-child { border-top: 0; }
+    .of__for { min-height: 0; }
+  }
+</style>

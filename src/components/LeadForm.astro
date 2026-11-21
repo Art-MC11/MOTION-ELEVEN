@@ -1,0 +1,103 @@
+---
+import "../styles/forms.css";
+const sectors = ["Restaurant", "Artisan", "Commerce", "Indépendant", "TPE / PME", "Association", "Autre"];
+const types = ["Site vitrine ou professionnel", "Refonte de site", "Boutique en ligne", "Réservation ou prise de rendez-vous", "Automatisation ou IA", "Motion design ou vidéo", "Projet sur mesure"];
+const budgets = ["Moins de 1 000 €", "1 000 à 2 000 €", "2 000 à 5 000 €", "Plus de 5 000 €", "Je ne sais pas encore"];
+const delays = ["Dès que possible", "Dans le mois", "D'ici 3 mois", "Pas de date précise"];
+---
+<form
+  class="fm"
+  name="devis"
+  method="POST"
+  action="/merci/?type=devis"
+  data-netlify="true"
+  netlify-honeypot="bot_field"
+  data-lead-form
+>
+  <input type="hidden" name="form-name" value="devis" />
+  <input type="hidden" name="formule" value="" />
+  <input type="hidden" name="page" value="" />
+  <input type="hidden" name="utm" value="" />
+  <p class="hp" aria-hidden="true"><label>Ne pas remplir <input name="bot_field" tabindex="-1" autocomplete="off" /></label></p>
+
+  <p class="fm__note" data-formule-note hidden></p>
+
+  <fieldset>
+    <legend>Votre activité</legend>
+    <div class="chips">
+      {sectors.map((s, i) => (
+        <label class="chip"><input type="radio" name="sector" value={s} required={i === 0} /><span>{s}</span></label>
+      ))}
+    </div>
+  </fieldset>
+
+  <fieldset>
+    <legend>Type de projet</legend>
+    <div class="chips">
+      {types.map((s, i) => (
+        <label class="chip"><input type="radio" name="project_type" value={s} required={i === 0} /><span>{s}</span></label>
+      ))}
+    </div>
+  </fieldset>
+
+  <div class="fm__row">
+    <fieldset>
+      <legend>Budget envisagé</legend>
+      <div class="chips">
+        {budgets.map((s) => (
+          <label class="chip"><input type="radio" name="budget" value={s} /><span>{s}</span></label>
+        ))}
+      </div>
+    </fieldset>
+    <fieldset>
+      <legend>Délai souhaité</legend>
+      <div class="chips">
+        {delays.map((s) => (
+          <label class="chip"><input type="radio" name="timeline" value={s} /><span>{s}</span></label>
+        ))}
+      </div>
+    </fieldset>
+  </div>
+
+  <div class="fm__field">
+    <label class="fm__label" for="f-message">Décrivez votre besoin <span class="fm__hint">Votre activité, ce que le site doit permettre, un site qui vous plaît…</span></label>
+    <textarea id="f-message" name="message" required minlength="10" maxlength="3000"></textarea>
+  </div>
+
+  <div class="fm__row">
+    <div class="fm__field">
+      <label class="fm__label" for="f-name">Nom et prénom</label>
+      <input id="f-name" type="text" name="name" required maxlength="120" autocomplete="name" />
+    </div>
+    <div class="fm__field">
+      <label class="fm__label" for="f-company">Entreprise <span class="fm__hint">facultatif</span></label>
+      <input id="f-company" type="text" name="company" maxlength="160" autocomplete="organization" />
+    </div>
+  </div>
+  <div class="fm__row">
+    <div class="fm__field">
+      <label class="fm__label" for="f-email">E-mail</label>
+      <input id="f-email" type="email" name="email" required maxlength="160" autocomplete="email" />
+    </div>
+    <div class="fm__field">
+      <label class="fm__label" for="f-phone">Téléphone</label>
+      <input id="f-phone" type="tel" name="phone" required maxlength="30" autocomplete="tel" pattern="[0-9+().\s-]{8,}" />
+    </div>
+  </div>
+
+  <label class="fm__consent">
+    <input type="checkbox" name="consent" value="oui" required />
+    <span>J'accepte que Motion Eleven utilise ces informations pour me recontacter au sujet de ma demande. <a href="/confidentialite/">Politique de confidentialité</a></span>
+  </label>
+
+  <p class="fm__error" data-form-error tabindex="-1" hidden></p>
+
+  <div class="fm__submit">
+    <button class="btn" type="submit">Envoyer ma demande de devis</button>
+    <p class="fm__legal">Gratuit et sans engagement. Réponse sous 24 h ouvrées, proposition chiffrée sous 48 h.</p>
+  </div>
+</form>
+
+<script>
+  import "../scripts/forms";
+</script>

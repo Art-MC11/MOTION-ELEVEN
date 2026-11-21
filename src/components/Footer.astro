@@ -1,0 +1,89 @@
+---
+import Logo from "./Logo.astro";
+import { site, whatsappLink } from "../data/site";
+const year = new Date().getFullYear();
+---
+<footer class="ftr">
+  <div class="wrap">
+    <div class="ftr__top">
+      <div class="ftr__brand">
+        <Logo tone="light" />
+        <p class="ftr__sig">{site.signature}</p>
+        <p class="ftr__meta">{site.tagline}. Basés à {site.address.city}, nous travaillons avec les entreprises de {site.area}.</p>
+      </div>
+      <div class="ftr__cols">
+        <div>
+          <p class="ftr__h">Services</p>
+          <ul>
+            <li><a href="/creation-site-internet/">Création de sites internet</a></li>
+            <li><a href="/e-commerce/">E-commerce</a></li>
+            <li><a href="/automatisation-ia/">Automatisation & IA</a></li>
+            <li><a href="/motion-design/">Motion design</a></li>
+          </ul>
+        </div>
+        <div>
+          <p class="ftr__h">Solutions</p>
+          <ul>
+            <li><a href="/solutions/restaurants/">Restaurants</a></li>
+            <li><a href="/solutions/artisans/">Artisans</a></li>
+            <li><a href="/solutions/commerces/">Commerces</a></li>
+            <li><a href="/realisations/">Réalisations</a></li>
+          </ul>
+        </div>
+        <div>
+          <p class="ftr__h">Agence</p>
+          <ul>
+            <li><a href="/a-propos/">À propos</a></li>
+            <li><a href="/tarifs/">Tarifs</a></li>
+            <li><a href="/devis/">Demander un devis</a></li>
+            <li><a href="/contact/">Contact</a></li>
+          </ul>
+        </div>
+        <div>
+          <p class="ftr__h">Nous joindre</p>
+          <ul>
+            <li><a href={`mailto:${site.email}`}>{site.email}</a></li>
+            <li><a href={site.phoneHref}>{site.phone}</a></li>
+            <li><a href={whatsappLink()} target="_blank" rel="noopener">WhatsApp</a></li>
+            <li><a href={site.instagram} target="_blank" rel="noopener">Instagram</a></li>
+            <li><a href={site.linkedin} target="_blank" rel="noopener">LinkedIn</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="ftr__bottom">
+      <p>© {year} {site.name} — {site.founder}. SIRET {site.siret}.</p>
+      <ul>
+        <li><a href="/mentions-legales/">Mentions légales</a></li>
+        <li><a href="/cgv/">CGV</a></li>
+        <li><a href="/confidentialite/">Confidentialité</a></li>
+        <li><button type="button" class="ftr__cookies" data-cookie-settings>Cookies</button></li>
+      </ul>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .ftr { background: var(--ink); color: #aab3cc; padding: 0 0 2rem; font-size: var(--t-sm); }
+  .ftr__top { border-top: 1px solid var(--line-dark); padding-top: clamp(3.5rem, 7vw, 5rem); }
+  .ftr a { text-decoration: none; color: #d7dcea; }
+  .ftr a:hover { color: #fff; text-decoration: underline; }
+  .ftr__top { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 2fr); gap: 3rem; }
+  .ftr__sig { color: #fff; font-size: var(--t-md); font-weight: 600; font-stretch: 112%; letter-spacing: -0.015em; line-height: 1.3; margin: 1.5rem 0 1rem; max-width: 24ch; }
+  .ftr__meta { max-width: 36ch; }
+  .ftr__cols { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 2rem; }
+  .ftr__h { color: #fff; font-weight: 640; margin-bottom: 0.9rem; }
+  .ftr ul { list-style: none; display: grid; gap: 0.5rem; }
+  .ftr__bottom {
+    margin-top: 4rem; padding-top: 1.5rem; border-top: 1px solid var(--line-dark);
+    display: flex; flex-wrap: wrap; justify-content: space-between; gap: 1rem;
+  }
+  .ftr__bottom p { margin: 0; }
+  .ftr__bottom ul { display: flex; flex-wrap: wrap; gap: 1.25rem; }
+  .ftr__cookies { background: none; border: 0; padding: 0; font: inherit; color: #d7dcea; cursor: pointer; }
+  .ftr__cookies:hover { color: #fff; text-decoration: underline; }
+  @media (max-width: 960px) {
+    .ftr__top { grid-template-columns: 1fr; }
+    .ftr__cols { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+</style>

@@ -1,0 +1,103 @@
+---
+import Base from "../layouts/Base.astro";
+import PageHero from "../components/PageHero.astro";
+import CtaFinal from "../components/CtaFinal.astro";
+import { site } from "../data/site";
+
+const values = [
+  { t: "Un seul interlocuteur", d: "Vous parlez à la personne qui conçoit votre projet, du premier appel à la mise en ligne. Pas de commercial, pas de transfert de dossier." },
+  { t: "Des prix écrits avant de commencer", d: "Ce qui est inclus, ce qui ne l'est pas, les délais : tout est dans le devis. Aucun travail supplémentaire n'est facturé sans votre accord." },
+  { t: "Du sur mesure, pas du modèle", d: "Chaque site est dessiné pour votre activité et vos clients. Vous ne retrouverez pas votre design sur le site d'un concurrent." },
+  { t: "Un suivi dans la durée", d: "Après la mise en ligne, nous restons là : maintenance, modifications, conseils pour faire évoluer le site avec votre activité." },
+];
+const aboutSchema = {
+  "@context": "https://schema.org",
+  "@type": "AboutPage",
+  name: "À propos de Motion Eleven",
+  url: `${site.url}/a-propos/`,
+  about: { "@id": `${site.url}/#organisation` },
+};
+---
+<Base
+  title="À propos de Motion Eleven, agence digitale à Groslay (Val-d'Oise)"
+  description="Motion Eleven est une agence digitale fondée par Meir Cohen, designer et motion designer. Sites internet, e-commerce, automatisation pour les entreprises d'Île-de-France."
+  crumbs={[{ name: "À propos", href: "/a-propos/" }]}
+  schema={[aboutSchema]}
+>
+  <PageHero
+    title="Le design au service de votre croissance."
+    lede={`Motion Eleven est née du motion design et s'est construite autour d'une conviction : une petite entreprise mérite le même niveau d'exigence qu'une grande marque. Aujourd'hui, nous concevons des sites, des outils de vente et des automatisations pour les entreprises de ${site.area}.`}
+  />
+
+  <section class="section section--chalk">
+    <div class="wrap ab">
+      <div class="ab__portrait" aria-hidden="true">
+        <span>{site.founder.split(" ").map((w) => w[0]).join("")}</span>
+      </div>
+      <div class="ab__text">
+        <h2>Fondée par {site.founder}</h2>
+        <p class="lede">Designer et motion designer, avec une double compétence en design et en marketing.</p>
+        <p>J'ai créé Motion Eleven pour proposer aux indépendants, artisans, commerçants et restaurateurs ce que les grandes agences réservent souvent à leurs gros clients : une direction artistique soignée, une vraie réflexion sur ce qui fait venir des clients, et des outils qui fonctionnent.</p>
+        <p>Je travaille directement avec chaque client, depuis {site.address.city}, dans le Val-d'Oise. Vous avez un seul interlocuteur, du premier échange au suivi de votre site.</p>
+        <p class="ab__sign">{site.founder}, fondateur</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="head"><h2>Comment nous travaillons</h2></div>
+      <div class="ab__values">
+        {values.map((v) => (
+          <div class="ab__value">
+            <h3>{v.t}</h3>
+            <p>{v.d}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--chalk section--tight">
+    <div class="wrap ab__facts">
+      <dl>
+        <div><dt>Basés à</dt><dd>{site.address.city} (95)</dd></div>
+        <div><dt>Zone d'intervention</dt><dd>Paris et Île-de-France, à distance partout en France</dd></div>
+        <div><dt>Délai de réponse</dt><dd>Sous 24 h ouvrées</dd></div>
+        <div><dt>SIRET</dt><dd>{site.siret}</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <CtaFinal />
+</Base>
+
+<style>
+  .ab { display: grid; grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr); gap: clamp(2rem, 6vw, 6rem); align-items: start; }
+  .ab__portrait {
+    aspect-ratio: 4 / 5; border-radius: var(--r-frame); background: var(--ink);
+    display: grid; place-items: center; position: relative; overflow: hidden;
+  }
+  .ab__portrait::before, .ab__portrait::after {
+    content: ""; position: absolute; width: 18%; border-radius: 999px; background: #1e2a57;
+  }
+  .ab__portrait::before { height: 62%; left: 26%; top: 22%; }
+  .ab__portrait::after { height: 62%; left: 56%; top: 14%; background: var(--cobalt); }
+  .ab__portrait span { position: relative; z-index: 1; color: #fff; font-size: clamp(3rem, 8vw, 6rem); font-weight: 760; font-stretch: 125%; letter-spacing: -0.05em; }
+  .ab__text h2 { margin-bottom: 1rem; }
+  .ab__text .lede { margin-bottom: 2rem; }
+  .ab__text p { max-width: 60ch; }
+  .ab__sign { font-weight: 660; margin-top: 1.5rem; }
+  @media (max-width: 860px) { .ab { grid-template-columns: 1fr; } .ab__portrait { max-width: 320px; } }
+
+  .ab__values { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(2rem, 4vw, 3rem) clamp(2rem, 6vw, 5rem); }
+  .ab__value { border-top: 2px solid var(--ink); padding-top: 1.5rem; }
+  .ab__value h3 { margin-bottom: 0.75rem; }
+  .ab__value p { color: var(--ink-soft); }
+  @media (max-width: 760px) { .ab__values { grid-template-columns: 1fr; } }
+
+  .ab__facts dl { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 2rem; margin: 0; }
+  .ab__facts dt { font-size: var(--t-sm); color: var(--ink-soft); }
+  .ab__facts dd { margin: 0.3rem 0 0; font-weight: 640; }
+  @media (max-width: 860px) { .ab__facts dl { grid-template-columns: 1fr 1fr; } }
+</style>

@@ -1,0 +1,32 @@
+---
+import Legal from "../components/Legal.astro";
+import { site } from "../data/site";
+---
+<Legal title="Mentions légales" slug="mentions-legales" updated="22 novembre 2026" description="Mentions légales du site motion-eleven.fr : éditeur, hébergeur, propriété intellectuelle.">
+  <h2>Éditeur du site</h2>
+  <p>
+    Le site {site.url.replace("https://", "")} est édité par {site.founder}, entrepreneur individuel exerçant sous le nom commercial {site.name}.<br />
+    Adresse : {site.address.street}, {site.address.postalCode} {site.address.city}, France<br />
+    SIRET : {site.siret}<br />
+    E-mail : <a href={`mailto:${site.email}`}>{site.email}</a><br />
+    Téléphone : {site.phone}
+  </p>
+  <p>Directeur de la publication : {site.founder}.</p>
+
+  <h2>Hébergeur</h2>
+  <p>
+    Netlify, Inc.<br />
+    101 2nd Street, Suite 575, San Francisco, CA 94105, États-Unis<br />
+    <a href="https://www.netlify.com" rel="noopener">www.netlify.com</a>
+  </p>
+
+  <h2>Propriété intellectuelle</h2>
+  <p>L'ensemble des contenus de ce site (textes, visuels, logos, animations, code) est la propriété de {site.name}, sauf mention contraire. Toute reproduction, totale ou partielle, sans autorisation écrite préalable est interdite.</p>
+  <p>Les noms et sites des clients présentés dans les réalisations restent la propriété de leurs titulaires respectifs.</p>
+
+  <h2>Données personnelles</h2>
+  <p>Le traitement des données collectées par les formulaires est décrit dans la <a href="/confidentialite/">politique de confidentialité</a>.</p>
+
+  <h2>Médiation de la consommation</h2>
+  <p>Conformément à l'article L612-1 du Code de la consommation, le client consommateur peut recourir gratuitement à un médiateur de la consommation en vue de la résolution amiable d'un litige. Les coordonnées du médiateur sont communiquées sur simple demande et figurent dans les conditions générales de vente.</p>
+</Legal>

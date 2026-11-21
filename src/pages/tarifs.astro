@@ -1,0 +1,124 @@
+---
+import Base from "../layouts/Base.astro";
+import PageHero from "../components/PageHero.astro";
+import Offers from "../components/Offers.astro";
+import Faq from "../components/Faq.astro";
+import CtaFinal from "../components/CtaFinal.astro";
+import { offers, options, subscriptionTerms, faq } from "../data/content";
+import { site } from "../data/site";
+
+const offerSchema = offers.map((o) => ({
+  "@context": "https://schema.org",
+  "@type": "Offer",
+  name: `Formule ${o.name}`,
+  description: o.forWho,
+  price: o.setup,
+  priceCurrency: "EUR",
+  seller: { "@id": `${site.url}/#organisation` },
+  priceSpecification: [
+    { "@type": "PriceSpecification", price: o.setup, priceCurrency: "EUR", valueAddedTaxIncluded: false, name: "Création" },
+    { "@type": "UnitPriceSpecification", price: o.monthly, priceCurrency: "EUR", unitCode: "MON", valueAddedTaxIncluded: false, name: "Abonnement mensuel" },
+  ],
+}));
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faq.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })),
+};
+---
+<Base
+  title="Tarifs création de site internet : formules dès 590 € | Motion Eleven"
+  description="Tarifs transparents : Starter 590 € + 39 €/mois, Business 990 € + 59 €/mois, E-commerce 1 490 € + 79 €/mois. Ce qui est inclus, les limites et les options."
+  crumbs={[{ name: "Tarifs", href: "/tarifs/" }]}
+  schema={[...offerSchema, faqSchema]}
+>
+  <PageHero
+    title="Des prix affichés, des prestations détaillées."
+    lede="Un prix de création pour concevoir et mettre en ligne votre site, puis un abonnement mensuel qui couvre l'hébergement, la sécurité, la maintenance et vos modifications. Tous les prix sont indiqués hors taxes."
+    primary={{ label: "Obtenir mon devis gratuit", href: "/devis/" }}
+  />
+
+  <section class="section section--chalk">
+    <div class="wrap">
+      <Offers detailed />
+      <p class="tf__pay">Paiement de la création : 50 % à la commande, 50 % à la mise en ligne. Vous pouvez commander une formule et régler l'acompte en ligne, ou demander un devis pour l'adapter à votre projet.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="head"><h2>L'abonnement, en clair</h2></div>
+      <div class="tf__terms">
+        <div>
+          <h3>Ce qui est compris</h3>
+          <ul class="ticks">{subscriptionTerms.included.map((i) => <li>{i}</li>)}</ul>
+        </div>
+        <div>
+          <h3>Ce qui n'est pas compris</h3>
+          <ul class="ticks ticks--neutral">{subscriptionTerms.excluded.map((i) => <li>{i}</li>)}</ul>
+          <p class="small muted tf__note">Ces prestations font l'objet d'un devis séparé, que vous acceptez avant tout travail.</p>
+        </div>
+        <div>
+          <h3>Conditions</h3>
+          <ul class="tf__rules">{subscriptionTerms.rules.map((i) => <li>{i}</li>)}</ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--chalk">
+    <div class="wrap tf__opts">
+      <div>
+        <h2>Options à la carte</h2>
+        <p class="lede">À ajouter à une formule ou à commander seules.</p>
+      </div>
+      <table class="tf__table">
+        <caption class="visually-hidden">Options et prix</caption>
+        <tbody>
+          {options.map((o) => (
+            <tr><th scope="row">{o.name}</th><td>{o.price} HT</td></tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap tf__custom">
+      <div>
+        <h2>Projets sur devis</h2>
+        <p class="lede">Plateforme de réservation, espace client, application web, intégrations complexes, refonte d'un site de plus de 10 pages, identité visuelle complète : nous chiffrons ces projets sur devis, après un échange de 30 minutes.</p>
+      </div>
+      <a class="btn" href="/devis/?projet=sur-mesure">Demander un devis sur mesure</a>
+    </div>
+  </section>
+
+  <section class="section section--chalk">
+    <div class="wrap"><Faq items={faq} /></div>
+  </section>
+
+  <CtaFinal />
+</Base>
+
+<style>
+  .tf__pay { margin-top: 1.5rem; font-size: var(--t-sm); color: var(--ink-soft); max-width: 80ch; }
+  .tf__terms { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(1.5rem, 4vw, 3.5rem); }
+  .tf__terms h3 { padding-bottom: 1rem; margin-bottom: 1.25rem; border-bottom: 2px solid var(--ink); }
+  .tf__note { margin-top: 1rem; }
+  .tf__rules { padding-left: 1.1rem; display: grid; gap: 0.75rem; }
+  @media (max-width: 900px) { .tf__terms { grid-template-columns: 1fr; } }
+
+  .tf__opts { display: grid; grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr); gap: 2rem 4rem; align-items: start; }
+  .tf__opts h2 { margin-bottom: 1rem; }
+  .tf__table { width: 100%; border-collapse: collapse; background: #fff; border-radius: 14px; overflow: hidden; }
+  .tf__table th, .tf__table td { padding: 1.1rem 1.25rem; border-bottom: 1px solid var(--line); text-align: left; }
+  .tf__table th { font-weight: 500; }
+  .tf__table td { text-align: right; font-weight: 660; white-space: nowrap; }
+  .tf__table tr:last-child th, .tf__table tr:last-child td { border-bottom: 0; }
+  @media (max-width: 860px) { .tf__opts { grid-template-columns: 1fr; } }
+
+  .tf__custom { display: grid; grid-template-columns: minmax(0, 1.4fr) auto; gap: 2rem 4rem; align-items: end; }
+  .tf__custom h2 { margin-bottom: 1rem; }
+  .tf__custom .lede { max-width: 60ch; }
+  @media (max-width: 860px) { .tf__custom { grid-template-columns: 1fr; } }
+</style>

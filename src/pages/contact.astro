@@ -1,0 +1,74 @@
+---
+import Base from "../layouts/Base.astro";
+import BookingForm from "../components/BookingForm.astro";
+import { site, whatsappLink } from "../data/site";
+
+const contactSchema = {
+  "@context": "https://schema.org",
+  "@type": "ContactPage",
+  name: "Contacter Motion Eleven",
+  url: `${site.url}/contact/`,
+  about: { "@id": `${site.url}/#organisation` },
+};
+---
+<Base
+  title="Contact et prise de rendez-vous | Motion Eleven"
+  description="Contactez Motion Eleven par WhatsApp, téléphone ou e-mail, ou réservez un appel de 30 minutes pour parler de votre projet. Réponse sous 24 h ouvrées."
+  crumbs={[{ name: "Contact", href: "/contact/" }]}
+  schema={[contactSchema]}
+>
+  <section class="ct">
+    <div class="wrap ct__grid">
+      <div class="ct__info">
+        <h1>Contact</h1>
+        <p class="lede">Le moyen le plus rapide de nous joindre est WhatsApp. Pour un projet, le formulaire de devis nous donne toutes les informations utiles.</p>
+        <ul class="ct__ways">
+          <li>
+            <a href={whatsappLink()} target="_blank" rel="noopener" data-track="whatsapp_click" data-label="contact_page">
+              <span class="ct__k">WhatsApp</span><span class="ct__v">Écrire un message</span>
+            </a>
+          </li>
+          <li>
+            <a href={site.phoneHref}>
+              <span class="ct__k">Téléphone</span><span class="ct__v">{site.phone}</span>
+            </a>
+          </li>
+          <li>
+            <a href={`mailto:${site.email}`}>
+              <span class="ct__k">E-mail</span><span class="ct__v">{site.email}</span>
+            </a>
+          </li>
+          <li>
+            <a href="/devis/">
+              <span class="ct__k">Projet</span><span class="ct__v">Demander un devis gratuit</span>
+            </a>
+          </li>
+        </ul>
+        <p class="small muted">{site.responseTime}. {site.address.city} ({site.address.postalCode}), {site.area}.</p>
+      </div>
+      <div class="ct__book" id="rendez-vous">
+        <h2>Réserver un appel de 30 minutes</h2>
+        <p class="muted">Choisissez un jour et un créneau : nous vous confirmons l'horaire exact.</p>
+        <BookingForm />
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .ct { padding: clamp(1.5rem, 4vw, 3rem) 0 var(--section); }
+  .ct__grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: clamp(2rem, 6vw, 6rem); align-items: start; }
+  .ct__info { display: grid; gap: 1.5rem; }
+  .ct__ways { list-style: none; border-top: 1px solid var(--line); }
+  .ct__ways a {
+    display: grid; grid-template-columns: 120px 1fr; gap: 1rem; align-items: baseline;
+    padding: 1.25rem 0; border-bottom: 1px solid var(--line); text-decoration: none;
+  }
+  .ct__k { font-size: var(--t-sm); color: var(--ink-soft); }
+  .ct__v { font-size: var(--t-md); font-weight: 660; letter-spacing: -0.01em; word-break: break-word; }
+  .ct__ways a:hover .ct__v { color: var(--cobalt); }
+  .ct__book { background: var(--chalk); border-radius: var(--r-frame); padding: clamp(1.25rem, 4vw, 2.5rem); scroll-margin-top: 100px; }
+  .ct__book h2 { font-size: var(--t-lg); margin-bottom: 0.6rem; }
+  .ct__book > .muted { margin-bottom: 1.75rem; }
+  @media (max-width: 960px) { .ct__grid { grid-template-columns: 1fr; } .ct__ways a { grid-template-columns: 1fr; gap: 0.2rem; } }
+</style>

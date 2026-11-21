@@ -1,0 +1,92 @@
+---
+import Base from "../../layouts/Base.astro";
+import ProjectVisual from "../../components/ProjectVisual.astro";
+import CtaFinal from "../../components/CtaFinal.astro";
+import { projects, type Project } from "../../data/content";
+
+export function getStaticPaths() {
+  return projects.map((p) => ({ params: { slug: p.slug }, props: { project: p } }));
+}
+interface Props { project: Project; }
+const { project } = Astro.props;
+const others = projects.filter((p) => p.slug !== project.slug);
+---
+<Base
+  title={`${project.name} : étude de cas | Motion Eleven`}
+  description={`${project.type}. ${project.summary}`}
+  crumbs={[{ name: "Réalisations", href: "/realisations/" }, { name: project.name, href: `/realisations/${project.slug}/` }]}
+>
+  <section class="cs-hero">
+    <div class="wrap">
+      <p class="cs__sector">{project.sector}</p>
+      <h1>{project.name}</h1>
+      <p class="lede">{project.type}</p>
+      <dl class="cs__meta">
+        <div><dt>Site</dt><dd><a href={project.url} target="_blank" rel="noopener">{project.urlLabel}</a></dd></div>
+        <div><dt>Secteur</dt><dd>{project.sector}</dd></div>
+        <div><dt>Réalisé</dt><dd>{project.stack.join(", ")}</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <section class="section section--chalk section--tight">
+    <div class="wrap cs__visual"><ProjectVisual project={project} size="lg" /></div>
+  </section>
+
+  <section class="section">
+    <div class="wrap cs__body">
+      <div class="cs__block">
+        <h2>Contexte</h2>
+        <p>{project.context}</p>
+      </div>
+      <div class="cs__block">
+        <h2>Problématique</h2>
+        <p>{project.problem}</p>
+      </div>
+      <div class="cs__block">
+        <h2>Solution</h2>
+        <p>{project.solution}</p>
+      </div>
+      <div class="cs__block">
+        <h2>Fonctionnalités</h2>
+        <ul class="ticks">{project.features.map((f) => <li>{f}</li>)}</ul>
+      </div>
+      <div class="cs__block cs__links">
+        <a class="btn" href={`/devis/?projet=${project.slug === "dankys-burger" ? "restaurant" : "reservation"}`}>Un projet similaire ? Parlons-en</a>
+        <a class="btn btn--ghost" href={project.url} target="_blank" rel="noopener">Visiter {project.urlLabel}</a>
+      </div>
+    </div>
+  </section>
+
+  {others.length > 0 && (
+    <section class="section section--chalk section--tight">
+      <div class="wrap cs__next">
+        <p class="muted">Autre réalisation</p>
+        {others.map((o) => (
+          <a href={`/realisations/${o.slug}/`} class="cs__next-link">{o.name}</a>
+        ))}
+      </div>
+    </section>
+  )}
+
+  <CtaFinal />
+</Base>
+
+<style>
+  .cs-hero { padding: clamp(1.5rem, 4vw, 3rem) 0 clamp(3rem, 6vw, 5rem); }
+  .cs__sector { color: var(--cobalt); font-weight: 620; margin-bottom: 0.75rem; }
+  .cs-hero h1 { margin-bottom: 1.25rem; }
+  .cs__meta { display: flex; flex-wrap: wrap; gap: 1.5rem 3.5rem; margin: 2.5rem 0 0; padding-top: 1.5rem; border-top: 1px solid var(--line); }
+  .cs__meta dt { font-size: var(--t-xs); color: var(--ink-soft); }
+  .cs__meta dd { margin: 0.2rem 0 0; font-weight: 600; }
+  .cs__visual { max-width: 980px; }
+  .cs__body { display: grid; gap: clamp(2.5rem, 5vw, 3.5rem); max-width: 860px; }
+  .cs__block { display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 1rem 2.5rem; }
+  .cs__block h2 { font-size: var(--t-md); }
+  .cs__block p { font-size: var(--t-md); line-height: 1.55; color: var(--ink-soft); }
+  .cs__links { display: flex; flex-wrap: wrap; gap: 0.75rem; grid-template-columns: none; }
+  @media (max-width: 700px) { .cs__block { grid-template-columns: 1fr; } }
+  .cs__next { display: flex; flex-wrap: wrap; gap: 1rem 2rem; align-items: baseline; }
+  .cs__next p { margin: 0; }
+  .cs__next-link { font-size: var(--t-xl); font-weight: 720; font-stretch: 125%; letter-spacing: -0.03em; text-decoration: none; }
+</style>

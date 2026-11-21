@@ -1,0 +1,26 @@
+---
+// N'affiche rien tant qu'aucun avis authentique n'est renseigné dans src/data/content.ts
+import { testimonials } from "../data/content";
+---
+{testimonials.length > 0 && (
+  <section class="section section--chalk" aria-labelledby="avis">
+    <div class="wrap">
+      <div class="head"><h2 id="avis">Ils nous ont confié leur projet</h2></div>
+      <div class="tm">
+        {testimonials.map((t) => (
+          <blockquote class="tm__item">
+            <p>« {t.text} »</p>
+            <footer><strong>{t.name}</strong>, {t.company}{t.source && <span> — avis {t.source}</span>}</footer>
+          </blockquote>
+        ))}
+      </div>
+    </div>
+  </section>
+)}
+
+<style>
+  .tm { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; }
+  .tm__item { margin: 0; padding: 2rem 0 0; border-top: 2px solid var(--ink); }
+  .tm__item p { font-size: var(--t-md); line-height: 1.45; margin-bottom: 1.25rem; }
+  .tm__item footer { font-size: var(--t-sm); color: var(--ink-soft); }
+</style>

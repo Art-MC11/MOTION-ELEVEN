@@ -1,0 +1,26 @@
+---
+// Bandeau affiché uniquement si un identifiant Google Analytics est configuré
+// (PUBLIC_GA_ID). Sans GA, aucun cookie de mesure n'est déposé.
+---
+<div class="ck" role="dialog" aria-live="polite" aria-label="Gestion des cookies" hidden data-cookie>
+  <p>
+    Nous utilisons Google Analytics pour mesurer l'audience et améliorer le site, uniquement avec votre accord.
+    <a href="/confidentialite/">En savoir plus</a>
+  </p>
+  <div class="ck__btns">
+    <button type="button" class="btn btn--sm btn--ghost" data-consent="denied">Refuser</button>
+    <button type="button" class="btn btn--sm" data-consent="granted">Accepter</button>
+  </div>
+</div>
+
+<style>
+  .ck {
+    position: fixed; left: 1rem; bottom: 1rem; z-index: 60; max-width: 420px;
+    background: #fff; border: 1px solid var(--line); border-radius: 14px; padding: 1.1rem 1.2rem;
+    box-shadow: 0 24px 48px -24px rgba(12, 21, 48, 0.4); font-size: var(--t-sm);
+  }
+  .ck p { margin-bottom: 0.9rem; }
+  .ck__btns { display: flex; gap: 0.5rem; }
+  .ck__btns .btn { flex: 1; }
+  @media (max-width: 560px) { .ck { right: 1rem; bottom: 5.25rem; max-width: none; } }
+</style>

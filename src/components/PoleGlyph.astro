@@ -1,0 +1,70 @@
+---
+// Visuels distinctifs des quatre pôles (SVG, aucune image générique).
+interface Props { kind: "web" | "shop" | "auto" | "motion"; }
+const { kind } = Astro.props;
+---
+<div class:list={["pg", `pg--${kind}`]} aria-hidden="true">
+  {kind === "web" && (
+    <svg viewBox="0 0 200 140">
+      <rect x="10" y="10" width="180" height="120" rx="10" class="f-paper" />
+      <rect x="10" y="10" width="180" height="20" rx="10" class="f-chalk" />
+      <rect x="24" y="46" width="78" height="10" rx="3" class="f-ink" />
+      <rect x="24" y="62" width="58" height="10" rx="3" class="f-ink" />
+      <rect x="24" y="82" width="70" height="5" rx="2.5" class="f-line" />
+      <rect x="24" y="92" width="54" height="5" rx="2.5" class="f-line" />
+      <rect x="24" y="106" width="40" height="13" rx="4" class="f-cobalt" />
+      <rect x="114" y="44" width="62" height="74" rx="7" class="f-tint" />
+    </svg>
+  )}
+  {kind === "shop" && (
+    <svg viewBox="0 0 200 140">
+      <rect x="18" y="14" width="96" height="112" rx="10" class="f-paper" />
+      <rect x="28" y="24" width="76" height="52" rx="6" class="f-tint" />
+      <rect x="28" y="86" width="52" height="7" rx="3" class="f-ink" />
+      <rect x="28" y="99" width="30" height="7" rx="3" class="f-line" />
+      <rect x="126" y="48" width="58" height="56" rx="10" class="f-ink" />
+      <rect x="136" y="60" width="38" height="5" rx="2.5" class="f-muted" />
+      <rect x="136" y="70" width="24" height="5" rx="2.5" class="f-muted" />
+      <rect x="136" y="84" width="38" height="11" rx="3.5" class="f-cobalt" />
+    </svg>
+  )}
+  {kind === "auto" && (
+    <svg viewBox="0 0 200 140">
+      <path d="M46 70h40M114 70h40M100 56V34M100 84v22" class="s-line" />
+      <circle cx="32" cy="70" r="16" class="f-paper" />
+      <rect x="84" y="52" width="32" height="36" rx="9" class="f-cobalt" />
+      <circle cx="168" cy="70" r="16" class="f-paper" />
+      <circle cx="100" cy="22" r="12" class="f-paper" />
+      <circle cx="100" cy="118" r="12" class="f-lead" />
+      <path d="M94 118l4 4 8-8" class="s-white" />
+      <path d="M26 70h12M162 64v12M156 70h12" class="s-ink" />
+    </svg>
+  )}
+  {kind === "motion" && (
+    <svg viewBox="0 0 200 140">
+      <path d="M20 112C60 112 70 28 110 28s50 84 70 84" class="s-cobalt" />
+      <path d="M20 122h160" class="s-line" />
+      <circle cx="20" cy="112" r="6" class="f-ink" />
+      <rect x="104" y="22" width="12" height="12" rx="2" transform="rotate(45 110 28)" class="f-ink" />
+      <circle cx="180" cy="112" r="6" class="f-ink" />
+      <path d="M60 122v-6M100 122v-6M140 122v-6" class="s-line" />
+    </svg>
+  )}
+</div>
+
+<style>
+  .pg { background: var(--chalk); border-radius: 14px; padding: 1rem; }
+  .pg svg { width: 100%; height: auto; }
+  .f-paper { fill: #fff; stroke: var(--line); }
+  .f-chalk { fill: #f5f6f8; }
+  .f-ink { fill: var(--ink); }
+  .f-line { fill: var(--line); }
+  .f-muted { fill: #4b577d; }
+  .f-tint { fill: var(--cobalt-tint); }
+  .f-cobalt { fill: var(--cobalt); }
+  .f-lead { fill: var(--lead); }
+  .s-line { fill: none; stroke: #b9c0d0; stroke-width: 2; stroke-dasharray: 4 4; }
+  .s-cobalt { fill: none; stroke: var(--cobalt); stroke-width: 3; }
+  .s-ink { fill: none; stroke: var(--ink); stroke-width: 2.5; stroke-linecap: round; }
+  .s-white { fill: none; stroke: #fff; stroke-width: 2.5; }
+</style>
