@@ -1,3 +1,4 @@
+import { projectOptions, sectorOptions } from "../data/funnel";
 // Envoi des formulaires de prospects.
 // 1) Netlify Forms (enregistrement garanti, visible dans le tableau de bord Netlify)
 // 2) /api/lead (Supabase + e-mail Resend, dès que les clés sont configurées)
@@ -84,43 +85,38 @@ document.querySelectorAll<HTMLFormElement>("form[data-lead-form]").forEach((form
   });
 });
 
-// Pré-remplissage depuis l'URL (?formule=business&projet=restaurant)
+// Pré-remplissage depuis l'URL (?projet=e-commerce&secteur=restaurant&formule=business)
 const params = new URLSearchParams(location.search);
 const formule = params.get("formule");
 const projet = params.get("projet");
-const mapProjet: Record<string, string> = {
-  "creation-site-internet": "Site vitrine ou professionnel",
-  "e-commerce": "Boutique en ligne",
-  "automatisation-ia": "Automatisation ou IA",
-  "motion-design": "Motion design ou vidéo",
-  restaurants: "Site vitrine ou professionnel",
-  restaurant: "Site vitrine ou professionnel",
-  artisans: "Site vitrine ou professionnel",
-  commerces: "Boutique en ligne",
-  reservation: "Réservation ou prise de rendez-vous",
+const secteur = params.get("secteur");
+const projetLabels: Record<string, string> = Object.fromEntries(projectOptions.map((o) => [o.key, o.label]));
+Object.assign(projetLabels, {
   "sur-mesure": "Projet sur mesure",
-};
-const mapSecteur: Record<string, string> = {
-  restaurants: "Restaurant", restaurant: "Restaurant", artisans: "Artisan", commerces: "Commerce",
-};
-const mapFormule: Record<string, string> = {
-  starter: "Site vitrine ou professionnel",
-  business: "Site vitrine ou professionnel",
-  ecommerce: "Boutique en ligne",
+  restaurants: projetLabels["creation-site-internet"],
+  artisans: projetLabels["creation-site-internet"],
+  commerces: projetLabels["e-commerce"],
+});
+const secteurLabels: Record<string, string> = Object.fromEntries(sectorOptions.map((o) => [o.key, o.label]));
+Object.assign(secteurLabels, { restaurants: "Restaurant", artisans: "Artisan", commerces: "Commerce" });
+const formuleProjet: Record<string, string> = {
+  starter: projetLabels["creation-site-internet"],
+  business: projetLabels["creation-site-internet"],
+  ecommerce: projetLabels["e-commerce"],
 };
 function check(name: string, value?: string) {
   if (!value) return;
   const input = document.querySelector<HTMLInputElement>(`[data-lead-form] input[name="${name}"][value="${CSS.escape(value)}"]`);
   if (input) input.checked = true;
 }
-check("project_type", (projet && mapProjet[projet]) || (formule ? mapFormule[formule] : undefined));
-check("sector", projet ? mapSecteur[projet] : undefined);
+check("project_type", (projet && projetLabels[projet]) || (formule ? formuleProjet[formule] : undefined));
+check("sector", (secteur && secteurLabels[secteur]) || (projet ? secteurLabels[projet] : undefined));
 const formuleField = document.querySelector<HTMLInputElement>("[data-lead-form] input[name=formule]");
 if (formuleField && formule) formuleField.value = formule;
 const formuleNote = document.querySelector<HTMLElement>("[data-formule-note]");
 if (formuleNote && formule) {
   const names: Record<string, string> = { starter: "Starter", business: "Business", ecommerce: "E-commerce" };
-  if (names[formule]) { formuleNote.textContent = `Formule choisie : ${names[formule]}. Nous adaptons la proposition à votre projet.`; formuleNote.hidden = false; }
+  if (names[formule]) { formuleNote.textContent = `Formule choisie : ${names[formule]}.`; formuleNote.hidden = false; }
 }
 
 export {};

@@ -1,18 +1,26 @@
 ---
+// Tunnel de devis : une question par écran, avancée automatique, barre de progression.
+// Sans JavaScript, toutes les étapes s'affichent et le formulaire reste utilisable.
 import "../styles/forms.css";
-const sectors = ["Restaurant", "Artisan", "Commerce", "Indépendant", "TPE / PME", "Association", "Autre"];
-const types = ["Site vitrine ou professionnel", "Refonte de site", "Boutique en ligne", "Réservation ou prise de rendez-vous", "Automatisation ou IA", "Motion design ou vidéo", "Projet sur mesure"];
-const budgets = ["Moins de 1 000 €", "1 000 à 2 000 €", "2 000 à 5 000 €", "Plus de 5 000 €", "Je ne sais pas encore"];
-const delays = ["Dès que possible", "Dans le mois", "D'ici 3 mois", "Pas de date précise"];
+import { projectOptions, sectorOptions, budgetOptions, timelineOptions } from "../data/funnel";
+const types = [...projectOptions.map((o) => o.label), "Projet sur mesure"];
+const steps = [
+  { name: "project_type", q: "De quoi avez-vous besoin ?", opts: types },
+  { name: "sector", q: "Quelle est votre activité ?", opts: sectorOptions.map((o) => o.label) },
+  { name: "budget", q: "Quel budget envisagez-vous ?", opts: budgetOptions },
+  { name: "timeline", q: "Pour quand ?", opts: timelineOptions },
+];
+const total = steps.length + 1;
 ---
 <form
-  class="fm"
+  class="fm tn"
   name="devis"
   method="POST"
   action="/merci/?type=devis"
   data-netlify="true"
   netlify-honeypot="bot_field"
   data-lead-form
+  data-steps
 >
   <input type="hidden" name="form-name" value="devis" />
   <input type="hidden" name="formule" value="" />
@@ -20,84 +28,131 @@ const delays = ["Dès que possible", "Dans le mois", "D'ici 3 mois", "Pas de dat
   <input type="hidden" name="utm" value="" />
   <p class="hp" aria-hidden="true"><label>Ne pas remplir <input name="bot_field" tabindex="-1" autocomplete="off" /></label></p>
 
-  <p class="fm__note" data-formule-note hidden></p>
+  <div class="tn__head">
+    <button type="button" class="tn__back" data-back hidden>Retour</button>
+    <p class="tn__count" aria-live="polite"><span data-count>Étape 1</span> sur {total}</p>
+  </div>
+  <div class="tn__bar" aria-hidden="true"><span data-bar></span></div>
 
-  <fieldset>
-    <legend>Votre activité</legend>
-    <div class="chips">
-      {sectors.map((s, i) => (
-        <label class="chip"><input type="radio" name="sector" value={s} required={i === 0} /><span>{s}</span></label>
-      ))}
-    </div>
-  </fieldset>
-
-  <fieldset>
-    <legend>Type de projet</legend>
-    <div class="chips">
-      {types.map((s, i) => (
-        <label class="chip"><input type="radio" name="project_type" value={s} required={i === 0} /><span>{s}</span></label>
-      ))}
-    </div>
-  </fieldset>
-
-  <div class="fm__row">
-    <fieldset>
-      <legend>Budget envisagé</legend>
-      <div class="chips">
-        {budgets.map((s) => (
-          <label class="chip"><input type="radio" name="budget" value={s} /><span>{s}</span></label>
+  {steps.map((s) => (
+    <fieldset class="tn__step" data-step>
+      <legend class="tn__q">{s.q}</legend>
+      <div class="tn__opts">
+        {s.opts.map((o, j) => (
+          <label class="tn__opt"><input type="radio" name={s.name} value={o} required={j === 0} /><span>{o}</span></label>
         ))}
       </div>
     </fieldset>
-    <fieldset>
-      <legend>Délai souhaité</legend>
-      <div class="chips">
-        {delays.map((s) => (
-          <label class="chip"><input type="radio" name="timeline" value={s} /><span>{s}</span></label>
-        ))}
+  ))}
+
+  <fieldset class="tn__step" data-step>
+    <legend class="tn__q">Où vous envoyer votre devis ?</legend>
+    <p class="fm__note" data-formule-note hidden></p>
+    <div class="fm__row">
+      <div class="fm__field">
+        <label class="fm__label" for="f-name">Nom et prénom</label>
+        <input id="f-name" type="text" name="name" required maxlength="120" autocomplete="name" />
       </div>
-    </fieldset>
-  </div>
-
-  <div class="fm__field">
-    <label class="fm__label" for="f-message">Décrivez votre besoin <span class="fm__hint">Votre activité, ce que le site doit permettre, un site qui vous plaît…</span></label>
-    <textarea id="f-message" name="message" required minlength="10" maxlength="3000"></textarea>
-  </div>
-
-  <div class="fm__row">
-    <div class="fm__field">
-      <label class="fm__label" for="f-name">Nom et prénom</label>
-      <input id="f-name" type="text" name="name" required maxlength="120" autocomplete="name" />
+      <div class="fm__field">
+        <label class="fm__label" for="f-phone">Téléphone</label>
+        <input id="f-phone" type="tel" name="phone" required maxlength="30" autocomplete="tel" pattern="[0-9+().\s-]{8,}" />
+      </div>
+    </div>
+    <div class="fm__row">
+      <div class="fm__field">
+        <label class="fm__label" for="f-email">E-mail</label>
+        <input id="f-email" type="email" name="email" required maxlength="160" autocomplete="email" />
+      </div>
+      <div class="fm__field">
+        <label class="fm__label" for="f-company">Entreprise <span class="fm__hint">facultatif</span></label>
+        <input id="f-company" type="text" name="company" maxlength="160" autocomplete="organization" />
+      </div>
     </div>
     <div class="fm__field">
-      <label class="fm__label" for="f-company">Entreprise <span class="fm__hint">facultatif</span></label>
-      <input id="f-company" type="text" name="company" maxlength="160" autocomplete="organization" />
+      <label class="fm__label" for="f-message">Votre projet en quelques mots <span class="fm__hint">facultatif</span></label>
+      <textarea id="f-message" name="message" maxlength="3000" rows="3"></textarea>
     </div>
-  </div>
-  <div class="fm__row">
-    <div class="fm__field">
-      <label class="fm__label" for="f-email">E-mail</label>
-      <input id="f-email" type="email" name="email" required maxlength="160" autocomplete="email" />
+    <label class="fm__consent">
+      <input type="checkbox" name="consent" value="oui" required />
+      <span>J'accepte d'être recontacté au sujet de ma demande. <a href="/confidentialite/">Confidentialité</a></span>
+    </label>
+    <p class="fm__error" data-form-error tabindex="-1" hidden></p>
+    <div class="fm__submit">
+      <button class="btn" type="submit">Recevoir mon devis gratuit</button>
+      <p class="fm__legal">Réponse sous 24 h ouvrées. Gratuit et sans engagement.</p>
     </div>
-    <div class="fm__field">
-      <label class="fm__label" for="f-phone">Téléphone</label>
-      <input id="f-phone" type="tel" name="phone" required maxlength="30" autocomplete="tel" pattern="[0-9+().\s-]{8,}" />
-    </div>
-  </div>
-
-  <label class="fm__consent">
-    <input type="checkbox" name="consent" value="oui" required />
-    <span>J'accepte que Motion Eleven utilise ces informations pour me recontacter au sujet de ma demande. <a href="/confidentialite/">Politique de confidentialité</a></span>
-  </label>
-
-  <p class="fm__error" data-form-error tabindex="-1" hidden></p>
-
-  <div class="fm__submit">
-    <button class="btn" type="submit">Envoyer ma demande de devis</button>
-    <p class="fm__legal">Gratuit et sans engagement. Réponse sous 24 h ouvrées, proposition chiffrée sous 48 h.</p>
-  </div>
+  </fieldset>
 </form>
 
 <script>
   import "../scripts/forms";
+
+  const form = document.querySelector<HTMLFormElement>("form[data-steps]");
+  if (form) {
+    const stepsEls = [...form.querySelectorAll<HTMLElement>("[data-step]")];
+    const back = form.querySelector<HTMLButtonElement>("[data-back]")!;
+    const count = form.querySelector<HTMLElement>("[data-count]")!;
+    const bar = form.querySelector<HTMLElement>("[data-bar]")!;
+    let current = 0;
+
+    const answered = (el: HTMLElement) => [...el.querySelectorAll<HTMLInputElement>("input[type=radio]")].some((r) => r.checked);
+    const show = (i: number, focus = true) => {
+      current = Math.max(0, Math.min(i, stepsEls.length - 1));
+      stepsEls.forEach((el, k) => (el.hidden = k !== current));
+      back.hidden = current === 0;
+      count.textContent = `Étape ${current + 1}`;
+      bar.style.width = `${((current + 1) / stepsEls.length) * 100}%`;
+      if (focus) {
+        const target = stepsEls[current].querySelector<HTMLElement>("input:checked, input:not([type=hidden])");
+        target?.focus({ preventScroll: true });
+        const top = form.getBoundingClientRect().top + window.scrollY - 100;
+        if (window.scrollY > top) window.scrollTo({ top, behavior: "smooth" });
+      }
+      window.meTrack?.("funnel_step", { step: current + 1 });
+    };
+
+    form.classList.add("is-stepped");
+    // Étape de départ : la première question sans réponse (pré-remplissage depuis l'URL)
+    window.setTimeout(() => {
+      const first = stepsEls.findIndex((el) => el.querySelector("input[type=radio]") && !answered(el));
+      show(first === -1 ? stepsEls.length - 1 : first, false);
+    }, 0);
+
+    form.addEventListener("change", (e) => {
+      const t = e.target as HTMLInputElement;
+      if (t.type !== "radio") return;
+      const idx = stepsEls.findIndex((el) => el.contains(t));
+      if (idx === current) window.setTimeout(() => show(current + 1), 180);
+    });
+    back.addEventListener("click", () => show(current - 1));
+  }
 </script>
+
+<style>
+  .tn { gap: 1.25rem; }
+  .tn__head { display: flex; align-items: center; justify-content: space-between; min-height: 36px; }
+  .tn__back {
+    background: none; border: 0; padding: 0.4rem 0; font: inherit; font-size: var(--t-sm); font-weight: 600;
+    color: var(--ink); cursor: pointer; text-decoration: underline; text-underline-offset: 0.2em;
+  }
+  .tn__count { margin: 0 0 0 auto; font-size: var(--t-sm); color: var(--ink-soft); }
+  .tn__bar { height: 4px; border-radius: 4px; background: var(--line); overflow: hidden; margin-top: -0.5rem; }
+  .tn__bar span { display: block; height: 100%; width: 20%; background: var(--cobalt); transition: width 0.35s var(--ease); }
+  .tn__step { gap: 1.1rem; }
+  .tn__q { font-size: var(--t-lg); font-weight: 720; font-stretch: 118%; letter-spacing: -0.02em; line-height: 1.15; margin-bottom: 0.6rem; }
+  .tn__opts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.6rem; }
+  .tn__opt { position: relative; }
+  .tn__opt input { position: absolute; inset: 0; opacity: 0; margin: 0; cursor: pointer; }
+  .tn__opt span {
+    display: flex; align-items: center; min-height: 62px; padding: 0.75rem 1rem;
+    border: 1.5px solid var(--line); border-radius: var(--r-ui); background: #fff;
+    font-weight: 600; font-size: var(--t-base); line-height: 1.25; cursor: pointer;
+    transition: border-color 0.15s, background-color 0.15s, color 0.15s;
+  }
+  .tn__opt input:hover + span { border-color: var(--ink); }
+  .tn__opt input:checked + span { background: var(--ink); border-color: var(--ink); color: #fff; }
+  .tn__opt input:focus-visible + span { outline: 3px solid var(--cobalt); outline-offset: 2px; }
+  .tn__step[hidden] { display: none; }
+  .tn:not(.is-stepped) .tn__head, .tn:not(.is-stepped) .tn__bar { display: none; }
+  @media (max-width: 420px) { .tn__opts { grid-template-columns: 1fr; } .tn__opt span { min-height: 56px; } }
+</style>

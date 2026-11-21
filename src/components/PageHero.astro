@@ -5,8 +5,9 @@ interface Props {
   primary?: { label: string; href: string };
   secondary?: { label: string; href: string };
   kicker?: string;
+  noButtons?: boolean;
 }
-const { title, lede, primary = { label: "Parler de mon projet", href: "/devis/" }, secondary, kicker } = Astro.props;
+const { title, lede, primary = { label: "Parler de mon projet", href: "/devis/" }, secondary, kicker, noButtons = false } = Astro.props;
 ---
 <section class="ph">
   <div class="wrap ph__grid">
@@ -14,10 +15,10 @@ const { title, lede, primary = { label: "Parler de mon projet", href: "/devis/" 
       {kicker && <p class="ph__kicker">{kicker}</p>}
       <h1>{title}</h1>
       <p class="lede">{lede}</p>
-      <div class="btns">
+      {!noButtons && <div class="btns">
         <a class="btn" href={primary.href} data-track="cta_click" data-label={`hero_${primary.label}`}>{primary.label}</a>
         {secondary && <a class="btn btn--ghost" href={secondary.href}>{secondary.label}</a>}
-      </div>
+      </div>}
     </div>
     <div class="ph__aside"><slot /></div>
   </div>

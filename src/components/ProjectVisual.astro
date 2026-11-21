@@ -33,19 +33,7 @@ const { project, size = "md" } = Astro.props;
         </div>
       </div>
     </div>
-  ) : (
-    <div class="pv__phone" aria-hidden="true">
-      <div class="pv__notch"></div>
-      <div class="pv__app">
-        <div class="pv__brand">{project.name}</div>
-        <div class="pv__tabs"><span class="on">Burgers</span><span>Menus</span><span>Boissons</span></div>
-        {[0, 1, 2, 3].map(() => (
-          <div class="pv__item"><i class="pv__thumb"></i><div><i class="pv__t"></i><i class="pv__s"></i></div><i class="pv__add">+</i></div>
-        ))}
-        <div class="pv__order">Commander</div>
-      </div>
-    </div>
-  )}
+  ) : null}
   {!project.image && <figcaption>Schéma de l'interface réalisée</figcaption>}
 </figure>
 
@@ -82,28 +70,7 @@ const { project, size = "md" } = Astro.props;
   .pv__total { border-top: 1px solid #3d3531; padding-top: 0.45rem; margin-top: 0.2rem; font-weight: 700; color: #d8b56d; }
   .pv__pay { margin-top: 0.5rem; background: #d8b56d; color: #1b1717; border-radius: 6px; text-align: center; font-size: 11px; font-weight: 700; padding: 0.5rem; }
 
-  /* Téléphone — Danky's Burger */
-  .pv__phone {
-    width: min(270px, 78%); margin: 0 auto; aspect-ratio: 9 / 18.5; border-radius: 34px;
-    background: #121212; padding: 10px; position: relative;
-    box-shadow: 0 30px 60px -30px rgba(12, 21, 48, 0.6);
-  }
-  .pv__notch { position: absolute; top: 16px; left: 50%; transform: translateX(-50%); width: 70px; height: 18px; border-radius: 10px; background: #000; z-index: 2; }
-  .pv__app { height: 100%; border-radius: 26px; background: #fff8ef; padding: 44px 14px 14px; display: flex; flex-direction: column; gap: 10px; overflow: hidden; }
-  .pv__brand { font-weight: 800; font-stretch: 125%; letter-spacing: -0.03em; font-size: 1.05rem; color: #2a1608; }
-  .pv__tabs { display: flex; gap: 6px; }
-  .pv__tabs span { font-size: 10px; padding: 5px 9px; border-radius: 99px; background: #f1e4d2; color: #6b4a2e; font-weight: 600; }
-  .pv__tabs span.on { background: #e5482a; color: #fff; }
-  .pv__item { display: grid; grid-template-columns: 46px 1fr 24px; gap: 10px; align-items: center; background: #fff; border-radius: 12px; padding: 8px; border: 1px solid #f1e4d2; }
-  .pv__thumb { width: 46px; height: 46px; border-radius: 9px; background: #f6c98b; display: block; }
-  .pv__t { display: block; height: 7px; width: 80%; background: #2a1608; border-radius: 3px; margin-bottom: 6px; }
-  .pv__s { display: block; height: 5px; width: 50%; background: #e2d3c0; border-radius: 3px; }
-  .pv__add { width: 24px; height: 24px; border-radius: 50%; background: #e5482a; color: #fff; font-style: normal; font-weight: 700; display: grid; place-items: center; font-size: 14px; }
-  .pv__order { margin-top: auto; background: #2a1608; color: #fff; border-radius: 12px; text-align: center; padding: 11px; font-size: 12px; font-weight: 700; }
-
   .pv--la-photo-minute { background: linear-gradient(160deg, #efe6d8, #e3d5c0); border-radius: var(--r-frame); padding: clamp(1.25rem, 4vw, 2.5rem); }
   .pv--la-photo-minute figcaption { color: #5c5042; }
   @media (max-width: 520px) { .pv__cols { grid-template-columns: 1fr; } .pv__row { white-space: nowrap; } }
-  .pv--dankys-burger { background: linear-gradient(160deg, #fbe9d7, #f6dcc4); border-radius: var(--r-frame); padding: 2rem 1rem; }
-  .pv--dankys-burger figcaption { text-align: center; }
 </style>

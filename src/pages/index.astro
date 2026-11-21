@@ -1,14 +1,12 @@
 ---
 import Base from "../layouts/Base.astro";
-import HeroAssemble from "../components/HeroAssemble.astro";
-import PoleGlyph from "../components/PoleGlyph.astro";
+import FunnelStart from "../components/FunnelStart.astro";
 import ProjectVisual from "../components/ProjectVisual.astro";
-import Method from "../components/Method.astro";
 import Offers from "../components/Offers.astro";
 import Testimonials from "../components/Testimonials.astro";
 import Faq from "../components/Faq.astro";
 import CtaFinal from "../components/CtaFinal.astro";
-import { poles, projects, faq, sectors } from "../data/content";
+import { projects, faq, sectors } from "../data/content";
 import { site } from "../data/site";
 
 const faqSchema = {
@@ -24,208 +22,130 @@ const websiteSchema = {
   inLanguage: "fr-FR",
   publisher: { "@id": `${site.url}/#organisation` },
 };
+const steps = [
+  { t: "Vous répondez à 5 questions", d: "1 minute, depuis votre téléphone." },
+  { t: "On vous rappelle sous 24 h", d: "30 minutes pour cadrer votre projet." },
+  { t: "Devis clair sous 48 h", d: "Contenu, délai, prix. Vous décidez." },
+  { t: "Votre site en ligne", d: "Dès 2 semaines, maintenance comprise." },
+];
+const project = projects[0];
 ---
 <Base
-  title="Motion Eleven — Agence digitale en Île-de-France : sites internet, e-commerce, automatisation"
-  description="Création de sites internet, boutiques en ligne et automatisations pour indépendants, artisans, restaurants, TPE et PME en Île-de-France. Devis gratuit sous 48 h."
+  title="Motion Eleven — Création de site internet en Île-de-France, devis gratuit en 1 minute"
+  description="Sites internet, boutiques en ligne et automatisations pour indépendants, artisans, restaurants et PME en Île-de-France. Dès 590 € HT. Devis gratuit en 1 minute, réponse sous 24 h."
   schema={[websiteSchema, faqSchema]}
 >
-  <!-- 1. Hero -->
+  <!-- Hero + entrée du tunnel -->
   <section class="hero">
     <div class="wrap hero__grid">
       <div class="hero__text">
-        <p class="hero__brand">Motion Eleven, digital agency & technology</p>
         <h1>Votre entreprise mérite une présence digitale à la hauteur de vos ambitions.</h1>
-        <p class="lede">Nous concevons des sites web, des solutions e-commerce et des outils digitaux qui aident les entreprises à attirer de nouveaux clients et à développer leur activité.</p>
-        <div class="btns">
-          <a class="btn" href="/devis/" data-track="cta_click" data-label="hero_parler_projet">Parler de mon projet</a>
-          <a class="btn btn--ghost" href="/realisations/" data-track="cta_click" data-label="hero_realisations">Découvrir nos réalisations</a>
-        </div>
-        <p class="hero__note">Devis gratuit sous 48 h. Interlocuteur unique, de la maquette à la mise en ligne.</p>
+        <p class="lede">Sites internet, boutiques en ligne et outils qui vous apportent des clients. Dès 590&nbsp;€&nbsp;HT.</p>
+        <ul class="hero__proof">
+          <li>Devis gratuit sous 48 h</li>
+          <li>Interlocuteur unique</li>
+          <li>Paris et Île-de-France</li>
+        </ul>
       </div>
-      <HeroAssemble />
+      <FunnelStart />
     </div>
   </section>
 
-  <!-- 2. Confiance -->
-  <section class="trust" aria-label="Références">
-    <div class="wrap trust__inner">
-      <p class="trust__label">Ils sont en ligne avec Motion Eleven</p>
-      <ul class="trust__list">
-        {projects.map((p) => (
-          <li>
-            <a href={`/realisations/${p.slug}/`}>
-              <strong>{p.name}</strong>
-              <span>{p.sector}, {p.urlLabel}</span>
-            </a>
-          </li>
-        ))}
+  <!-- Activités : accès direct -->
+  <section class="sect" aria-label="Solutions par activité">
+    <div class="wrap sect__inner">
+      <p>Vous êtes</p>
+      <ul>
+        {sectors.map((s) => <li><a href={s.href}>{s.label}</a></li>)}
       </ul>
     </div>
   </section>
 
-  <!-- 3. Services -->
-  <section class="section" aria-labelledby="services">
-    <div class="wrap">
-      <div class="head head--split">
-        <h2 id="services">Quatre expertises, un seul interlocuteur.</h2>
-        <p class="lede">Du site qui rassure à l'automatisation qui fait gagner du temps : nous construisons tout ce dont votre activité a besoin pour avancer en ligne.</p>
-      </div>
-      <div class="poles">
-        {poles.map((p) => (
-          <article class="pole">
-            <PoleGlyph kind={p.key} />
-            <div class="pole__body">
-              <h3><a href={p.href}>{p.title}</a></h3>
-              <p>{p.promise}</p>
-              <ul class="pole__items">{p.items.map((i) => <li>{i}</li>)}</ul>
-            </div>
-          </article>
-        ))}
-      </div>
-    </div>
-  </section>
-
-  <!-- 4. Solutions par activité -->
-  <section class="section section--chalk" aria-labelledby="activites">
-    <div class="wrap">
-      <div class="head head--split">
-        <h2 id="activites">Une solution pensée pour votre métier.</h2>
-        <p class="lede">Un restaurant n'a pas les mêmes besoins qu'un plombier ou une boutique. Choisissez votre activité.</p>
-      </div>
-      <ul class="sectors">
-        {sectors.map((s) => (
-          <li>
-            <a href={s.href} class="sector">
-              <span class="sector__name">{s.label}</span>
-              <span class="sector__text">{s.text}</span>
-              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" /></svg>
-            </a>
-          </li>
-        ))}
-      </ul>
-    </div>
-  </section>
-
-  <!-- 5. Portfolio -->
-  <section class="section" aria-labelledby="portfolio">
-    <div class="wrap">
-      <div class="head head--split">
-        <h2 id="portfolio">Des projets réels, expliqués en détail.</h2>
-        <p class="lede">Le contexte, le problème à résoudre et ce que nous avons construit. Pas de chiffres inventés.</p>
-      </div>
-      <div class="cases">
-        {projects.map((p, i) => (
-          <article class:list={["case", { "case--flip": i % 2 === 1 }]}>
-            <div class="case__visual"><ProjectVisual project={p} /></div>
-            <div class="case__text">
-              <p class="case__sector">{p.sector}</p>
-              <h3>{p.name}</h3>
-              <p class="case__type">{p.type}</p>
-              <dl class="case__dl">
-                <div><dt>Contexte</dt><dd>{p.context}</dd></div>
-                <div><dt>Problématique</dt><dd>{p.problem}</dd></div>
-                <div><dt>Solution</dt><dd>{p.solution}</dd></div>
-              </dl>
-              <p class="case__feat-h">Fonctionnalités</p>
-              <ul class="ticks small">{p.features.slice(0, 4).map((f) => <li>{f}</li>)}</ul>
-              <div class="btns case__btns">
-                <a class="link" href={`/realisations/${p.slug}/`}>Lire l'étude de cas</a>
-                <a class="link" href={p.url} target="_blank" rel="noopener">Voir le site en ligne</a>
-              </div>
-            </div>
-          </article>
-        ))}
-      </div>
-    </div>
-  </section>
-
-  <!-- 6. Méthodologie -->
-  <section class="section section--ink" aria-labelledby="methode">
-    <div class="wrap">
-      <div class="head head--split">
-        <h2 id="methode">Un projet clair, en quatre étapes.</h2>
-        <p class="lede">Vous savez toujours où en est votre site, ce qui est inclus et ce que cela coûte.</p>
-      </div>
-      <Method />
-    </div>
-  </section>
-
-  <!-- 7. Offres -->
+  <!-- Offres -->
   <section class="section section--chalk" aria-labelledby="offres">
     <div class="wrap">
-      <div class="head head--split">
-        <h2 id="offres">Des formules lisibles, sans mauvaise surprise.</h2>
-        <p class="lede">Un prix de création, puis un abonnement qui couvre l'hébergement, la sécurité et vos modifications. Les projets sur mesure sont chiffrés sur devis.</p>
-      </div>
+      <div class="head"><h2 id="offres">Des prix clairs, affichés.</h2></div>
       <Offers />
     </div>
   </section>
 
-  <!-- 8. Témoignages (affichés dès qu'un avis authentique est ajouté) -->
+  <!-- Preuve -->
+  <section class="section" aria-labelledby="realisation">
+    <div class="wrap case">
+      <ProjectVisual project={project} />
+      <div class="case__text">
+        <p class="case__k">Réalisation</p>
+        <h2 id="realisation">{project.name}</h2>
+        <p class="lede">{project.summary}</p>
+        <ul class="ticks small">{project.features.slice(0, 4).map((f) => <li>{f}</li>)}</ul>
+        <div class="btns">
+          <a class="btn" href="/devis/?projet=reservation" data-track="cta_click" data-label="case_devis">Je veux le même résultat</a>
+          <a class="btn btn--ghost" href={`/realisations/${project.slug}/`}>Voir l'étude de cas</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Comment ça marche -->
+  <section class="section section--ink" aria-labelledby="methode">
+    <div class="wrap">
+      <div class="head head--split">
+        <h2 id="methode">De la demande à la mise en ligne.</h2>
+        <div><a class="btn btn--light" href="/devis/" data-track="cta_click" data-label="methode_devis">Commencer mon devis</a></div>
+      </div>
+      <ol class="flow">
+        {steps.map((s, i) => (
+          <li><span>{i + 1}</span><strong>{s.t}</strong><em>{s.d}</em></li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
   <Testimonials />
 
-  <!-- 9. FAQ -->
   <section class="section" aria-label="Questions fréquentes">
     <div class="wrap"><Faq items={faq} /></div>
   </section>
 
-  <!-- 10. CTA final -->
   <CtaFinal />
 </Base>
 
 <style>
-  .hero { padding: clamp(2.5rem, 6vw, 5.5rem) 0 clamp(3.5rem, 7vw, 6rem); overflow: hidden; }
-  .hero__grid { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: clamp(2.5rem, 5vw, 5rem); align-items: center; }
-  .hero__text { display: grid; gap: 1.6rem; }
-  .hero__brand { margin: 0; font-weight: 620; color: var(--cobalt); }
-  .hero h1 { font-size: clamp(2.2rem, 1.25rem + 3vw, 3.85rem); max-width: 17ch; }
-  .hero__note { font-size: var(--t-sm); color: var(--ink-soft); margin: 0; }
-  @media (max-width: 960px) { .hero__grid { grid-template-columns: 1fr; } }
-
-  .trust { border-block: 1px solid var(--line); }
-  .trust__inner { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem 3rem; padding-block: 1.5rem; }
-  .trust__label { margin: 0; font-size: var(--t-sm); color: var(--ink-soft); }
-  .trust__list { list-style: none; display: flex; flex-wrap: wrap; gap: 1rem 3rem; }
-  .trust__list a { display: grid; text-decoration: none; }
-  .trust__list strong { font-size: 1.35rem; font-weight: 740; font-stretch: 125%; letter-spacing: -0.03em; line-height: 1.2; }
-  .trust__list span { font-size: var(--t-xs); color: var(--ink-soft); }
-  .trust__list a:hover strong { color: var(--cobalt); }
-
-  .poles { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(2.5rem, 5vw, 4.5rem) clamp(2rem, 5vw, 5rem); }
-  .pole { display: grid; grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr); gap: 1.75rem; align-items: start; }
-  .pole h3 { font-size: var(--t-lg); margin-bottom: 0.75rem; }
-  .pole h3 a { text-decoration: none; }
-  .pole h3 a:hover { text-decoration: underline; text-decoration-color: var(--cobalt); }
-  .pole__body > p { color: var(--ink-soft); }
-  .pole__items { list-style: none; display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 1rem; }
-  .pole__items li { font-size: var(--t-xs); padding: 0.3rem 0.65rem; border: 1px solid var(--line); border-radius: var(--r-pill); }
-  @media (max-width: 1000px) { .poles { grid-template-columns: 1fr; } }
-  @media (max-width: 560px) { .pole { grid-template-columns: 1fr; } .pole :global(.pg) { max-width: 260px; } }
-
-  .sectors { list-style: none; border-top: 1px solid var(--line); }
-  .sector {
-    display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr) 28px; gap: 1.5rem; align-items: center;
-    padding: 1.6rem 0; border-bottom: 1px solid var(--line); text-decoration: none;
-    transition: padding 0.3s var(--ease);
+  .hero { padding: clamp(1.5rem, 5vw, 4.5rem) 0 clamp(2.5rem, 5vw, 4.5rem); }
+  .hero__grid { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: clamp(2rem, 5vw, 4.5rem); align-items: center; }
+  .hero__text { display: grid; gap: 1.4rem; }
+  .hero h1 { font-size: clamp(2rem, 1.2rem + 2.8vw, 3.6rem); max-width: 17ch; }
+  .hero .lede { max-width: 36ch; }
+  .hero__proof { list-style: none; display: flex; flex-wrap: wrap; gap: 0.5rem 1.5rem; font-size: var(--t-sm); font-weight: 600; }
+  .hero__proof li { position: relative; padding-left: 1.4rem; }
+  .hero__proof li::before {
+    content: ""; position: absolute; left: 0; top: 0.45em; width: 0.8rem; height: 0.45rem;
+    border-left: 2px solid var(--lead); border-bottom: 2px solid var(--lead); transform: rotate(-45deg);
   }
-  .sector__name { font-size: clamp(1.6rem, 1.1rem + 2vw, 2.6rem); font-weight: 720; font-stretch: 125%; letter-spacing: -0.035em; line-height: 1; }
-  .sector__text { color: var(--ink-soft); }
-  .sector svg { width: 28px; height: 28px; transition: transform 0.3s var(--ease); }
-  .sector:hover { color: var(--cobalt); padding-left: 0.75rem; }
-  .sector:hover svg { transform: translateX(4px); }
-  @media (max-width: 700px) { .sector { grid-template-columns: 1fr 28px; } .sector__text { grid-column: 1; grid-row: 2; } .sector svg { grid-row: 1; grid-column: 2; } }
+  @media (max-width: 960px) { .hero__grid { grid-template-columns: 1fr; } }
+  @media (max-width: 600px) { .hero h1 { font-size: 1.85rem; } .hero .lede { font-size: var(--t-base); } .hero__proof { display: none; } }
 
-  .cases { display: grid; gap: clamp(4rem, 8vw, 7rem); }
+  .sect { border-block: 1px solid var(--line); }
+  .sect__inner { display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem 1.5rem; padding-block: 1.1rem; }
+  .sect__inner p { margin: 0; color: var(--ink-soft); font-size: var(--t-sm); }
+  .sect ul { list-style: none; display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .sect a {
+    display: inline-flex; align-items: center; min-height: 40px; padding: 0 1rem; border-radius: var(--r-pill);
+    border: 1.5px solid var(--line); text-decoration: none; font-weight: 600; font-size: var(--t-sm);
+  }
+  .sect a:hover { border-color: var(--ink); color: var(--ink); }
+
   .case { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: clamp(2rem, 5vw, 5rem); align-items: center; }
-  .case--flip .case__visual { order: 2; }
-  .case__sector { color: var(--cobalt); font-weight: 620; margin-bottom: 0.5rem; }
-  .case h3 { font-size: var(--t-xl); margin-bottom: 0.5rem; }
-  .case__type { color: var(--ink-soft); margin-bottom: 1.75rem; }
-  .case__dl { display: grid; gap: 1.1rem; margin: 0 0 1.75rem; }
-  .case__dl dt { font-weight: 660; margin-bottom: 0.2rem; }
-  .case__dl dd { margin: 0; color: var(--ink-soft); font-size: var(--t-sm); }
-  .case__feat-h { font-weight: 660; margin-bottom: 0.6rem; }
-  .case__btns { margin-top: 1.75rem; gap: 1.5rem; }
-  @media (max-width: 900px) { .case { grid-template-columns: 1fr; } .case--flip .case__visual { order: 0; } }
+  .case__text { display: grid; gap: 1.1rem; justify-items: start; }
+  .case__k { margin: 0; color: var(--cobalt); font-weight: 620; }
+  .case .btns { margin-top: 0.5rem; }
+  @media (max-width: 900px) { .case { grid-template-columns: 1fr; } }
+
+  .flow { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1.5rem; }
+  .flow li { display: grid; gap: 0.35rem; align-content: start; border-top: 1px solid var(--line-dark); padding-top: 1.25rem; }
+  .flow span { font-size: 2.6rem; font-weight: 760; font-stretch: 125%; line-height: 1; color: #8f9cff; margin-bottom: 0.5rem; }
+  .flow strong { color: #fff; font-size: var(--t-md); line-height: 1.25; }
+  .flow em { font-style: normal; color: #aab3cc; font-size: var(--t-sm); }
+  @media (max-width: 900px) { .flow { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 520px) { .flow { grid-template-columns: 1fr; } }
 </style>

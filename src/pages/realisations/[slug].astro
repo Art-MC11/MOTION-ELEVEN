@@ -52,7 +52,7 @@ const others = projects.filter((p) => p.slug !== project.slug);
         <ul class="ticks">{project.features.map((f) => <li>{f}</li>)}</ul>
       </div>
       <div class="cs__block cs__links">
-        <a class="btn" href={`/devis/?projet=${project.slug === "dankys-burger" ? "restaurant" : "reservation"}`}>Un projet similaire ? Parlons-en</a>
+        <a class="btn" href="/devis/?projet=reservation">Un projet similaire ? Parlons-en</a>
         <a class="btn btn--ghost" href={project.url} target="_blank" rel="noopener">Visiter {project.urlLabel}</a>
       </div>
     </div>

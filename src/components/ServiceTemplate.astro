@@ -1,7 +1,7 @@
 ---
 import Base from "../layouts/Base.astro";
 import PageHero from "./PageHero.astro";
-import PoleGlyph from "./PoleGlyph.astro";
+import FunnelStart from "./FunnelStart.astro";
 import ProjectVisual from "./ProjectVisual.astro";
 import Faq from "./Faq.astro";
 import CtaFinal from "./CtaFinal.astro";
@@ -12,7 +12,8 @@ import type { PageData } from "../data/pages";
 interface Props { data: PageData; }
 const { data } = Astro.props;
 const project = data.project ? projects.find((p) => p.slug === data.project) : undefined;
-const heroProject = data.visual.project ? projects.find((p) => p.slug === data.visual.project) : undefined;
+const tradeSector: Record<string, string> = { restaurants: "restaurant", artisans: "artisan", commerces: "commerce" };
+const secteur = tradeSector[data.slug];
 const devisHref = `/devis/?projet=${encodeURIComponent(data.slug)}`;
 
 const serviceSchema = {
@@ -36,10 +37,9 @@ const faqSchema = {
     kicker={data.kicker}
     title={data.title}
     lede={data.lede}
-    primary={{ label: "Parler de mon projet", href: devisHref }}
-    secondary={{ label: "Voir les tarifs", href: "/tarifs/" }}
+    noButtons
   >
-    {heroProject ? <ProjectVisual project={heroProject} /> : data.visual.pole && <div class="st__glyph"><PoleGlyph kind={data.visual.pole} /></div>}
+    {secteur ? <FunnelStart mode="project" secteur={secteur} /> : <FunnelStart mode="sector" projet={data.slug} />}
   </PageHero>
 
   <section class="section section--chalk">
@@ -80,8 +80,8 @@ const faqSchema = {
 
   {project && (
     <section class="section section--chalk">
-      <div class:list={["wrap", "st__case", { "st__case--text": project.slug === heroProject?.slug }]}>
-        {project.slug !== heroProject?.slug && <ProjectVisual project={project} />}
+      <div class="wrap st__case">
+        <ProjectVisual project={project} />
         <div>
           <p class="st__case-k">Réalisation</p>
           <h2>{project.name}</h2>
@@ -116,7 +116,6 @@ const faqSchema = {
 </Base>
 
 <style>
-  .st__glyph :global(.pg) { padding: clamp(1.5rem, 4vw, 3rem); border-radius: var(--r-frame); }
 
   .st__problems { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(1.5rem, 4vw, 3.5rem); }
   .st__problem { border-top: 2px solid var(--ink); padding-top: 1.5rem; }
@@ -135,8 +134,6 @@ const faqSchema = {
   .st__case { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: clamp(2rem, 5vw, 5rem); align-items: center; }
   .st__case h2 { margin: 0.4rem 0 1.25rem; }
   .st__case .lede { margin-bottom: 1.5rem; }
-  .st__case--text { grid-template-columns: minmax(0, 1fr); }
-  .st__case--text > div { max-width: 46rem; }
   .st__case-k { color: var(--cobalt); font-weight: 620; margin: 0; }
   @media (max-width: 900px) { .st__case { grid-template-columns: 1fr; } }
 

@@ -8,7 +8,7 @@ import { site } from "../../data/site";
 ---
 <Base
   title="Réalisations : études de cas de sites internet | Motion Eleven"
-  description="Découvrez nos réalisations en détail : La Photo Minute (réservation et acompte en ligne), Danky's Burger (menu et commande en ligne)."
+  description="Nos réalisations en détail : La Photo Minute, site de location de borne photo avec réservation et acompte en ligne."
   crumbs={[{ name: "Réalisations", href: "/realisations/" }]}
 >
   <PageHero
@@ -18,7 +18,7 @@ import { site } from "../../data/site";
   />
 
   <section class="section section--chalk">
-    <div class="wrap rl">
+    <div class:list={["wrap", "rl", { "rl--single": projects.length === 1 }]}>
       {projects.map((p) => (
         <a class="rl__item" href={`/realisations/${p.slug}/`}>
           <ProjectVisual project={p} />
@@ -56,6 +56,9 @@ import { site } from "../../data/site";
   .rl__text p { color: var(--ink-soft); }
   .rl__text .link { display: inline-block; margin-top: 0.5rem; }
   @media (max-width: 860px) { .rl { grid-template-columns: 1fr; } }
+  .rl--single { grid-template-columns: 1fr; }
+  .rl--single .rl__item { grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); align-items: center; gap: clamp(2rem, 5vw, 5rem); }
+  @media (max-width: 860px) { .rl--single .rl__item { grid-template-columns: 1fr; } }
   .rl__motion { display: flex; flex-wrap: wrap; gap: 2rem; justify-content: space-between; align-items: end; }
   .rl__motion h2 { margin-bottom: 1rem; }
 </style>

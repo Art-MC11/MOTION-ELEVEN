@@ -162,7 +162,7 @@ export const pages: Record<string, PageData> = {
     kicker: "Solutions pour restaurants",
     title: "Remplissez vos tables et vos commandes, sans reverser de commission.",
     lede: "Vos clients choisissent souvent leur restaurant sur leur téléphone, quelques minutes avant de manger. Votre site doit leur montrer le menu, les horaires et le bouton pour commander, immédiatement.",
-    visual: { project: "dankys-burger" },
+    visual: { pole: "web" },
     problemsTitle: "Les problèmes que nous réglons pour les restaurateurs",
     problems: [
       { t: "Un menu illisible ou périmé", d: "Une photo floue de la carte ou un PDF à télécharger fait fuir. Un menu en ligne clair, par catégories, que vous mettez à jour en un instant." },
@@ -174,7 +174,6 @@ export const pages: Record<string, PageData> = {
       { group: "Pour vos clients", items: ["Menu en ligne par catégories, avec photos et prix", "Commande à emporter ou click & collect, paiement en ligne", "Réservation de table", "Horaires, adresse, itinéraire et appel en un geste", "Mention des allergènes et des labels (casher, halal, végétarien…)"] },
       { group: "Pour vous", items: ["Mise à jour du menu et des prix sans compétence technique", "Notification de chaque commande ou réservation", "Fiche Google Business cohérente avec le site", "Visibilité locale sur « restaurant + votre ville »"] },
     ],
-    project: "dankys-burger",
     offerTitle: "Formule Business recommandée : 990 € puis 59 € par mois",
     offerText: "Elle couvre le site, le menu en ligne, la réservation et le SEO local. La commande en ligne avec paiement relève de la formule E-commerce (1 490 € puis 79 € par mois).",
     offerKey: "business",

@@ -1,0 +1,54 @@
+---
+// Entrée du tunnel de vente : la première question du devis, directement dans la page.
+// mode "project" : on demande le type de projet. mode "sector" : le projet est connu, on demande l'activité.
+import { projectOptions, sectorOptions } from "../data/funnel";
+interface Props { mode?: "project" | "sector"; projet?: string; secteur?: string; }
+const { mode = "project", projet, secteur } = Astro.props;
+const options = mode === "project"
+  ? projectOptions.map((o) => ({ label: o.short, href: `/devis/?projet=${o.key}${secteur ? `&secteur=${secteur}` : ""}` }))
+  : sectorOptions.slice(0, 5).map((o) => ({ label: o.label, href: `/devis/?secteur=${o.key}${projet ? `&projet=${projet}` : ""}` }));
+const question = mode === "project" ? "De quoi avez-vous besoin ?" : "Quelle est votre activité ?";
+---
+<div class="fs">
+  <div class="fs__top">
+    <p class="fs__q">{question}</p>
+    <p class="fs__meta">Devis gratuit en 1 minute</p>
+  </div>
+  <div class="fs__bar" aria-hidden="true"><span></span></div>
+  <ul class="fs__opts">
+    {options.map((o) => (
+      <li>
+        <a href={o.href} data-track="funnel_start" data-label={o.label}>
+          {o.label}
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" /></svg>
+        </a>
+      </li>
+    ))}
+  </ul>
+  <p class="fs__foot">Réponse sous 24 h. Sans engagement.</p>
+</div>
+
+<style>
+  .fs {
+    background: var(--ink); color: #fff; border-radius: var(--r-frame);
+    padding: clamp(1.25rem, 3vw, 2rem); box-shadow: 0 40px 80px -40px rgba(12, 21, 48, 0.55);
+  }
+  .fs__top { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; flex-wrap: wrap; }
+  .fs__q { margin: 0; font-size: var(--t-lg); font-weight: 720; font-stretch: 118%; letter-spacing: -0.02em; line-height: 1.15; }
+  .fs__meta { margin: 0; font-size: var(--t-xs); color: #aab3cc; }
+  .fs__bar { height: 4px; border-radius: 4px; background: var(--line-dark); margin: 1.1rem 0 1.25rem; overflow: hidden; }
+  .fs__bar span { display: block; width: 20%; height: 100%; background: #8f9cff; }
+  .fs__opts { list-style: none; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.6rem; }
+  .fs__opts a {
+    display: flex; align-items: center; justify-content: space-between; gap: 0.5rem;
+    min-height: 60px; padding: 0.75rem 1rem; border-radius: var(--r-ui);
+    background: var(--ink-2); border: 1.5px solid var(--line-dark);
+    color: #fff; text-decoration: none; font-weight: 600; font-size: var(--t-sm); line-height: 1.25;
+    transition: background-color 0.15s, border-color 0.15s;
+  }
+  .fs__opts svg { width: 18px; height: 18px; flex: none; color: #8f9cff; transition: transform 0.2s var(--ease); }
+  .fs__opts a:hover { background: var(--cobalt); border-color: var(--cobalt); color: #fff; }
+  .fs__opts a:hover svg { color: #fff; transform: translateX(3px); }
+  .fs__foot { margin: 1rem 0 0; font-size: var(--t-xs); color: #aab3cc; }
+  @media (max-width: 380px) { .fs__opts { grid-template-columns: 1fr; } }
+</style>

@@ -181,25 +181,6 @@ export const projects: Project[] = [
     ],
     stack: ["Site sur mesure", "Stripe", "Netlify"],
   },
-  {
-    slug: "dankys-burger",
-    name: "Danky's Burger",
-    url: "https://dankysburger.com",
-    urlLabel: "dankysburger.com",
-    sector: "Restauration",
-    type: "Site vitrine, menu en ligne et commande",
-    summary: "Restaurant de burgers casher à Sarcelles : un menu lisible sur mobile et la commande en ligne directement depuis le site.",
-    context: "Danky's Burger est un restaurant de burgers casher situé à Sarcelles, dans le Val-d'Oise.",
-    problem: "Les clients découvrent le restaurant sur leur téléphone, souvent au moment de choisir où manger. Il leur fallait un menu clair et un moyen de commander immédiatement.",
-    solution: "Un site pensé d'abord pour le mobile : le menu se parcourt d'un pouce, les informations pratiques sont visibles tout de suite et la commande en ligne est accessible depuis chaque page.",
-    features: [
-      "Menu en ligne organisé par catégories",
-      "Commande en ligne depuis le site",
-      "Interface optimisée pour le mobile",
-      "Informations pratiques mises en avant",
-    ],
-    stack: ["Site sur mesure", "Mobile-first"],
-  },
 ];
 
 export const faq = [
