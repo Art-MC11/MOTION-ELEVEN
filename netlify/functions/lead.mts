@@ -1,8 +1,9 @@
 import type { Config } from "@netlify/functions";
-import { clean, isEmail, json, supabase, supabaseReady, sendEmail, notifyTo, leadEmailHtml } from "../lib/shared.mts";
+import { clean, isEmail, json, sendEmail, notifyTo, leadEmailHtml } from "../lib/shared.mts";
+import { createContact, getContact, saveContact, now } from "../lib/crm.mts";
 
 // Reçoit les demandes de devis, de rendez-vous et de contact.
-// Enregistre dans Supabase et envoie une notification e-mail si les clés sont configurées.
+// Enregistre la demande dans le CRM (Netlify Blobs) et envoie une notification e-mail si Resend est configuré.
 export default async (req: Request) => {
   if (req.method !== "POST") return json({ error: "Méthode non autorisée" }, 405);
 
@@ -45,15 +46,45 @@ export default async (req: Request) => {
   if (clean(body.consent) !== "oui") return json({ error: "Consentement requis." }, 422);
   if (lead.appointment_date && !/^\d{4}-\d{2}-\d{2}$/.test(lead.appointment_date)) lead.appointment_date = null;
 
+  // Enregistrement dans le CRM (Netlify Blobs)
   let stored = false;
-  if (supabaseReady()) {
-    const r = await supabase("leads", {
-      method: "POST",
-      headers: { Prefer: "return=minimal" },
-      body: JSON.stringify(lead),
-    });
-    stored = r.ok;
-    if (!r.ok) console.error("Supabase insert", r.status, await r.text());
+  try {
+    const leadInfo = Object.fromEntries(
+      Object.entries({
+        Projet: lead.project_type, Secteur: lead.sector, Budget: lead.budget, Délai: lead.timeline, Formule: lead.formule,
+        "Rendez-vous": [lead.appointment_date, lead.appointment_slot, lead.appointment_mode].filter(Boolean).join(" — "),
+        Page: lead.source_page,
+      }).filter(([, v]) => v)
+    ) as Record<string, string>;
+    const historyText = `${type === "rdv" ? "Demande de rendez-vous" : type === "contact" ? "Message" : "Demande de devis"} depuis le site${lead.message ? ` : ${lead.message}` : ""}`;
+    const r = await createContact(
+      {
+        company: lead.company || lead.name,
+        name: lead.name,
+        email: lead.email,
+        phone: lead.phone,
+        activity: lead.sector || undefined,
+        source: "site",
+        notes: lead.message || undefined,
+        lead: leadInfo,
+        status: "prospect",
+        nextActionAt: new Date().toISOString().slice(0, 10),
+      },
+      historyText
+    );
+    if (r.duplicate) {
+      const c = await getContact(r.contact.id);
+      if (c) {
+        c.history.unshift({ at: now(), type: "demande", text: historyText });
+        c.lead = leadInfo;
+        c.nextActionAt = new Date().toISOString().slice(0, 10);
+        if (["perdu", "contacte"].includes(c.status)) c.status = "interesse";
+        await saveContact(c);
+      }
+    }
+    stored = true;
+  } catch (e) {
+    console.error("CRM", e);
   }
 
   const titles = { devis: "Nouvelle demande de devis", rdv: "Nouvelle demande de rendez-vous", contact: "Nouveau message" };

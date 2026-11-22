@@ -1,5 +1,6 @@
 import type { Config } from "@netlify/functions";
-import { OFFERS, type OfferKey, env, json, supabase, supabaseReady, sendEmail, notifyTo, leadEmailHtml } from "../lib/shared.mts";
+import { OFFERS, type OfferKey, env, json, sendEmail, notifyTo, leadEmailHtml } from "../lib/shared.mts";
+import { createContact, getContact, saveContact, now } from "../lib/crm.mts";
 
 // Webhook Stripe : enregistre chaque acompte payé dans le CRM et prévient par e-mail.
 // Dans Stripe > Développeurs > Webhooks : URL https://motion-eleven.fr/api/stripe-webhook,
@@ -51,13 +52,33 @@ export default async (req: Request) => {
     source_page: "/commander/",
   };
 
-  if (supabaseReady()) {
-    const r = await supabase("leads?on_conflict=stripe_session_id", {
-      method: "POST",
-      headers: { Prefer: "return=minimal,resolution=ignore-duplicates" },
-      body: JSON.stringify(lead),
-    });
-    if (!r.ok) console.error("Supabase insert", r.status, await r.text());
+  try {
+    const r = await createContact(
+      {
+        company: lead.company || lead.name,
+        name: lead.name,
+        email: lead.email,
+        phone: lead.phone,
+        source: "stripe",
+        sourceId: s.id,
+        status: "client",
+        formule: offer?.name ?? key,
+        value: offer?.setup,
+        monthly: offer?.monthly,
+      },
+      `Commande en ligne : ${lead.message}`
+    );
+    const c = await getContact(r.contact.id);
+    if (c && r.duplicate && !c.history.some((h) => h.text.includes(s.id))) {
+      c.status = "client";
+      c.formule = offer?.name ?? key;
+      c.value = offer?.setup;
+      c.monthly = offer?.monthly;
+      c.history.unshift({ at: now(), type: "paiement", text: `${lead.message} (session ${s.id})` });
+      await saveContact(c);
+    }
+  } catch (e) {
+    console.error("CRM", e);
   }
   await sendEmail({
     to: notifyTo(),

@@ -1,199 +1,169 @@
 ---
 import "../../styles/global.css";
-import "../../styles/forms.css";
+import "../../styles/admin.css";
 ---
 <!doctype html>
 <html lang="fr">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="robots" content="noindex, nofollow" />
-    <title>CRM | Motion Eleven</title>
+    <meta name="theme-color" content="#0c1530" />
+    <title>Motion Eleven — Espace admin</title>
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="preload" href="/fonts/archivo.woff2" as="font" type="font/woff2" crossorigin />
   </head>
   <body class="adm">
-    <header class="adm__bar">
-      <strong>Motion Eleven</strong><span>Prospects</span>
-      <button class="btn btn--sm btn--ghost" data-logout hidden>Se déconnecter</button>
-    </header>
-
-    <main class="adm__main">
-      <form class="fm adm__login" data-login>
-        <h1>Accès au CRM</h1>
-        <div class="fm__field">
-          <label class="fm__label" for="pw">Mot de passe</label>
-          <input id="pw" type="password" name="password" required autocomplete="current-password" />
-        </div>
-        <p class="fm__error" data-login-error hidden></p>
-        <button class="btn" type="submit">Se connecter</button>
+    <!-- Connexion -->
+    <main id="login" class="login" hidden>
+      <form id="login-form" class="login__box">
+        <div class="login__logo"><svg viewBox="0 0 28 28" aria-hidden="true"><rect x="6" y="5" width="5.5" height="18" rx="2.75" /><rect x="16.5" y="2" width="5.5" height="18" rx="2.75" fill="#5b6dff" /></svg> Motion Eleven</div>
+        <h1>Espace admin</h1>
+        <label class="fld"><span>Mot de passe</span><input id="pw" type="password" autocomplete="current-password" required autofocus /></label>
+        <p id="login-error" class="err" hidden></p>
+        <button class="btn btn--wide" type="submit">Se connecter</button>
       </form>
-
-      <section data-app hidden>
-        <div class="adm__stats" data-stats></div>
-        <div class="adm__filters">
-          <input type="search" placeholder="Rechercher un nom, une entreprise, un e-mail…" data-search aria-label="Rechercher" />
-        </div>
-        <div class="adm__board" data-board></div>
-      </section>
     </main>
 
-    <dialog class="adm__dlg" data-dialog>
-      <form method="dialog" class="adm__dlg-close"><button class="btn btn--sm btn--ghost" aria-label="Fermer">Fermer</button></form>
-      <div data-detail></div>
-    </dialog>
+    <!-- Application -->
+    <div id="app" hidden>
+      <header class="top">
+        <div class="top__brand"><svg viewBox="0 0 28 28" aria-hidden="true"><rect x="6" y="5" width="5.5" height="18" rx="2.75" /><rect x="16.5" y="2" width="5.5" height="18" rx="2.75" fill="#5b6dff" /></svg><span>Motion Eleven</span></div>
+        <nav class="nav" aria-label="Sections">
+          <a href="#accueil" data-view="accueil"><i>◧</i>Accueil</a>
+          <a href="#prospecter" data-view="prospecter"><i>⌕</i>Prospecter</a>
+          <a href="#contacts" data-view="contacts"><i>☰</i>Contacts</a>
+          <a href="#messages" data-view="messages"><i>✉︎</i>Messages</a>
+          <a href="#reglages" data-view="reglages"><i>⚙︎</i>Réglages</a>
+        </nav>
+        <button id="logout" class="top__out">Déconnexion</button>
+      </header>
+
+      <main class="main">
+        <!-- Accueil -->
+        <section id="v-accueil" class="view" hidden>
+          <h1>Tableau de bord</h1>
+          <div id="v-accueil-body"></div>
+        </section>
+
+        <!-- Prospection -->
+        <section id="v-prospecter" class="view" hidden>
+          <h1>Trouver des clients</h1>
+          <form id="search-form" class="card search">
+            <fieldset class="seg">
+              <legend class="visually-hidden">Source</legend>
+              <label><input type="radio" name="source" value="osm" checked /><span><b>Commerces sans site</b><em>OpenStreetMap, gratuit</em></span></label>
+              <label><input type="radio" name="source" value="entreprises" /><span><b>Annuaire officiel</b><em>Toutes les entreprises actives</em></span></label>
+              <label><input type="radio" name="source" value="google" id="src-google" /><span><b>Google Maps</b><em id="src-google-hint">Clé API requise</em></span></label>
+            </fieldset>
+            <div class="grid2">
+              <label class="fld"><span>Activité</span><select id="s-activity"></select></label>
+              <label class="fld"><span>Ville ou code postal</span><input id="s-city" placeholder="Ex. : Sarcelles, 95200" required /></label>
+            </div>
+            <div class="grid2">
+              <label class="fld" id="radius-field"><span>Rayon</span>
+                <select id="s-radius"><option value="2">2 km</option><option value="5" selected>5 km</option><option value="10">10 km</option><option value="20">20 km</option></select>
+              </label>
+              <label class="check" id="nosite-field"><input type="checkbox" id="s-nosite" /> Seulement les entreprises sans site</label>
+            </div>
+            <button class="btn btn--wide" type="submit">Rechercher</button>
+          </form>
+          <div id="results"></div>
+          <div id="pick-bar" class="bar" hidden>
+            <span><b id="pick-count">0</b> sélectionné(s)</span>
+            <button class="btn btn--sm" id="pick-add">Ajouter au CRM</button>
+          </div>
+        </section>
+
+        <!-- Contacts -->
+        <section id="v-contacts" class="view" hidden>
+          <div class="vhead">
+            <h1>Contacts</h1>
+            <div class="btns"><button class="btn btn--sm btn--ghost" id="export">Exporter</button><button class="btn btn--sm" id="add-contact">Ajouter</button></div>
+          </div>
+          <input id="c-search" class="search-in" type="search" placeholder="Rechercher un nom, une ville, un téléphone…" aria-label="Rechercher" />
+          <div id="filters" class="chips"></div>
+          <div id="contact-list" class="clist"></div>
+          <div id="sel-bar" class="bar" hidden>
+            <span><b id="sel-count">0</b> sélectionné(s)</span>
+            <button class="btn btn--sm btn--ghost" id="sel-clear">Annuler</button>
+            <button class="btn btn--sm" id="sel-email">Envoyer un e-mail</button>
+          </div>
+        </section>
+
+        <!-- Messages -->
+        <section id="v-messages" class="view" hidden>
+          <h1>Messages</h1>
+          <form id="campaign" class="card">
+            <h2>Campagne e-mail</h2>
+            <p id="cg-email-off" class="warn">L'envoi automatique nécessite Resend (voir Réglages). En attendant, envoyez vos messages un par un depuis la fiche du contact.</p>
+            <div class="grid2">
+              <label class="fld"><span>Destinataires</span>
+                <select id="cg-target">
+                  <option value="nouveaux">Prospects jamais contactés</option>
+                  <option value="relance">Contactés, relance prévue aujourd'hui</option>
+                  <option value="interesses">Intéressés et devis envoyés</option>
+                  <option value="selection">Ma sélection (page Contacts)</option>
+                </select>
+              </label>
+              <label class="fld"><span>Modèle</span><select id="cg-tpl"></select></label>
+            </div>
+            <p id="cg-count" class="muted small"></p>
+            <label class="fld"><span>Objet</span><input id="cg-subject" required /></label>
+            <label class="fld"><span>Message</span><textarea id="cg-body" rows="10" required></textarea></label>
+            <p class="muted small">Variables : {"{{entreprise}} {{nom}} {{ville}} {{a_ville}} {{activite}} {{un_activite}} {{signature}}"}. Chaque e-mail est personnalisé et contient un lien de désinscription.</p>
+            <button class="btn btn--wide" type="submit">Envoyer la campagne</button>
+            <div id="cg-report"></div>
+          </form>
+
+          <section class="card">
+            <div class="vhead"><h2>Modèles</h2><button class="btn btn--sm btn--ghost" id="tpl-new">Nouveau modèle</button></div>
+            <div id="tpl-list" class="rows"></div>
+            <form id="tpl-form" class="tplf" hidden>
+              <div class="grid2">
+                <label class="fld"><span>Nom</span><input id="t-name" required /></label>
+                <label class="fld"><span>Canal</span><select id="t-channel"><option value="email">E-mail</option><option value="whatsapp">WhatsApp</option></select></label>
+              </div>
+              <label class="fld"><span>Objet (e-mail)</span><input id="t-subject" /></label>
+              <label class="fld"><span>Message</span><textarea id="t-body" rows="9" required></textarea></label>
+              <div class="btns">
+                <button class="btn btn--sm" type="submit">Enregistrer</button>
+                <button class="btn btn--sm btn--ghost" type="button" id="t-cancel">Annuler</button>
+                <button class="btn btn--sm btn--ghost danger" type="button" id="t-del">Supprimer</button>
+              </div>
+            </form>
+          </section>
+        </section>
+
+        <!-- Réglages -->
+        <section id="v-reglages" class="view" hidden>
+          <h1>Réglages</h1>
+          <form id="settings-form" class="card">
+            <h2>Signature des messages</h2>
+            <label class="fld"><span>Nom de l'expéditeur</span><input id="st-sender" /></label>
+            <label class="fld"><span>Signature</span><textarea id="st-signature" rows="5"></textarea></label>
+            <label class="fld"><span>Limite d'e-mails par jour</span><input id="st-limit" type="number" min="1" max="200" /></label>
+            <p class="muted small">Une limite raisonnable protège la réputation de votre adresse d'envoi. Commencez autour de 30 à 40 par jour.</p>
+            <button class="btn" type="submit">Enregistrer</button>
+          </form>
+          <section class="card">
+            <h2>Connexions</h2>
+            <dl class="status">
+              <div><dt>Envoi d'e-mails (Resend)</dt><dd id="st-email"></dd></div>
+              <div><dt>Google Maps (Places API)</dt><dd id="st-google"></dd></div>
+            </dl>
+            <p class="muted small">Ces clés s'ajoutent dans Netlify, Project configuration, Environment variables : RESEND_API_KEY, RESEND_FROM (adresse de votre domaine vérifiée), GOOGLE_PLACES_API_KEY.</p>
+          </section>
+        </section>
+      </main>
+    </div>
+
+    <dialog id="sheet" class="sheet"><div id="sheet-body" class="sheet__body"></div></dialog>
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
     <script>
-      type Lead = Record<string, any> & { id: string; status: string; name: string };
-      const COLS: [string, string][] = [
-        ["nouveau", "Nouveaux prospects"],
-        ["contacte", "Contactés"],
-        ["devis_envoye", "Devis envoyés"],
-        ["gagne", "Clients gagnés"],
-        ["perdu", "Clients perdus"],
-      ];
-      const TYPES: Record<string, string> = { devis: "Devis", rdv: "Rendez-vous", contact: "Contact", commande: "Commande payée" };
-      const $ = <T extends HTMLElement>(s: string) => document.querySelector<T>(s)!;
-      const esc = (s: unknown) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]!);
-      let token = sessionStorage.getItem("me-admin") || "";
-      let leads: Lead[] = [];
-
-      async function api(method: string, body?: unknown) {
-        const res = await fetch("/api/admin/leads", {
-          method,
-          headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
-          body: body ? JSON.stringify(body) : undefined,
-        });
-        const json = await res.json().catch(() => ({}));
-        if (!res.ok) throw Object.assign(new Error(json.error || "Erreur"), { status: res.status });
-        return json;
-      }
-
-      async function load() {
-        try {
-          const data = await api("GET");
-          leads = data.leads;
-          $("[data-login]").hidden = true;
-          $("[data-app]").hidden = false;
-          $("[data-logout]").hidden = false;
-          render();
-        } catch (e: any) {
-          if (e.status === 401) { sessionStorage.removeItem("me-admin"); token = ""; }
-          const box = $("[data-login-error]");
-          box.textContent = e.message; box.hidden = false;
-          $("[data-login]").hidden = false;
-        }
-      }
-
-      function render() {
-        const q = ($<HTMLInputElement>("[data-search]").value || "").toLowerCase();
-        const list = leads.filter((l) => !q || [l.name, l.company, l.email, l.phone].join(" ").toLowerCase().includes(q));
-        $("[data-stats]").innerHTML = COLS.map(([k, label]) =>
-          `<div><span>${label}</span><strong>${leads.filter((l) => l.status === k).length}</strong></div>`).join("");
-        $("[data-board]").innerHTML = COLS.map(([k, label]) => {
-          const items = list.filter((l) => l.status === k);
-          return `<div class="adm__col"><h2>${label} <em>${items.length}</em></h2>${items.map(card).join("") || '<p class="adm__empty">Aucun</p>'}</div>`;
-        }).join("");
-      }
-
-      function card(l: Lead) {
-        const d = new Date(l.created_at).toLocaleDateString("fr-FR", { day: "2-digit", month: "short" });
-        return `<button class="adm__card" data-id="${esc(l.id)}">
-          <span class="adm__type adm__type--${esc(l.type)}">${esc(TYPES[l.type] || l.type)}</span>
-          <strong>${esc(l.name)}</strong>
-          <span>${esc(l.company || l.sector || "")}</span>
-          <span class="adm__meta">${esc(l.project_type || "")}${l.budget ? " — " + esc(l.budget) : ""}</span>
-          <span class="adm__date">${d}</span>
-        </button>`;
-      }
-
-      function detail(l: Lead) {
-        const rows: [string, unknown][] = [
-          ["Type", TYPES[l.type] || l.type], ["Reçu le", new Date(l.created_at).toLocaleString("fr-FR")],
-          ["E-mail", l.email], ["Téléphone", l.phone], ["Entreprise", l.company], ["Secteur", l.sector],
-          ["Projet", l.project_type], ["Formule", l.formule], ["Budget", l.budget], ["Délai", l.timeline],
-          ["Rendez-vous", [l.appointment_date, l.appointment_slot, l.appointment_mode].filter(Boolean).join(" — ")],
-          ["Montant", l.amount_cents ? (l.amount_cents / 100).toLocaleString("fr-FR") + " €" : ""],
-          ["Page", l.source_page], ["Message", l.message],
-        ];
-        const phone = String(l.phone || "").replace(/[^0-9+]/g, "");
-        const wa = phone.startsWith("0") ? "33" + phone.slice(1) : phone.replace("+", "");
-        $("[data-detail]").innerHTML = `
-          <h2>${esc(l.name)}</h2>
-          <div class="adm__actions">
-            ${l.email ? `<a class="btn btn--sm" href="mailto:${esc(l.email)}">E-mail</a>` : ""}
-            ${phone ? `<a class="btn btn--sm btn--ghost" href="tel:${esc(phone)}">Appeler</a><a class="btn btn--sm btn--ghost" target="_blank" rel="noopener" href="https://wa.me/${esc(wa)}">WhatsApp</a>` : ""}
-          </div>
-          <dl class="adm__dl">${rows.filter(([, v]) => v).map(([k, v]) => `<div><dt>${k}</dt><dd>${esc(v).replace(/\n/g, "<br>")}</dd></div>`).join("")}</dl>
-          <form class="fm" data-edit>
-            <div class="fm__field"><label class="fm__label" for="st">Statut</label>
-              <select id="st" name="status">${COLS.map(([k, label]) => `<option value="${k}" ${k === l.status ? "selected" : ""}>${label}</option>`).join("")}</select></div>
-            <div class="fm__field"><label class="fm__label" for="nt">Notes</label>
-              <textarea id="nt" name="notes">${esc(l.notes || "")}</textarea></div>
-            <button class="btn" type="submit">Enregistrer</button>
-          </form>`;
-        $("[data-detail]").querySelector("form")!.addEventListener("submit", async (e) => {
-          e.preventDefault();
-          const f = new FormData(e.target as HTMLFormElement);
-          const patch = { id: l.id, status: String(f.get("status")), notes: String(f.get("notes")) };
-          await api("PATCH", patch);
-          Object.assign(l, patch);
-          ($<HTMLDialogElement>("[data-dialog]")).close();
-          render();
-        });
-        ($<HTMLDialogElement>("[data-dialog]")).showModal();
-      }
-
-      $("[data-login]").addEventListener("submit", (e) => {
-        e.preventDefault();
-        token = String(new FormData(e.target as HTMLFormElement).get("password"));
-        sessionStorage.setItem("me-admin", token);
-        load();
-      });
-      $("[data-logout]").addEventListener("click", () => { sessionStorage.removeItem("me-admin"); location.reload(); });
-      $("[data-search]").addEventListener("input", render);
-      $("[data-board]").addEventListener("click", (e) => {
-        const b = (e.target as HTMLElement).closest<HTMLElement>("[data-id]");
-        const l = b && leads.find((x) => x.id === b.dataset.id);
-        if (l) detail(l);
-      });
-      if (token) load();
+      import "../../scripts/admin/app";
     </script>
-
-    <style>
-      .adm { background: var(--chalk); min-height: 100vh; }
-      .adm__bar { display: flex; align-items: center; gap: 0.75rem; padding: 1rem var(--gutter); background: var(--ink); color: #fff; }
-      .adm__bar span { color: #aab3cc; }
-      .adm__bar button { margin-left: auto; --btn-fg: #fff; border-color: #7d88ad; }
-      .adm__main { padding: 1.5rem var(--gutter) 4rem; }
-      .adm__login { max-width: 380px; margin: 10vh auto; background: #fff; padding: 2rem; border-radius: var(--r-frame); }
-      .adm__login h1 { font-size: var(--t-lg); }
-      .adm__stats { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 0.75rem; margin-bottom: 1rem; }
-      .adm__stats div { background: #fff; border-radius: 12px; padding: 0.9rem 1rem; display: grid; }
-      .adm__stats span { font-size: var(--t-xs); color: var(--ink-soft); }
-      .adm__stats strong { font-size: 1.8rem; font-stretch: 125%; }
-      .adm__filters input { width: 100%; max-width: 420px; min-height: 46px; border: 1.5px solid var(--line); border-radius: var(--r-ui); padding: 0 1rem; font: inherit; margin-bottom: 1rem; }
-      .adm__board { display: grid; grid-template-columns: repeat(5, minmax(220px, 1fr)); gap: 0.75rem; overflow-x: auto; padding-bottom: 1rem; }
-      .adm__col { background: #e3e6ed; border-radius: 14px; padding: 0.75rem; display: grid; gap: 0.5rem; align-content: start; min-height: 200px; }
-      .adm__col h2 { font-size: var(--t-sm); font-stretch: 100%; letter-spacing: 0; padding: 0.25rem 0.25rem 0.5rem; }
-      .adm__col h2 em { font-style: normal; color: var(--ink-soft); font-weight: 500; }
-      .adm__card { text-align: left; display: grid; gap: 0.15rem; background: #fff; border: 1px solid var(--line); border-radius: 10px; padding: 0.75rem; font: inherit; font-size: var(--t-sm); cursor: pointer; position: relative; }
-      .adm__card:hover { border-color: var(--cobalt); }
-      .adm__meta { color: var(--ink-soft); font-size: var(--t-xs); }
-      .adm__date { position: absolute; right: 0.75rem; top: 0.75rem; font-size: var(--t-xs); color: var(--ink-soft); }
-      .adm__type { justify-self: start; font-size: 11px; font-weight: 600; padding: 0.1rem 0.5rem; border-radius: 99px; background: var(--chalk); margin-bottom: 0.25rem; }
-      .adm__type--rdv { background: var(--cobalt-tint); }
-      .adm__type--commande { background: var(--lead-tint); }
-      .adm__empty { color: var(--ink-soft); font-size: var(--t-xs); padding: 0.25rem; }
-      .adm__dlg { border: 0; border-radius: var(--r-frame); padding: 1.75rem; width: min(640px, 94vw); max-height: 90vh; }
-      .adm__dlg::backdrop { background: rgba(12, 21, 48, 0.5); }
-      .adm__dlg h2 { font-size: var(--t-lg); margin-bottom: 1rem; }
-      .adm__dlg-close { float: right; }
-      .adm__actions { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1.25rem; }
-      .adm__dl { display: grid; gap: 0.5rem; margin: 0 0 1.5rem; font-size: var(--t-sm); }
-      .adm__dl div { display: grid; grid-template-columns: 110px 1fr; gap: 1rem; border-bottom: 1px solid var(--line); padding-bottom: 0.5rem; }
-      .adm__dl dt { color: var(--ink-soft); }
-      .adm__dl dd { margin: 0; word-break: break-word; }
-      @media (max-width: 800px) { .adm__stats { grid-template-columns: repeat(2, 1fr); } }
-    </style>
   </body>
 </html>

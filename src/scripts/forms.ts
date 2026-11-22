@@ -1,7 +1,7 @@
 import { projectOptions, sectorOptions } from "../data/funnel";
 // Envoi des formulaires de prospects.
 // 1) Netlify Forms (enregistrement garanti, visible dans le tableau de bord Netlify)
-// 2) /api/lead (Supabase + e-mail Resend, dès que les clés sont configurées)
+// 2) /api/lead (CRM de l'espace admin + e-mail Resend si configuré)
 
 const encode = (data: Record<string, string>) =>
   Object.entries(data).map(([k, v]) => `${encodeURIComponent(k)}=${encodeURIComponent(v)}`).join("&");

@@ -12,6 +12,7 @@
   "license": "MIT",
   "dependencies": {
     "@astrojs/sitemap": "^3.7.6",
+    "@netlify/blobs": "^11.1.9",
     "astro": "^7.4.13"
   },
   "devDependencies": {
