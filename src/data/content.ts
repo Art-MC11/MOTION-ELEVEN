@@ -221,3 +221,23 @@ export const sectors = [
   { label: "Indépendants", href: "/creation-site-internet/", text: "Un site crédible, une prise de rendez-vous, un paiement en ligne." },
   { label: "Entreprises", href: "/services/", text: "Refonte, outils internes, automatisations et CRM." },
 ];
+
+// Modèles de sites (démos en ligne sur /modeles/<slug>/)
+export const models = [
+  {
+    slug: "restaurant",
+    name: "Braise & Bun",
+    niche: "Restaurant",
+    secteur: "restaurant",
+    summary: "Un site de restaurant prêt à vendre : menu avec photos, commande en ligne, réservation de table et espace de gestion pour le restaurateur.",
+    features: [
+      "Menu en ligne avec photos et prix",
+      "Commande à emporter ou en livraison",
+      "Réservation de table",
+      "Avis clients, galerie, plan d'accès",
+      "Espace gérant : commandes, réservations, statistiques",
+    ],
+    desktop: "/images/modeles/restaurant-desktop.jpg",
+    mobile: "/images/modeles/restaurant-mobile.jpg",
+  },
+];

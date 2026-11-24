@@ -53,6 +53,7 @@ export const nav = [
       { label: "Commerces", href: "/solutions/commerces/", desc: "Click & collect, catalogue, boutique" },
     ],
   },
+  { label: "Modèles", href: "/modeles/" },
   { label: "Réalisations", href: "/realisations/" },
   { label: "Tarifs", href: "/tarifs/" },
   { label: "À propos", href: "/a-propos/" },

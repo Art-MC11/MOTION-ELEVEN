@@ -1,0 +1,58 @@
+---
+import Base from "../layouts/Base.astro";
+import CtaFinal from "../components/CtaFinal.astro";
+import { models } from "../data/content";
+---
+<Base
+  title="Modèles de sites internet à personnaliser | Motion Eleven"
+  description="Découvrez nos modèles de sites prêts à personnaliser : restaurant avec menu, commande en ligne et réservation. Testez la démo, puis obtenez votre version."
+  crumbs={[{ name: "Modèles", href: "/modeles/" }]}
+>
+  <section class="md-hero">
+    <div class="wrap">
+      <h1>Testez votre futur site avant de vous décider.</h1>
+      <p class="lede">Des modèles complets, à vos couleurs, avec votre logo, vos photos et vos textes. Ouvrez la démo, naviguez comme un client, puis demandez votre version.</p>
+    </div>
+  </section>
+
+  <section class="section section--chalk md-list">
+    <div class="wrap">
+      {models.map((m) => (
+        <article class="md">
+          <a class="md__shots" href={`/modeles/${m.slug}/`} target="_blank" rel="noopener" aria-label={`Ouvrir la démo ${m.name}`}>
+            <img class="md__desk" src={m.desktop} alt={`Modèle ${m.niche} : page d'accueil sur ordinateur`} width="1200" height="750" loading="lazy" />
+            <img class="md__mob" src={m.mobile} alt={`Modèle ${m.niche} : page d'accueil sur mobile`} width="390" height="844" loading="lazy" />
+          </a>
+          <div class="md__text">
+            <p class="md__niche">Modèle {m.niche}</p>
+            <h2>{m.name}</h2>
+            <p class="lede">{m.summary}</p>
+            <ul class="ticks">{m.features.map((f) => <li>{f}</li>)}</ul>
+            <div class="btns">
+              <a class="btn" href={`/devis/?projet=creation-site-internet&secteur=${m.secteur}`} data-track="cta_click" data-label={`modele_${m.slug}_devis`}>Je veux ce site</a>
+              <a class="btn btn--ghost" href={`/modeles/${m.slug}/`} target="_blank" rel="noopener" data-track="cta_click" data-label={`modele_${m.slug}_demo`}>Voir la démo</a>
+            </div>
+            <p class="small muted">Marque fictive, créée pour la démonstration.</p>
+          </div>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <CtaFinal title="Votre activité n'est pas dans la liste ?" text="Nous créons aussi des sites sur mesure. 5 questions, 1 minute, réponse sous 24 h." />
+</Base>
+
+<style>
+  .md-hero { padding: clamp(1.5rem, 4vw, 3rem) 0 clamp(2.5rem, 5vw, 4rem); }
+  .md-hero h1 { font-size: clamp(2rem, 1.3rem + 2.8vw, 3.6rem); max-width: 18ch; margin-bottom: 1.25rem; }
+  .md-list .wrap { display: grid; gap: clamp(3rem, 6vw, 5rem); }
+  .md { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: clamp(2rem, 5vw, 4.5rem); align-items: center; }
+  .md__shots { position: relative; display: block; padding: 0 8% 8% 0; }
+  .md__desk { width: 100%; border-radius: 14px; box-shadow: 0 30px 60px -30px rgba(12, 21, 48, 0.55); }
+  .md__mob { position: absolute; right: 0; bottom: 0; width: 24%; border-radius: 16px; border: 4px solid var(--ink); box-shadow: 0 20px 40px -18px rgba(12, 21, 48, 0.6); }
+  .md__shots:hover .md__desk { outline: 3px solid var(--cobalt); outline-offset: 4px; }
+  .md__text { display: grid; gap: 1.1rem; justify-items: start; }
+  .md__niche { margin: 0; color: var(--cobalt); font-weight: 620; }
+  .md h2 { font-size: var(--t-xl); }
+  @media (max-width: 900px) { .md { grid-template-columns: 1fr; } }
+</style>

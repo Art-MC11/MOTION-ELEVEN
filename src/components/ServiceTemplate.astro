@@ -92,6 +92,22 @@ const faqSchema = {
     </section>
   )}
 
+  {data.slug === "restaurants" && (
+    <section class="section section--chalk section--tight">
+      <div class="wrap st__demo">
+        <img src="/images/modeles/restaurant-desktop.jpg" alt="Modèle de site restaurant Braise & Bun" width="1200" height="750" loading="lazy" />
+        <div>
+          <h2>Testez notre modèle restaurant</h2>
+          <p class="lede">Menu, commande en ligne, réservation et espace gérant : naviguez dans la démo comme le ferait votre client.</p>
+          <div class="btns">
+            <a class="btn" href="/modeles/restaurant/" target="_blank" rel="noopener">Voir la démo</a>
+            <a class="btn btn--ghost" href="/modeles/">Tous les modèles</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  )}
+
   <section class="section section--tight">
     <div class="wrap st__offer">
       <div>
@@ -137,6 +153,11 @@ const faqSchema = {
   .st__case-k { color: var(--cobalt); font-weight: 620; margin: 0; }
   @media (max-width: 900px) { .st__case { grid-template-columns: 1fr; } }
 
+  .st__demo { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(2rem, 5vw, 4rem); align-items: center; }
+  .st__demo img { border-radius: 14px; box-shadow: 0 30px 60px -30px rgba(12, 21, 48, 0.55); }
+  .st__demo h2 { font-size: var(--t-lg); margin-bottom: 1rem; }
+  .st__demo .lede { margin-bottom: 1.5rem; }
+  @media (max-width: 900px) { .st__demo { grid-template-columns: 1fr; } }
   .st__offer { display: grid; grid-template-columns: minmax(0, 1.3fr) auto; gap: 2rem 4rem; align-items: end; }
   .st__offer h2 { font-size: var(--t-lg); margin-bottom: 1rem; }
   @media (max-width: 900px) { .st__offer { grid-template-columns: 1fr; } }

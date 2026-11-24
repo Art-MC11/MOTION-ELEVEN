@@ -96,7 +96,7 @@ const isActive = (href: string) => href !== "/" && path.startsWith(href);
   .hdr__link {
     display: inline-flex; align-items: center; gap: 0.35rem;
     padding: 0.6rem 0.8rem; border-radius: var(--r-ui);
-    font: inherit; font-size: var(--t-sm); font-weight: 560; color: var(--ink);
+    font: inherit; font-size: var(--t-sm); font-weight: 560; color: var(--ink); white-space: nowrap;
     background: none; border: 0; cursor: pointer; text-decoration: none;
   }
   .hdr__link svg { width: 12px; height: 12px; transition: transform 0.2s; }
@@ -152,7 +152,7 @@ const isActive = (href: string) => href !== "/" && path.startsWith(href);
   .mnav__cta { margin-top: 2rem; }
   .mnav__cta .btn { width: 100%; }
 
-  @media (max-width: 1080px) {
+  @media (max-width: 1200px) {
     .hdr__nav, .hdr__contact { display: none; }
     .hdr__cta { margin-left: auto; }
     .hdr__burger { display: block; }
