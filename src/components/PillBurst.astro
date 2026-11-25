@@ -1,5 +1,5 @@
 ---
-// Explosion de pastilles : empilées au centre, elles partent dans les angles
+// Explosion de pastilles : alignées et lisibles au centre, elles partent dans les angles
 // et sur les bords de l'écran pendant le défilement, puis révèlent le message central.
 const pills: { t: string; x: number; y: number; r: number; mx?: number; my?: number }[] = [
   { t: "Attirer", x: -40, y: -34, r: -14 },
@@ -25,7 +25,7 @@ const pills: { t: string; x: number; y: number; r: number; mx?: number; my?: num
       <span
         class="pb__pill"
         aria-hidden="true"
-        style={`--i:${i};--tx:${p.x};--ty:${p.y};--txm:${p.mx ?? p.x};--tym:${p.my ?? p.y};--r:${p.r}deg;--o:${(i % 4) - 1.5}`}
+        style={`--i:${i};--tx:${p.x};--ty:${p.y};--txm:${p.mx ?? p.x};--tym:${p.my ?? p.y};--r:${p.r}deg;--o:${i % 2 ? 1 : -1}`}
       >{p.t}</span>
     ))}
   </div>
@@ -35,31 +35,30 @@ const pills: { t: string; x: number; y: number; r: number; mx?: number; my?: num
   .pb {
     position: relative; height: 230vh; --p: 0;
     /* e : progression de l'explosion ; s : version adoucie (smoothstep) */
-    --e: clamp(0, calc((var(--p) - 0.06) / 0.58), 1);
+    --e: clamp(0, calc((var(--p) - 0.16) / 0.52), 1);
     --s: calc(var(--e) * var(--e) * (3 - 2 * var(--e)));
   }
   .pb__sticky { position: sticky; top: 0; height: 100vh; height: 100svh; overflow: hidden; display: grid; place-items: center; }
 
   .pb__pill {
     --X: var(--tx); --Y: var(--ty);
+    --step: clamp(3.3rem, 2.4rem + 2.2vw, 4.6rem);
     position: absolute; left: 50%; top: 50%; z-index: 2;
     display: inline-flex; align-items: center; gap: 0.7rem; white-space: nowrap;
     padding: 0.9rem 1.5rem 0.9rem 1.15rem; border-radius: 999px;
     font-size: clamp(1rem, 0.8rem + 1.1vw, 1.75rem); font-weight: 620;
     background: var(--deep); border: 1.5px solid var(--line); color: var(--ink);
     box-shadow: 0 20px 50px -20px rgba(0, 0, 0, 0.8);
-    /* Pile légèrement décalée au départ, puis projection vers sa destination */
+    /* Colonne lisible au départ (décalée gauche/droite), puis projection vers sa destination */
     transform:
       translate(-50%, -50%)
       translate(
-        calc((1 - var(--s)) * var(--o) * 0.6rem + var(--s) * var(--X) * 1vw),
-        calc((1 - var(--s)) * (var(--i) - 3.5) * 0.7rem + var(--s) * var(--Y) * 1vh)
+        calc((1 - var(--s)) * var(--o) * clamp(1rem, 3vw, 2.5rem) + var(--s) * var(--X) * 1vw),
+        calc((1 - var(--s)) * (var(--i) - 3.5) * var(--step) + var(--s) * var(--Y) * 1vh)
       )
       rotate(calc(var(--s) * var(--r)))
       scale(calc(0.9 + var(--s) * 0.15));
-    /* Flou de mouvement au milieu de la trajectoire */
-    filter: blur(calc(var(--s) * (1 - var(--s)) * 18px));
-    will-change: transform, filter;
+    will-change: transform;
   }
   .pb__pill::before { content: ""; width: 10px; height: 10px; border-radius: 50%; background: var(--cobalt); flex: none; }
   .pb__pill:nth-child(2n) { background: var(--cobalt); color: var(--on-accent); border-color: var(--cobalt); }
