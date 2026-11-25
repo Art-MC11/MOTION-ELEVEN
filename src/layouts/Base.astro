@@ -4,6 +4,7 @@ import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import WhatsAppFab from "../components/WhatsAppFab.astro";
 import CookieBanner from "../components/CookieBanner.astro";
+import MobileBar from "../components/MobileBar.astro";
 import { site } from "../data/site";
 
 interface Crumb { name: string; href: string; }
@@ -66,7 +67,7 @@ const allSchema = [org, ...(breadcrumb ? [breadcrumb] : []), ...schema];
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
     {noindex && <meta name="robots" content="noindex, nofollow" />}
-    <meta name="theme-color" content="#0c1530" />
+    <meta name="theme-color" content="#0a0a0b" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="preload" href="/fonts/archivo.woff2" as="font" type="font/woff2" crossorigin />
@@ -109,6 +110,7 @@ const allSchema = [org, ...(breadcrumb ? [breadcrumb] : []), ...schema];
     </main>
     <Footer />
     {!hideFab && <WhatsAppFab />}
+    {!hideFab && <MobileBar />}
     <CookieBanner />
     <script>
       import "../scripts/analytics";

@@ -1,6 +1,18 @@
 /* Espace admin — mobile d'abord */
 [hidden] { display: none !important; }
-.adm { background: var(--chalk); min-height: 100vh; font-size: 16px; }
+.adm {
+  color-scheme: light;
+  --paper: #ffffff; --chalk: #eef0f4; --deep: #0c1530; --raise: #ffffff;
+  --ink: #0c1530; --ink-2: #18234a; --ink-soft: #5a6378;
+  --line: #d6dbe5; --line-dark: #2a3560;
+  --cobalt: #2f45ff; --cobalt-deep: #2236d9; --cobalt-tint: #e6e9ff; --on-accent: #ffffff;
+  --lead: #12a874; --lead-tint: #dff5ec; --warn: #c2410c; --r-ui: 10px; --r-frame: 18px;
+  background: var(--chalk); color: var(--ink); min-height: 100vh; font-size: 16px;
+}
+.adm::after { display: none; }
+.adm h1, .adm h2 { text-transform: none; font-stretch: 112%; font-weight: 720; letter-spacing: -0.015em; }
+.adm .btn--ghost { --btn-fg: var(--ink); border-color: var(--ink); }
+.adm .btn--ghost:hover { --btn-bg: var(--ink); --btn-fg: #fff; }
 .adm h1 { font-size: clamp(1.6rem, 1.2rem + 1.5vw, 2.2rem); margin-bottom: 1.25rem; }
 .adm h2 { font-size: 1.15rem; font-stretch: 112%; letter-spacing: -0.01em; margin-bottom: 0.9rem; }
 .adm h2 em { font-style: normal; color: var(--ink-soft); font-weight: 500; font-size: 0.9em; }

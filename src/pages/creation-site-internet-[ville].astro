@@ -1,0 +1,122 @@
+---
+import Base from "../layouts/Base.astro";
+import Faq from "../components/Faq.astro";
+import BookingSimulator from "../components/BookingSimulator.astro";
+import ZoneMap from "../components/ZoneMap.astro";
+import { zonePages, type Zone } from "../data/zones";
+import { site } from "../data/site";
+
+export function getStaticPaths() {
+  return zonePages.map((z) => ({ params: { ville: z.slug }, props: { zone: z } }));
+}
+interface Props { zone: Zone; }
+const { zone } = Astro.props;
+const url = `${site.url}/creation-site-internet-${zone.slug}/`;
+const neighbours = zone.neighbours.map((n) => zonePages.find((z) => z.slug === n)!).filter(Boolean);
+
+const serviceSchema = {
+  "@context": "https://schema.org",
+  "@type": "Service",
+  serviceType: "Création de site internet",
+  name: zone.h1,
+  description: zone.seoDescription,
+  url,
+  provider: { "@id": `${site.url}/#organisation` },
+  areaServed: { "@type": "City", name: zone.city, containedInPlace: { "@type": "AdministrativeArea", name: "Île-de-France" } },
+  offers: { "@type": "Offer", price: 590, priceCurrency: "EUR", description: "Formule Starter, création à partir de 590 € HT" },
+};
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: zone.faq.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })),
+};
+---
+<Base
+  title={zone.seoTitle}
+  description={zone.seoDescription}
+  crumbs={[{ name: `Site internet à ${zone.city}`, href: `/creation-site-internet-${zone.slug}/` }]}
+  schema={[serviceSchema, faqSchema]}
+>
+  <section class="zh">
+    <div class="wrap zh__grid">
+      <div class="zh__text">
+        <p class="zh__k">Zone d'intervention : {zone.city} ({zone.dept})</p>
+        <h1>{zone.h1}</h1>
+        <p class="lede">{zone.lede}</p>
+        <div class="btns">
+          <a class="btn" href="#rendez-vous" data-track="cta_click" data-label={`zone_${zone.slug}_rdv`}>Réserver un créneau</a>
+          <a class="btn btn--ghost" href={`/devis/?projet=creation-site-internet`}>Demander un devis</a>
+        </div>
+      </div>
+      <ZoneMap highlight={zone.city} />
+    </div>
+  </section>
+
+  <section class="section section--chalk">
+    <div class="wrap zt">
+      <div class="zt__body">
+        {zone.sections.map((s) => (
+          <div class="zt__block">
+            <h2>{s.h}</h2>
+            {s.p.map((p) => <p>{p}</p>)}
+          </div>
+        ))}
+      </div>
+      <aside class="zt__aside">
+        <p class="zt__aside-h">Pour les entreprises de {zone.city}</p>
+        <ul class="ticks">
+          <li><a href="/creation-site-internet/">Site vitrine ou refonte</a></li>
+          <li><a href="/e-commerce/">Boutique et commande en ligne</a></li>
+          <li><a href="/automatisation-ia/">Automatisation et CRM</a></li>
+          <li><a href="/motion-design/">Vidéo et motion design</a></li>
+        </ul>
+        <p class="zt__price">Dès 590&nbsp;€&nbsp;HT, puis 39&nbsp;€&nbsp;HT par mois tout compris.</p>
+        <a class="link" href="/tarifs/">Voir les tarifs</a>
+      </aside>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap"><Faq items={zone.faq} title={`Questions fréquentes à ${zone.city}`} /></div>
+  </section>
+
+  <section class="section section--chalk" id="rendez-vous" aria-label="Prendre rendez-vous">
+    <div class="wrap">
+      <BookingSimulator title={`Un rendez-vous pour votre projet à ${zone.city}`} city={zone.city} />
+    </div>
+  </section>
+
+  <section class="section section--tight">
+    <div class="wrap zn">
+      <p class="muted">Nous intervenons aussi à</p>
+      <ul>
+        {neighbours.map((n) => <li><a href={`/creation-site-internet-${n.slug}/`}>Création de site internet à {n.city}</a></li>)}
+      </ul>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .zh { padding: clamp(1.5rem, 4vw, 3rem) 0 clamp(4rem, 8vw, 6.5rem); }
+  .zh__grid { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: clamp(2rem, 5vw, 5rem); align-items: center; }
+  .zh__text { display: grid; gap: 1.5rem; justify-items: start; }
+  .zh__k { margin: 0; color: var(--cobalt); font-weight: 600; font-size: var(--t-sm); }
+  .zh h1 { font-size: clamp(2.3rem, 1.3rem + 4vw, 5rem); }
+  @media (max-width: 900px) { .zh__grid { grid-template-columns: 1fr; } }
+
+  .zt { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(0, 0.8fr); gap: clamp(2rem, 6vw, 6rem); align-items: start; }
+  .zt__body { display: grid; gap: clamp(2.5rem, 5vw, 3.5rem); max-width: 68ch; }
+  .zt__block h2 { font-size: var(--t-lg); margin-bottom: 1.2rem; }
+  .zt__block p { color: #c9c9c5; }
+  .zt__aside { position: sticky; top: 110px; display: grid; gap: 1.1rem; background: var(--deep); border: 1px solid var(--line); border-radius: var(--r-frame); padding: 1.6rem; }
+  .zt__aside-h { margin: 0; font-weight: 600; }
+  .zt__aside a { text-decoration: none; }
+  .zt__price { margin: 0; color: var(--ink-soft); font-size: var(--t-sm); }
+  @media (max-width: 900px) { .zt { grid-template-columns: 1fr; } .zt__aside { position: static; } }
+
+  .zn { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem 2rem; }
+  .zn p { margin: 0; }
+  .zn ul { list-style: none; display: flex; flex-wrap: wrap; gap: 0.6rem; }
+  .zn a { display: inline-flex; min-height: 44px; align-items: center; padding: 0 1.1rem; border-radius: 999px; border: 1.5px solid var(--line); text-decoration: none; font-weight: 600; font-size: var(--t-sm); }
+  .zn a:hover { border-color: var(--cobalt); }
+</style>

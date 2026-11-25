@@ -1,0 +1,31 @@
+---
+import { site } from "../data/site";
+---
+<div class="mb" role="navigation" aria-label="Actions rapides">
+  <a class="mb__call" href={site.phoneHref} data-label="mobile_bar_call">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1z" fill="currentColor" /></svg>
+    Appeler
+  </a>
+  <a class="mb__rdv" href="/#rendez-vous" data-track="cta_click" data-label="mobile_bar_rdv">Prendre RDV</a>
+</div>
+
+<style>
+  .mb { display: none; }
+  @media (max-width: 760px) {
+    .mb {
+      position: fixed; left: 0.75rem; right: 0.75rem; bottom: calc(0.75rem + env(safe-area-inset-bottom)); z-index: 45;
+      display: grid; grid-template-columns: 1fr 1.4fr; gap: 0.5rem; padding: 0.45rem;
+      background: rgba(22, 22, 24, 0.92); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      border: 1px solid var(--line); border-radius: 999px; box-shadow: 0 20px 40px -16px rgba(0, 0, 0, 0.8);
+    }
+    .mb a {
+      display: inline-flex; align-items: center; justify-content: center; gap: 0.45rem; min-height: 50px; border-radius: 999px;
+      font-weight: 650; font-size: var(--t-sm); text-decoration: none;
+    }
+    .mb svg { width: 17px; height: 17px; }
+    .mb__call { color: var(--ink); border: 1.5px solid rgba(255, 255, 255, 0.25); }
+    .mb__rdv { background: var(--cobalt); color: var(--on-accent); }
+    .mb__rdv:hover { color: var(--on-accent); }
+  }
+  @media print { .mb { display: none; } }
+</style>

@@ -146,15 +146,15 @@ const eur = (n: number) => n.toLocaleString("fr-FR", { minimumFractionDigits: 0,
   .co__plans { display: grid; gap: 0.6rem; }
   .co__plan { position: relative; display: block; }
   .co__plan input { position: absolute; opacity: 0; inset: 0; margin: 0; cursor: pointer; }
-  .co__plan span { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.25rem 1rem; padding: 1rem 1.15rem; border: 1.5px solid var(--line); border-radius: var(--r-ui); background: #fff; cursor: pointer; }
+  .co__plan span { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.25rem 1rem; padding: 1rem 1.15rem; border: 1.5px solid var(--line); border-radius: 14px; background: var(--raise); cursor: pointer; }
   .co__plan em { font-style: normal; color: var(--ink-soft); font-size: var(--t-sm); }
   .co__plan input:checked + span { border-color: var(--cobalt); box-shadow: 0 0 0 3px var(--cobalt-tint); }
   .co__plan input:focus-visible + span { outline: 3px solid var(--cobalt); outline-offset: 2px; }
-  .co__sum { position: sticky; top: 110px; background: var(--ink); color: #e8ebf4; border-radius: var(--r-frame); padding: 1.75rem; display: grid; gap: 0.9rem; }
-  .co__sum-h { font-weight: 700; color: #fff; margin: 0 0 0.25rem; font-stretch: 115%; }
-  .co__line { display: flex; justify-content: space-between; gap: 1rem; font-size: var(--t-sm); padding-bottom: 0.9rem; border-bottom: 1px solid var(--line-dark); }
-  .co__line--total { font-size: var(--t-base); color: #fff; }
-  .co__line--total strong { color: #8f9cff; }
-  .co__fine { font-size: var(--t-xs); color: #aab3cc; margin: 0.25rem 0 0; }
+  .co__sum { position: sticky; top: 110px; background: var(--grad); color: var(--ink); border: 1px solid var(--line); border-radius: var(--r-frame); padding: 1.75rem; display: grid; gap: 0.9rem; }
+  .co__sum-h { font-weight: 700; color: var(--ink); margin: 0 0 0.25rem; font-stretch: 115%; }
+  .co__line { display: flex; justify-content: space-between; gap: 1rem; font-size: var(--t-sm); padding-bottom: 0.9rem; border-bottom: 1px solid var(--line); }
+  .co__line--total { font-size: var(--t-base); color: var(--ink); }
+  .co__line--total strong { color: var(--cobalt); }
+  .co__fine { font-size: var(--t-xs); color: var(--ink-soft); margin: 0.25rem 0 0; }
   @media (max-width: 960px) { .co__grid { grid-template-columns: 1fr; } .co__sum { position: static; order: -1; } }
 </style>

@@ -80,6 +80,10 @@ document.querySelectorAll<HTMLFormElement>("form[data-lead-form]").forEach((form
       project_type: data.project_type,
       budget: data.budget,
     });
+    if (form.dataset.inline !== undefined) {
+      form.dispatchEvent(new CustomEvent("lead:sent"));
+      return;
+    }
     const next = form.dataset.next || "/merci/";
     location.href = `${next}?type=${encodeURIComponent(type)}`;
   });

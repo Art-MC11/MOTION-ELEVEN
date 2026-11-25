@@ -18,14 +18,11 @@ import { whatsappLink } from "../data/site";
     position: fixed; right: 1.1rem; bottom: 1.1rem; z-index: 40;
     display: inline-flex; align-items: center; gap: 0.5rem;
     height: 52px; padding: 0 1.1rem 0 0.9rem; border-radius: var(--r-pill);
-    background: #1f8f5f; color: #fff; text-decoration: none; font-weight: 620; font-size: var(--t-sm);
+    background: #1f1f22; color: #fff; border: 1px solid rgba(255,255,255,.18); text-decoration: none; font-weight: 620; font-size: var(--t-sm);
     box-shadow: 0 14px 30px -12px rgba(12, 21, 48, 0.55);
   }
-  .wa:hover { background: #18774e; color: #fff; }
+  .wa:hover { background: #25d366; color: #0a0a0b; border-color: #25d366; }
   .wa svg { width: 22px; height: 22px; fill: currentColor; }
-  @media (max-width: 560px) {
-    .wa { width: 54px; height: 54px; padding: 0; justify-content: center; }
-    .wa span { display: none; }
-  }
+  @media (max-width: 760px) { .wa { display: none; } }
   @media print { .wa { display: none; } }
 </style>

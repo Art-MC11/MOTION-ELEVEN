@@ -132,25 +132,25 @@ const total = steps.length + 1;
   .tn { gap: 1.25rem; }
   .tn__head { display: flex; align-items: center; justify-content: space-between; min-height: 36px; }
   .tn__back {
-    background: none; border: 0; padding: 0.4rem 0; font: inherit; font-size: var(--t-sm); font-weight: 600;
+    background: none; border: 0; color: var(--ink); padding: 0.4rem 0; font: inherit; font-size: var(--t-sm); font-weight: 600;
     color: var(--ink); cursor: pointer; text-decoration: underline; text-underline-offset: 0.2em;
   }
   .tn__count { margin: 0 0 0 auto; font-size: var(--t-sm); color: var(--ink-soft); }
-  .tn__bar { height: 4px; border-radius: 4px; background: var(--line); overflow: hidden; margin-top: -0.5rem; }
+  .tn__bar { height: 3px; border-radius: 4px; background: var(--line); overflow: hidden; margin-top: -0.5rem; }
   .tn__bar span { display: block; height: 100%; width: 20%; background: var(--cobalt); transition: width 0.35s var(--ease); }
   .tn__step { gap: 1.1rem; }
-  .tn__q { font-size: var(--t-lg); font-weight: 720; font-stretch: 118%; letter-spacing: -0.02em; line-height: 1.15; margin-bottom: 0.6rem; }
+  .tn__q { font-size: var(--t-lg); font-weight: 560; font-stretch: 88%; text-transform: uppercase; letter-spacing: 0.01em; line-height: 1.12; margin-bottom: 0.8rem; }
   .tn__opts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.6rem; }
   .tn__opt { position: relative; }
   .tn__opt input { position: absolute; inset: 0; opacity: 0; margin: 0; cursor: pointer; }
   .tn__opt span {
     display: flex; align-items: center; min-height: 62px; padding: 0.75rem 1rem;
-    border: 1.5px solid var(--line); border-radius: var(--r-ui); background: #fff;
+    border: 1.5px solid var(--line); border-radius: 14px; background: var(--raise);
     font-weight: 600; font-size: var(--t-base); line-height: 1.25; cursor: pointer;
     transition: border-color 0.15s, background-color 0.15s, color 0.15s;
   }
   .tn__opt input:hover + span { border-color: var(--ink); }
-  .tn__opt input:checked + span { background: var(--ink); border-color: var(--ink); color: #fff; }
+  .tn__opt input:checked + span { background: var(--cobalt); border-color: var(--cobalt); color: var(--on-accent); }
   .tn__opt input:focus-visible + span { outline: 3px solid var(--cobalt); outline-offset: 2px; }
   .tn__step[hidden] { display: none; }
   .tn:not(.is-stepped) .tn__head, .tn:not(.is-stepped) .tn__bar { display: none; }

@@ -1,0 +1,58 @@
+---
+// Carte stylisée de la zone d'intervention (positions géographiques simplifiées).
+interface Props { highlight?: string; }
+const { highlight } = Astro.props;
+const places = [
+  { name: "Groslay", lon: 2.349, lat: 48.986, hq: true, dx: 14, dy: -10 },
+  { name: "Montmorency", lon: 2.322, lat: 48.989, dx: -112, dy: -12 },
+  { name: "Sarcelles", lon: 2.38, lat: 48.997, dx: 14, dy: -14 },
+  { name: "Enghien-les-Bains", lon: 2.306, lat: 48.97, dx: -150, dy: 20 },
+  { name: "Saint-Denis", lon: 2.357, lat: 48.936, dx: 14, dy: 6 },
+  { name: "Paris", lon: 2.347, lat: 48.859, paris: true, dx: 0, dy: 0 },
+];
+const X = (lon: number) => 60 + (lon - 2.2) * 1500;
+const Y = (lat: number) => 30 + (49.03 - lat) * 2250;
+const hq = places[0];
+---
+<figure class="zm" aria-label="Carte de notre zone d'intervention : Paris et le Val-d'Oise">
+  <svg viewBox="0 0 440 440" role="img">
+    <title>Zone d'intervention de Motion Eleven</title>
+    <defs>
+      <pattern id="zm-grid" width="22" height="22" patternUnits="userSpaceOnUse">
+        <path d="M22 0H0V22" fill="none" stroke="rgba(255,255,255,.06)" stroke-width="1" />
+      </pattern>
+    </defs>
+    <rect width="440" height="440" fill="url(#zm-grid)" />
+    <circle cx={X(hq.lon)} cy={Y(hq.lat)} r="150" fill="rgba(212,248,12,.05)" stroke="rgba(212,248,12,.35)" stroke-dasharray="4 6" />
+    <circle cx={X(hq.lon)} cy={Y(hq.lat)} r="70" fill="none" stroke="rgba(212,248,12,.25)" stroke-dasharray="2 5" />
+    <path d={`M${X(2.347)} ${Y(48.859)} L${X(hq.lon)} ${Y(hq.lat)}`} stroke="rgba(255,255,255,.18)" stroke-width="1.5" stroke-dasharray="3 5" />
+    {places.map((p) => {
+      const on = highlight === p.name;
+      if (p.paris) return (
+        <g>
+          <ellipse cx={X(p.lon)} cy={Y(p.lat)} rx="78" ry="52" fill={on ? "rgba(212,248,12,.16)" : "rgba(255,255,255,.06)"} stroke={on ? "#d4f80c" : "rgba(255,255,255,.3)"} />
+          <text x={X(p.lon)} y={Y(p.lat) + 8} text-anchor="middle" class:list={["zm__t", "zm__t--big", { "zm__t--on": on }]}>PARIS</text>
+        </g>
+      );
+      return (
+        <g>
+          {p.hq && <circle cx={X(p.lon)} cy={Y(p.lat)} r="14" class="zm__pulse" />}
+          <circle cx={X(p.lon)} cy={Y(p.lat)} r={p.hq ? 7 : 5} fill={p.hq || on ? "#d4f80c" : "#f2f2ee"} />
+          <text x={X(p.lon) + p.dx} y={Y(p.lat) + p.dy} class:list={["zm__t", { "zm__t--on": on || p.hq }]}>{p.name}{p.hq ? " — Motion Eleven" : ""}</text>
+        </g>
+      );
+    })}
+  </svg>
+  <figcaption>Basés à Groslay (95) : Paris et tout le Val-d'Oise, en rendez-vous ou en visio.</figcaption>
+</figure>
+
+<style>
+  .zm { margin: 0; background: var(--grad); border: 1px solid var(--line); border-radius: var(--r-frame); padding: 1rem; }
+  .zm svg { width: 100%; height: auto; }
+  .zm__t { fill: #c9c9c5; font: 600 12px var(--font); }
+  .zm__t--big { font-size: 16px; letter-spacing: 0.08em; fill: #f2f2ee; }
+  .zm__t--on { fill: #d4f80c; }
+  .zm__pulse { fill: rgba(212, 248, 12, 0.25); transform-box: fill-box; transform-origin: center; animation: zm-p 2.4s ease-out infinite; }
+  @keyframes zm-p { from { transform: scale(0.6); opacity: 1; } to { transform: scale(2.4); opacity: 0; } }
+  .zm figcaption { padding: 0.5rem 0.5rem 0.25rem; font-size: var(--t-sm); color: var(--ink-soft); }
+</style>

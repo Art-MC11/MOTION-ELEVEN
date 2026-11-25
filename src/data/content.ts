@@ -3,6 +3,7 @@
 export const poles = [
   {
     key: "web",
+    img: "/images/services/web.jpg",
     title: "Web design & développement",
     href: "/creation-site-internet/",
     promise: "Un site qui inspire confiance dès la première seconde et transforme les visites en demandes.",
@@ -10,6 +11,7 @@ export const poles = [
   },
   {
     key: "shop",
+    img: "/images/services/shop.jpg",
     title: "E-commerce & digital business",
     href: "/e-commerce/",
     promise: "Vendre, encaisser et réserver en ligne, sans dépendre d'une plateforme qui prend une commission.",
@@ -17,6 +19,7 @@ export const poles = [
   },
   {
     key: "auto",
+    img: "/images/services/auto.jpg",
     title: "Automatisation & IA",
     href: "/automatisation-ia/",
     promise: "Les tâches répétitives se font seules : vous gagnez des heures chaque semaine et ne perdez plus un prospect.",
@@ -24,6 +27,7 @@ export const poles = [
   },
   {
     key: "motion",
+    img: "/images/services/motion.jpg",
     title: "Creative & motion design",
     href: "/motion-design/",
     promise: "Une image de marque qui se remarque, et des vidéos qui arrêtent le défilement.",
@@ -240,4 +244,14 @@ export const models = [
     desktop: "/images/modeles/restaurant-desktop.jpg",
     mobile: "/images/modeles/restaurant-mobile.jpg",
   },
+];
+
+// Extraits du showreel (galerie vidéo) — t = début de l'extrait dans le showreel complet, en secondes
+export const reelClips = [
+  { slug: "ruban", title: "Motion 3D en prise de vue réelle", tag: "3D / Compositing", t: 6.3 },
+  { slug: "kavinsky", title: "Univers isométrique animé", tag: "Illustration animée", t: 16.5 },
+  { slug: "mayime", title: "Packaging produit en 3D", tag: "3D produit", t: 23.2 },
+  { slug: "automobile", title: "Publicité automobile", tag: "3D / Pub", t: 27.4 },
+  { slug: "cosmos", title: "Animation d'interface", tag: "UI motion", t: 30.8 },
+  { slug: "cinema", title: "Direction artistique cinéma", tag: "Effets / Étalonnage", t: 37.6 },
 ];

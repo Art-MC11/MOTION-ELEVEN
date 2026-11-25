@@ -18,13 +18,13 @@ const steps = [
 
 <style>
   .me { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0; counter-reset: me; }
-  .me__step { position: relative; padding: 2rem 1.75rem 0 0; border-top: 1px solid var(--line-dark); }
+  .me__step { position: relative; padding: 2rem 1.75rem 0 0; border-top: 1px solid rgba(255,255,255,.18); }
   .me__step::before {
-    content: ""; position: absolute; top: -5px; left: 0; width: 9px; height: 9px; border-radius: 50%; background: #8f9cff;
+    content: ""; position: absolute; top: -5px; left: 0; width: 9px; height: 9px; border-radius: 50%; background: var(--cobalt);
   }
-  .me__n { display: block; font-size: 3.5rem; font-weight: 760; font-stretch: 125%; letter-spacing: -0.04em; line-height: 1; color: #fff; margin-bottom: 1.25rem; }
-  .me__step h3 { color: #fff; margin-bottom: 0.75rem; }
-  .me__step p { color: #aab3cc; font-size: var(--t-sm); }
+  .me__n { display: block; font-size: 3.5rem; font-weight: 520; font-stretch: 88%; line-height: 1; color: var(--cobalt); margin-bottom: 1.25rem; }
+  .me__step h3 { color: var(--ink); margin-bottom: 0.75rem; }
+  .me__step p { color: #b9b9be; font-size: var(--t-sm); }
   @media (max-width: 900px) {
     .me { grid-template-columns: 1fr 1fr; row-gap: 2.5rem; }
   }

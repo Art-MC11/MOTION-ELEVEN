@@ -20,7 +20,7 @@ const question = mode === "project" ? "De quoi avez-vous besoin ?" : "Quelle e
       <li>
         <a href={o.href} data-track="funnel_start" data-label={o.label}>
           {o.label}
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" /></svg>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9" fill="none" stroke="currentColor" stroke-width="2" /></svg>
         </a>
       </li>
     ))}
@@ -30,25 +30,26 @@ const question = mode === "project" ? "De quoi avez-vous besoin ?" : "Quelle e
 
 <style>
   .fs {
-    background: var(--ink); color: #fff; border-radius: var(--r-frame);
-    padding: clamp(1.25rem, 3vw, 2rem); box-shadow: 0 40px 80px -40px rgba(12, 21, 48, 0.55);
+    background: rgba(20, 20, 22, 0.72); color: var(--ink); border: 1px solid rgba(255, 255, 255, 0.14); border-radius: var(--r-frame);
+    padding: clamp(1.4rem, 3vw, 2.1rem); box-shadow: 0 40px 80px -40px rgba(0, 0, 0, 0.9);
+    backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
   }
   .fs__top { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; flex-wrap: wrap; }
-  .fs__q { margin: 0; font-size: var(--t-lg); font-weight: 720; font-stretch: 118%; letter-spacing: -0.02em; line-height: 1.15; }
-  .fs__meta { margin: 0; font-size: var(--t-xs); color: #aab3cc; }
-  .fs__bar { height: 4px; border-radius: 4px; background: var(--line-dark); margin: 1.1rem 0 1.25rem; overflow: hidden; }
-  .fs__bar span { display: block; width: 20%; height: 100%; background: #8f9cff; }
+  .fs__q { margin: 0; font-size: var(--t-lg); font-weight: 560; font-stretch: 88%; text-transform: uppercase; letter-spacing: 0.01em; line-height: 1.1; }
+  .fs__meta { margin: 0; font-size: var(--t-xs); color: var(--ink-soft); }
+  .fs__bar { height: 3px; border-radius: 4px; background: rgba(255,255,255,.12); margin: 1.1rem 0 1.25rem; overflow: hidden; }
+  .fs__bar span { display: block; width: 20%; height: 100%; background: var(--cobalt); }
   .fs__opts { list-style: none; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.6rem; }
   .fs__opts a {
     display: flex; align-items: center; justify-content: space-between; gap: 0.5rem;
-    min-height: 60px; padding: 0.75rem 1rem; border-radius: var(--r-ui);
-    background: var(--ink-2); border: 1.5px solid var(--line-dark);
-    color: #fff; text-decoration: none; font-weight: 600; font-size: var(--t-sm); line-height: 1.25;
+    min-height: 62px; padding: 0.8rem 1.1rem; border-radius: 14px;
+    background: rgba(255, 255, 255, 0.05); border: 1.5px solid rgba(255, 255, 255, 0.12);
+    color: var(--ink); text-decoration: none; font-weight: 600; font-size: var(--t-sm); line-height: 1.25;
     transition: background-color 0.15s, border-color 0.15s;
   }
-  .fs__opts svg { width: 18px; height: 18px; flex: none; color: #8f9cff; transition: transform 0.2s var(--ease); }
-  .fs__opts a:hover { background: var(--cobalt); border-color: var(--cobalt); color: #fff; }
-  .fs__opts a:hover svg { color: #fff; transform: translateX(3px); }
-  .fs__foot { margin: 1rem 0 0; font-size: var(--t-xs); color: #aab3cc; }
+  .fs__opts svg { width: 18px; height: 18px; flex: none; color: var(--cobalt); transition: transform 0.2s var(--ease); }
+  .fs__opts a:hover { background: var(--cobalt); border-color: var(--cobalt); color: var(--on-accent); }
+  .fs__opts a:hover svg { color: var(--on-accent); transform: translate(2px, -2px); }
+  .fs__foot { margin: 1rem 0 0; font-size: var(--t-xs); color: var(--ink-soft); }
   @media (max-width: 380px) { .fs__opts { grid-template-columns: 1fr; } }
 </style>

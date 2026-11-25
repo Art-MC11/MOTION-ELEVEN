@@ -1,58 +1,64 @@
 ---
 import Logo from "./Logo.astro";
-import { site, whatsappLink } from "../data/site";
+import { site, whatsappLink, zones } from "../data/site";
 const year = new Date().getFullYear();
 ---
 <footer class="ftr">
   <div class="wrap">
-    <div class="ftr__top">
-      <div class="ftr__brand">
-        <Logo tone="light" />
-        <p class="ftr__sig">{site.signature}</p>
-        <p class="ftr__meta">{site.tagline}. Basés à {site.address.city}, nous travaillons avec les entreprises de {site.area}.</p>
+    <div class="ftr__end">
+      <a class="ftr__follow" href={site.instagram} target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9" fill="none" stroke="currentColor" stroke-width="2" /></svg>
+        Suivez-nous sur les réseaux
+      </a>
+      <p class="ftr__big" aria-hidden="true">Motion Eleven</p>
+      <p class="ftr__sig">{site.signature}</p>
+    </div>
+
+    <div class="ftr__cols">
+      <div>
+        <p class="ftr__h">Services</p>
+        <ul>
+          <li><a href="/creation-site-internet/">Création de sites internet</a></li>
+          <li><a href="/e-commerce/">E-commerce</a></li>
+          <li><a href="/automatisation-ia/">Automatisation & IA</a></li>
+          <li><a href="/motion-design/">Motion design</a></li>
+          <li><a href="/modeles/">Modèles de sites</a></li>
+        </ul>
       </div>
-      <div class="ftr__cols">
-        <div>
-          <p class="ftr__h">Services</p>
-          <ul>
-            <li><a href="/creation-site-internet/">Création de sites internet</a></li>
-            <li><a href="/e-commerce/">E-commerce</a></li>
-            <li><a href="/automatisation-ia/">Automatisation & IA</a></li>
-            <li><a href="/motion-design/">Motion design</a></li>
-          </ul>
-        </div>
-        <div>
-          <p class="ftr__h">Solutions</p>
-          <ul>
-            <li><a href="/solutions/restaurants/">Restaurants</a></li>
-            <li><a href="/solutions/artisans/">Artisans</a></li>
-            <li><a href="/solutions/commerces/">Commerces</a></li>
-            <li><a href="/modeles/">Modèles de sites</a></li>
-            <li><a href="/realisations/">Réalisations</a></li>
-          </ul>
-        </div>
-        <div>
-          <p class="ftr__h">Agence</p>
-          <ul>
-            <li><a href="/a-propos/">À propos</a></li>
-            <li><a href="/tarifs/">Tarifs</a></li>
-            <li><a href="/devis/">Demander un devis</a></li>
-            <li><a href="/contact/">Contact</a></li>
-          </ul>
-        </div>
-        <div>
-          <p class="ftr__h">Nous joindre</p>
-          <ul>
-            <li><a href={`mailto:${site.email}`}>{site.email}</a></li>
-            <li><a href={site.phoneHref}>{site.phone}</a></li>
-            <li><a href={whatsappLink()} target="_blank" rel="noopener">WhatsApp</a></li>
-            <li><a href={site.instagram} target="_blank" rel="noopener">Instagram</a></li>
-            <li><a href={site.linkedin} target="_blank" rel="noopener">LinkedIn</a></li>
-          </ul>
-        </div>
+      <div>
+        <p class="ftr__h">Zones d'intervention</p>
+        <ul>
+          {zones.map((z) => <li><a href={z.href}>Site internet à {z.city}</a></li>)}
+          <li><a href="/solutions/restaurants/">Restaurants</a></li>
+          <li><a href="/solutions/artisans/">Artisans</a></li>
+          <li><a href="/solutions/commerces/">Commerces</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="ftr__h">Agence</p>
+        <ul>
+          <li><a href="/a-propos/">À propos</a></li>
+          <li><a href="/realisations/">Réalisations</a></li>
+          <li><a href="/tarifs/">Tarifs</a></li>
+          <li><a href="/devis/">Demander un devis</a></li>
+          <li><a href="/contact/">Contact</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="ftr__h">Nous joindre</p>
+        <ul>
+          <li><a href={site.phoneHref}>{site.phone}</a></li>
+          <li><a href={`mailto:${site.email}`}>{site.email}</a></li>
+          <li><a href={whatsappLink()} target="_blank" rel="noopener">WhatsApp</a></li>
+          <li><a href={site.instagram} target="_blank" rel="noopener">Instagram</a></li>
+          <li><a href={site.linkedin} target="_blank" rel="noopener">LinkedIn</a></li>
+          <li class="ftr__addr">{site.address.street}, {site.address.postalCode} {site.address.city}</li>
+        </ul>
       </div>
     </div>
+
     <div class="ftr__bottom">
+      <Logo />
       <p>© {year} {site.name} — {site.founder}. SIRET {site.siret}.</p>
       <ul>
         <li><a href="/mentions-legales/">Mentions légales</a></li>
@@ -65,26 +71,27 @@ const year = new Date().getFullYear();
 </footer>
 
 <style>
-  .ftr { background: var(--ink); color: #aab3cc; padding: 0 0 2rem; font-size: var(--t-sm); }
-  .ftr__top { border-top: 1px solid var(--line-dark); padding-top: clamp(3.5rem, 7vw, 5rem); }
-  .ftr a { text-decoration: none; color: #d7dcea; }
-  .ftr a:hover { color: #fff; text-decoration: underline; }
-  .ftr__top { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 2fr); gap: 3rem; }
-  .ftr__sig { color: #fff; font-size: var(--t-md); font-weight: 600; font-stretch: 112%; letter-spacing: -0.015em; line-height: 1.3; margin: 1.5rem 0 1rem; max-width: 24ch; }
-  .ftr__meta { max-width: 36ch; }
-  .ftr__cols { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 2rem; }
-  .ftr__h { color: #fff; font-weight: 640; margin-bottom: 0.9rem; }
-  .ftr ul { list-style: none; display: grid; gap: 0.5rem; }
-  .ftr__bottom {
-    margin-top: 4rem; padding-top: 1.5rem; border-top: 1px solid var(--line-dark);
-    display: flex; flex-wrap: wrap; justify-content: space-between; gap: 1rem;
+  .ftr { background: var(--grad); color: #b9b9be; font-size: var(--t-sm); padding: clamp(4.5rem, 9vw, 7rem) 0 2rem; border-top: 1px solid var(--line); }
+  .ftr a { text-decoration: none; color: #e2e2de; }
+  .ftr a:hover { color: var(--cobalt); }
+  .ftr__end { display: grid; gap: 1.25rem; padding-bottom: clamp(3rem, 6vw, 5rem); border-bottom: 1px solid var(--line); }
+  .ftr__follow { display: inline-flex; align-items: center; gap: 0.6rem; font-size: var(--t-xs); text-transform: uppercase; letter-spacing: 0.04em; }
+  .ftr__follow svg { width: 26px; height: 26px; color: var(--cobalt); }
+  .ftr__big {
+    margin: 0; font-size: clamp(3.2rem, 1rem + 10vw, 10rem); font-weight: 520; font-stretch: 88%; text-transform: uppercase;
+    line-height: 0.95; letter-spacing: 0; color: var(--ink);
   }
+  .ftr__sig { margin: 0; color: var(--cobalt); font-size: var(--t-xs); text-transform: uppercase; letter-spacing: 0.04em; max-width: 60ch; }
+  .ftr__cols { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 2rem; padding: clamp(2.5rem, 5vw, 3.5rem) 0; }
+  .ftr__h { color: var(--ink); font-weight: 600; margin-bottom: 1rem; }
+  .ftr ul { list-style: none; display: grid; gap: 0.6rem; }
+  .ftr__addr { color: #8b8b91; }
+  .ftr__bottom { padding-top: 1.75rem; border-top: 1px solid var(--line); display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1.25rem; }
   .ftr__bottom p { margin: 0; }
   .ftr__bottom ul { display: flex; flex-wrap: wrap; gap: 1.25rem; }
-  .ftr__cookies { background: none; border: 0; padding: 0; font: inherit; color: #d7dcea; cursor: pointer; }
-  .ftr__cookies:hover { color: #fff; text-decoration: underline; }
-  @media (max-width: 960px) {
-    .ftr__top { grid-template-columns: 1fr; }
-    .ftr__cols { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  }
+  .ftr__cookies { background: none; border: 0; padding: 0; font: inherit; color: #e2e2de; cursor: pointer; }
+  .ftr__cookies:hover { color: var(--cobalt); }
+  @media (max-width: 960px) { .ftr__cols { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (max-width: 760px) { .ftr { padding-bottom: 6.5rem; } }
+  @media (max-width: 480px) { .ftr__cols { grid-template-columns: 1fr; } }
 </style>

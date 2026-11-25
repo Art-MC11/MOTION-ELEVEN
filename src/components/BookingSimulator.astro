@@ -1,0 +1,224 @@
+---
+// Simulateur de prise de rendez-vous : service → jour → heure → coordonnées → confirmation immédiate.
+// Envoi : Netlify Forms (« rendez-vous ») + CRM de l'espace admin. Lien Cal.com/Calendly facultatif (PUBLIC_CAL_URL).
+import "../styles/forms.css";
+import { site } from "../data/site";
+interface Props { title?: string; intro?: string; city?: string; }
+const {
+  title = "Prendre rendez-vous",
+  intro = "Un appel de 30 minutes pour comprendre votre projet. Choisissez votre créneau : nous le confirmons sous 24 h ouvrées.",
+  city,
+} = Astro.props;
+const services = ["Site internet", "Boutique en ligne", "Automatisation / IA", "Motion design / vidéo", "Autre projet"];
+const slots = ["9 h 30", "11 h", "14 h", "16 h", "18 h"];
+const modes = ["Téléphone", "Visio", "WhatsApp"];
+---
+<div class="bk" data-booking>
+  <div class="bk__intro">
+    <h2>{title}</h2>
+    <p class="lede">{intro}</p>
+    <ul class="bk__facts">
+      <li>Gratuit et sans engagement</li>
+      <li>Par téléphone, visio ou WhatsApp</li>
+      <li>Confirmation sous 24 h ouvrées</li>
+    </ul>
+    {site.calUrl && <a class="link" href={site.calUrl} target="_blank" rel="noopener" data-track="book_appointment" data-label="cal_link">Ou réservez directement dans l'agenda</a>}
+  </div>
+
+  <div class="bk__panel">
+    <form
+      class="fm bk__form"
+      name="rendez-vous"
+      method="POST"
+      action="/merci/?type=rendez-vous"
+      data-netlify="true"
+      netlify-honeypot="bot_field"
+      data-lead-form
+      data-inline
+    >
+      <input type="hidden" name="form-name" value="rendez-vous" />
+      <input type="hidden" name="page" value="" />
+      <input type="hidden" name="utm" value="" />
+      <input type="hidden" name="appointment_date" value="" data-date-field />
+      {city && <input type="hidden" name="sector" value={`Zone : ${city}`} />}
+      <p class="hp" aria-hidden="true"><label>Ne pas remplir <input name="bot_field" tabindex="-1" autocomplete="off" /></label></p>
+
+      <fieldset class="bk__step">
+        <legend><span>1</span>Votre projet</legend>
+        <div class="chips">
+          {services.map((s, i) => (
+            <label class="chip"><input type="radio" name="project_type" value={s} required={i === 0} /><span>{s}</span></label>
+          ))}
+        </div>
+      </fieldset>
+
+      <fieldset class="bk__step">
+        <legend><span>2</span>Le jour</legend>
+        <div class="bk__days" data-days role="radiogroup" aria-label="Choisissez un jour">
+          <noscript><input type="date" name="appointment_date_manual" /></noscript>
+        </div>
+      </fieldset>
+
+      <fieldset class="bk__step">
+        <legend><span>3</span>L'heure</legend>
+        <div class="chips">
+          {slots.map((s, i) => (
+            <label class="chip"><input type="radio" name="appointment_slot" value={s} required={i === 0} /><span>{s}</span></label>
+          ))}
+        </div>
+        <div class="chips bk__modes">
+          {modes.map((m, i) => (
+            <label class="chip"><input type="radio" name="appointment_mode" value={m} checked={i === 0} /><span>{m}</span></label>
+          ))}
+        </div>
+      </fieldset>
+
+      <fieldset class="bk__step">
+        <legend><span>4</span>Vos coordonnées</legend>
+        <div class="fm__row">
+          <div class="fm__field">
+            <label class="fm__label" for={`bk-name-${city || "x"}`}>Nom et prénom</label>
+            <input id={`bk-name-${city || "x"}`} type="text" name="name" required maxlength="120" autocomplete="name" />
+          </div>
+          <div class="fm__field">
+            <label class="fm__label" for={`bk-phone-${city || "x"}`}>Téléphone</label>
+            <input id={`bk-phone-${city || "x"}`} type="tel" name="phone" required maxlength="30" autocomplete="tel" pattern="[\d\s\+\(\)\.\-]{8,}" />
+          </div>
+        </div>
+        <div class="fm__field">
+          <label class="fm__label" for={`bk-email-${city || "x"}`}>E-mail</label>
+          <input id={`bk-email-${city || "x"}`} type="email" name="email" required maxlength="160" autocomplete="email" />
+        </div>
+        <label class="fm__consent">
+          <input type="checkbox" name="consent" value="oui" required />
+          <span>J'accepte d'être recontacté pour organiser ce rendez-vous. <a href="/confidentialite/">Confidentialité</a></span>
+        </label>
+      </fieldset>
+
+      <p class="fm__error" data-form-error tabindex="-1" hidden></p>
+      <button class="btn bk__submit" type="submit" data-summary-btn>Réserver ce créneau</button>
+    </form>
+
+    <div class="bk__done" data-done hidden tabindex="-1">
+      <span class="bk__check" aria-hidden="true"><svg viewBox="0 0 20 20"><path d="M4 10.5 8 14l8-8" fill="none" stroke="currentColor" stroke-width="2.4" /></svg></span>
+      <h3>Créneau demandé</h3>
+      <p class="bk__recap" data-recap></p>
+      <p class="muted">Nous vous confirmons l'horaire par message sous 24 h ouvrées.</p>
+      <div class="btns">
+        <a class="btn btn--sm" href="#" data-ics download="rendez-vous-motion-eleven.ics">Ajouter à mon agenda</a>
+        <button type="button" class="btn btn--sm btn--ghost" data-again>Modifier</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .bk { display: grid; grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.25fr); gap: clamp(2rem, 5vw, 5rem); align-items: start; }
+  .bk__intro { display: grid; gap: 1.4rem; position: sticky; top: 110px; }
+  .bk__facts { list-style: none; display: grid; gap: 0.55rem; font-size: var(--t-sm); }
+  .bk__facts li { position: relative; padding-left: 1.5rem; }
+  .bk__facts li::before { content: ""; position: absolute; left: 0; top: 0.55em; width: 8px; height: 8px; border-radius: 50%; background: var(--cobalt); }
+  .bk__panel { background: var(--deep); border: 1px solid var(--line); border-radius: var(--r-frame); padding: clamp(1.3rem, 3.5vw, 2.4rem); }
+  .bk__form { gap: 1.9rem; }
+  .bk__step legend { display: flex; align-items: center; gap: 0.7rem; font-weight: 600; margin-bottom: 0.9rem; }
+  .bk__step legend span {
+    width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center;
+    background: var(--cobalt); color: var(--on-accent); font-size: var(--t-xs); font-weight: 700;
+  }
+  .bk__days { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 0.5rem; }
+  :global(.bk__day) {
+    display: grid; justify-items: center; gap: 0.1rem; padding: 0.7rem 0.3rem; border-radius: 14px;
+    border: 1.5px solid var(--line); background: var(--raise); color: var(--ink); font: inherit; cursor: pointer;
+  }
+  :global(.bk__day small) { font-size: 11px; color: var(--ink-soft); text-transform: uppercase; letter-spacing: 0.04em; }
+  :global(.bk__day b) { font-size: 1.35rem; font-weight: 560; font-stretch: 88%; line-height: 1.1; }
+  :global(.bk__day:hover) { border-color: rgba(255, 255, 255, 0.4); }
+  :global(.bk__day[aria-checked="true"]) { background: var(--cobalt); border-color: var(--cobalt); color: var(--on-accent); }
+  :global(.bk__day[aria-checked="true"] small) { color: var(--on-accent); }
+  .bk__modes { margin-top: 0.75rem; }
+  .bk__submit { width: 100%; min-height: 58px; }
+  .bk__done { display: grid; gap: 1rem; justify-items: start; padding: 1rem 0; }
+  .bk__check { width: 54px; height: 54px; border-radius: 50%; display: grid; place-items: center; background: var(--cobalt); color: var(--on-accent); }
+  .bk__check svg { width: 26px; height: 26px; }
+  .bk__done h3 { font-size: var(--t-lg); font-weight: 560; font-stretch: 88%; text-transform: uppercase; }
+  .bk__recap { font-size: var(--t-md); margin: 0; }
+  @media (max-width: 960px) { .bk { grid-template-columns: 1fr; } .bk__intro { position: static; } }
+  @media (max-width: 480px) { .bk__days { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+</style>
+
+<script>
+  import "../scripts/forms";
+
+  const jours = ["Dim.", "Lun.", "Mar.", "Mer.", "Jeu.", "Ven.", "Sam."];
+  const mois = ["janv.", "févr.", "mars", "avr.", "mai", "juin", "juil.", "août", "sept.", "oct.", "nov.", "déc."];
+  const iso = (d: Date) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+
+  document.querySelectorAll<HTMLElement>("[data-booking]").forEach((root) => {
+    const form = root.querySelector<HTMLFormElement>("form")!;
+    const daysBox = root.querySelector<HTMLElement>("[data-days]")!;
+    const dateField = root.querySelector<HTMLInputElement>("[data-date-field]")!;
+    const done = root.querySelector<HTMLElement>("[data-done]")!;
+
+    // 10 prochains jours ouvrés
+    const days: Date[] = [];
+    const d = new Date();
+    d.setHours(12, 0, 0, 0);
+    while (days.length < 10) {
+      d.setDate(d.getDate() + 1);
+      if (d.getDay() !== 0 && d.getDay() !== 6) days.push(new Date(d));
+    }
+    daysBox.innerHTML = days.map((day, i) =>
+      `<button type="button" class="bk__day" role="radio" aria-checked="false" data-date="${iso(day)}" tabindex="${i === 0 ? 0 : -1}"><small>${jours[day.getDay()]}</small><b>${day.getDate()}</b><small>${mois[day.getMonth()]}</small></button>`
+    ).join("");
+    const btns = [...daysBox.querySelectorAll<HTMLButtonElement>(".bk__day")];
+    const pick = (b: HTMLButtonElement) => {
+      btns.forEach((x) => { x.setAttribute("aria-checked", String(x === b)); x.tabIndex = x === b ? 0 : -1; });
+      dateField.value = b.dataset.date!;
+    };
+    btns.forEach((b, i) => {
+      b.addEventListener("click", () => pick(b));
+      b.addEventListener("keydown", (e) => {
+        const n = e.key === "ArrowRight" ? i + 1 : e.key === "ArrowLeft" ? i - 1 : -1;
+        if (n >= 0 && n < btns.length) { e.preventDefault(); btns[n].focus(); pick(btns[n]); }
+      });
+    });
+
+    form.addEventListener("submit", (e) => {
+      if (!dateField.value) {
+        e.preventDefault();
+        e.stopImmediatePropagation();
+        const err = form.querySelector<HTMLElement>("[data-form-error]")!;
+        err.textContent = "Choisissez un jour pour votre rendez-vous.";
+        err.hidden = false;
+        btns[0]?.focus();
+      }
+    }, { capture: true });
+
+    form.addEventListener("lead:sent", () => {
+      const data = new FormData(form);
+      const date = new Date(`${dateField.value}T12:00:00`);
+      const slot = String(data.get("appointment_slot") || "");
+      const recap = `${String(data.get("project_type"))} — ${jours[date.getDay()].replace(".", "")} ${date.getDate()} ${mois[date.getMonth()]} à ${slot}, par ${String(data.get("appointment_mode")).toLowerCase()}.`;
+      root.querySelector("[data-recap]")!.textContent = recap;
+      // Fichier agenda (.ics)
+      const [h, m] = slot.replace(" h ", ":").replace(" h", ":00").split(":").map((x) => parseInt(x, 10) || 0);
+      const start = new Date(`${dateField.value}T${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}:00`);
+      const end = new Date(start.getTime() + 30 * 60000);
+      const f = (x: Date) => x.toISOString().replace(/[-:]/g, "").replace(/\.\d{3}/, "");
+      const ics = ["BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//Motion Eleven//RDV//FR", "BEGIN:VEVENT",
+        `UID:${Date.now()}@motion-eleven.fr`, `DTSTAMP:${f(new Date())}`, `DTSTART:${f(start)}`, `DTEND:${f(end)}`,
+        "SUMMARY:Rendez-vous Motion Eleven (à confirmer)", `DESCRIPTION:${recap}`, "END:VEVENT", "END:VCALENDAR"].join("\r\n");
+      root.querySelector<HTMLAnchorElement>("[data-ics]")!.href = "data:text/calendar;charset=utf-8," + encodeURIComponent(ics);
+      form.hidden = true;
+      done.hidden = false;
+      done.focus();
+    });
+
+    root.querySelector("[data-again]")?.addEventListener("click", () => {
+      done.hidden = true;
+      form.hidden = false;
+      const submit = form.querySelector<HTMLButtonElement>("button[type=submit]");
+      if (submit) { submit.disabled = false; submit.textContent = "Réserver ce créneau"; }
+    });
+  });
+</script>

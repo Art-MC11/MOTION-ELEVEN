@@ -1,11 +1,14 @@
 ---
 import Base from "../layouts/Base.astro";
 import FunnelStart from "../components/FunnelStart.astro";
+import ServicesGrid from "../components/ServicesGrid.astro";
+import VideoGallery from "../components/VideoGallery.astro";
+import ShowreelModal from "../components/ShowreelModal.astro";
 import ProjectVisual from "../components/ProjectVisual.astro";
 import Offers from "../components/Offers.astro";
 import Testimonials from "../components/Testimonials.astro";
+import BookingSimulator from "../components/BookingSimulator.astro";
 import Faq from "../components/Faq.astro";
-import CtaFinal from "../components/CtaFinal.astro";
 import { projects, faq, sectors } from "../data/content";
 import { site } from "../data/site";
 
@@ -22,55 +25,119 @@ const websiteSchema = {
   inLanguage: "fr-FR",
   publisher: { "@id": `${site.url}/#organisation` },
 };
-const steps = [
-  { t: "Vous répondez à 5 questions", d: "1 minute, depuis votre téléphone." },
-  { t: "On vous rappelle sous 24 h", d: "30 minutes pour cadrer votre projet." },
-  { t: "Devis clair sous 48 h", d: "Contenu, délai, prix. Vous décidez." },
-  { t: "Votre site en ligne", d: "Dès 2 semaines, maintenance comprise." },
+const videoSchema = {
+  "@context": "https://schema.org",
+  "@type": "VideoObject",
+  name: "Showreel Motion Eleven",
+  description: "Showreel de motion design, 3D et publicité réalisé par Motion Eleven.",
+  thumbnailUrl: `${site.url}/images/showreel/hero-poster.jpg`,
+  contentUrl: `${site.url}/media/showreel-720.mp4`,
+  uploadDate: "2025-01-01",
+  duration: "PT50S",
+};
+const reasons = [
+  { n: "48 h", t: "pour recevoir votre devis", d: "Contenu, délai, prix : une proposition claire et chiffrée, sans engagement." },
+  { n: "2 sem.", t: "pour un site vitrine en ligne", d: "Dès réception de vos contenus. Une boutique en ligne prend 4 à 6 semaines." },
+  { n: "1", t: "seul interlocuteur", d: "La même personne du premier appel à la maintenance. Pas de transfert de dossier." },
 ];
 const project = projects[0];
 ---
 <Base
-  title="Motion Eleven — Création de site internet en Île-de-France, devis gratuit en 1 minute"
-  description="Sites internet, boutiques en ligne et automatisations pour indépendants, artisans, restaurants et PME en Île-de-France. Dès 590 € HT. Devis gratuit en 1 minute, réponse sous 24 h."
-  schema={[websiteSchema, faqSchema]}
+  title="Motion Eleven — Agence digitale & motion design à Paris : sites internet, e-commerce, vidéo"
+  description="Création de sites internet, e-commerce, automatisation et motion design pour les entreprises de Paris et d'Île-de-France. Dès 590 € HT. Rendez-vous en ligne, réponse sous 24 h."
+  schema={[websiteSchema, faqSchema, videoSchema]}
 >
-  <!-- Hero + entrée du tunnel -->
+  <!-- Hero vidéo plein écran -->
   <section class="hero">
+    <video class="hero__video" autoplay muted loop playsinline poster="/images/showreel/hero-poster.jpg" aria-hidden="true" data-hero-video>
+      <source src="/media/hero-1280.mp4" type="video/mp4" media="(min-width: 761px)" />
+      <source src="/media/hero-854.mp4" type="video/mp4" />
+    </video>
+    <div class="hero__shade" aria-hidden="true"></div>
     <div class="wrap hero__grid">
       <div class="hero__text">
-        <h1>Votre entreprise mérite une présence digitale à la hauteur de vos ambitions.</h1>
-        <p class="lede">Sites internet, boutiques en ligne et outils qui vous apportent des clients. Dès 590&nbsp;€&nbsp;HT.</p>
-        <ul class="hero__proof">
+        <h1>Votre présence digitale à la hauteur de vos ambitions.</h1>
+        <p class="hero__sub">Sites internet, boutiques en ligne, automatisations et vidéos pour les entreprises de Paris et d'Île-de-France. Dès 590&nbsp;€&nbsp;HT.</p>
+        <div class="btns">
+          <a class="btn" href="#rendez-vous" data-track="cta_click" data-label="hero_rdv">Réserver un créneau</a>
+          <a class="btn btn--ghost" href="/realisations/" data-track="cta_click" data-label="hero_realisations">Voir nos réalisations</a>
+        </div>
+        <button class="hero__reel" type="button" data-showreel data-t="0">
+          <span aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z" fill="currentColor" /></svg></span>
+          Voir le showreel
+        </button>
+        <ul class="hero__badges">
           <li>Devis gratuit sous 48 h</li>
-          <li>Interlocuteur unique</li>
-          <li>Paris et Île-de-France</li>
+          <li>Maintenance incluse</li>
+          <li>Réponse sous 24 h</li>
         </ul>
       </div>
-      <FunnelStart />
+      <div class="hero__funnel"><FunnelStart /></div>
     </div>
   </section>
 
-  <!-- Activités : accès direct -->
+  <!-- Activités -->
   <section class="sect" aria-label="Solutions par activité">
     <div class="wrap sect__inner">
       <p>Vous êtes</p>
-      <ul>
-        {sectors.map((s) => <li><a href={s.href}>{s.label}</a></li>)}
-      </ul>
+      <ul>{sectors.map((s) => <li><a href={s.href}>{s.label}</a></li>)}</ul>
+    </div>
+  </section>
+
+  <!-- Services -->
+  <section class="section" aria-labelledby="services">
+    <div class="wrap">
+      <div class="head head--split">
+        <h2 id="services">Nos services</h2>
+        <p class="lede">Quatre expertises réunies chez un seul interlocuteur, pour attirer des clients et vous faire gagner du temps.</p>
+      </div>
+      <ServicesGrid />
+    </div>
+  </section>
+
+  <!-- Galerie vidéo -->
+  <section class="section section--chalk" aria-labelledby="galerie">
+    <div class="wrap">
+      <div class="head head--split">
+        <h2 id="galerie">Le savoir-faire en mouvement</h2>
+        <div class="gal__aside">
+          <p class="lede">Extraits de notre showreel : 3D, publicité, interfaces. Cliquez sur un extrait pour lancer la vidéo.</p>
+          <button class="btn btn--ghost" type="button" data-showreel data-t="0">Voir le showreel complet</button>
+        </div>
+      </div>
+      <VideoGallery />
+    </div>
+  </section>
+
+  <!-- Pourquoi nous choisir -->
+  <section class="section section--ink" aria-labelledby="pourquoi">
+    <div class="wrap">
+      <div class="head"><h2 id="pourquoi">Pourquoi nous choisir</h2></div>
+      <div class="why">
+        {reasons.map((r) => (
+          <div class="why__item">
+            <p class="why__n">{r.n}</p>
+            <h3>{r.t}</h3>
+            <p>{r.d}</p>
+          </div>
+        ))}
+      </div>
     </div>
   </section>
 
   <!-- Offres -->
-  <section class="section section--chalk" aria-labelledby="offres">
+  <section class="section" aria-labelledby="offres">
     <div class="wrap">
-      <div class="head"><h2 id="offres">Des prix clairs, affichés.</h2></div>
+      <div class="head head--split">
+        <h2 id="offres">Des prix clairs</h2>
+        <p class="lede">Un prix de création, puis un abonnement qui couvre l'hébergement, la sécurité et vos modifications.</p>
+      </div>
       <Offers />
     </div>
   </section>
 
-  <!-- Preuve -->
-  <section class="section" aria-labelledby="realisation">
+  <!-- Réalisation + modèle -->
+  <section class="section section--chalk" aria-labelledby="realisation">
     <div class="wrap case">
       <ProjectVisual project={project} />
       <div class="case__text">
@@ -79,73 +146,93 @@ const project = projects[0];
         <p class="lede">{project.summary}</p>
         <ul class="ticks small">{project.features.slice(0, 4).map((f) => <li>{f}</li>)}</ul>
         <div class="btns">
-          <a class="btn" href="/devis/?projet=reservation" data-track="cta_click" data-label="case_devis">Je veux le même résultat</a>
-          <a class="btn btn--ghost" href={`/realisations/${project.slug}/`}>Voir l'étude de cas</a>
+          <a class="btn" href={`/realisations/${project.slug}/`}>Voir l'étude de cas</a>
+          <a class="btn btn--ghost" href="/modeles/">Tester nos modèles de sites</a>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Comment ça marche -->
-  <section class="section section--ink" aria-labelledby="methode">
-    <div class="wrap">
-      <div class="head head--split">
-        <h2 id="methode">De la demande à la mise en ligne.</h2>
-        <div><a class="btn btn--light" href="/devis/" data-track="cta_click" data-label="methode_devis">Commencer mon devis</a></div>
-      </div>
-      <ol class="flow">
-        {steps.map((s, i) => (
-          <li><span>{i + 1}</span><strong>{s.t}</strong><em>{s.d}</em></li>
-        ))}
-      </ol>
-    </div>
-  </section>
-
   <Testimonials />
 
-  <section class="section" aria-label="Questions fréquentes">
+  <!-- Prise de rendez-vous -->
+  <section class="section" id="rendez-vous" aria-label="Prendre rendez-vous">
+    <div class="wrap"><BookingSimulator /></div>
+  </section>
+
+  <section class="section section--chalk" aria-label="Questions fréquentes">
     <div class="wrap"><Faq items={faq} /></div>
   </section>
 
-  <CtaFinal />
+  <ShowreelModal />
 </Base>
 
 <style>
-  .hero { padding: clamp(1.5rem, 5vw, 4.5rem) 0 clamp(2.5rem, 5vw, 4.5rem); }
-  .hero__grid { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: clamp(2rem, 5vw, 4.5rem); align-items: center; }
-  .hero__text { display: grid; gap: 1.4rem; }
-  .hero h1 { font-size: clamp(2rem, 1.2rem + 2.8vw, 3.6rem); max-width: 17ch; }
-  .hero .lede { max-width: 36ch; }
-  .hero__proof { list-style: none; display: flex; flex-wrap: wrap; gap: 0.5rem 1.5rem; font-size: var(--t-sm); font-weight: 600; }
-  .hero__proof li { position: relative; padding-left: 1.4rem; }
-  .hero__proof li::before {
-    content: ""; position: absolute; left: 0; top: 0.45em; width: 0.8rem; height: 0.45rem;
-    border-left: 2px solid var(--lead); border-bottom: 2px solid var(--lead); transform: rotate(-45deg);
+  .hero { position: relative; min-height: calc(100svh - 78px); display: grid; align-items: center; overflow: hidden; margin-top: -1px; }
+  .hero__video, .hero__shade { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .hero__video { object-fit: cover; }
+  .hero__shade {
+    background:
+      linear-gradient(90deg, rgba(10, 10, 11, 0.92) 0%, rgba(10, 10, 11, 0.7) 45%, rgba(10, 10, 11, 0.35) 100%),
+      linear-gradient(0deg, rgba(10, 10, 11, 0.95) 0%, transparent 35%);
   }
-  @media (max-width: 960px) { .hero__grid { grid-template-columns: 1fr; } }
-  @media (max-width: 600px) { .hero h1 { font-size: 1.85rem; } .hero .lede { font-size: var(--t-base); } .hero__proof { display: none; } }
+  .hero__grid {
+    position: relative; display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+    gap: clamp(2rem, 5vw, 5rem); align-items: center; padding-block: clamp(3.5rem, 8vw, 6rem);
+  }
+  .hero__text { display: grid; gap: 1.6rem; justify-items: start; }
+  .hero h1 { font-size: clamp(2.5rem, 1.4rem + 4.4vw, 5.6rem); max-width: 14ch; }
+  .hero__sub { margin: 0; font-size: var(--t-md); line-height: 1.55; color: #c9c9c5; max-width: 40ch; }
+  .hero__reel {
+    display: inline-flex; align-items: center; gap: 0.75rem; background: none; border: 0; padding: 0;
+    color: var(--ink); font: inherit; font-weight: 600; cursor: pointer;
+  }
+  .hero__reel span {
+    width: 46px; height: 46px; border-radius: 999px; display: grid; place-items: center;
+    border: 1.5px solid var(--cobalt); color: var(--cobalt); transition: background 0.2s, color 0.2s;
+  }
+  .hero__reel svg { width: 16px; height: 16px; margin-left: 2px; }
+  .hero__reel:hover span { background: var(--cobalt); color: var(--on-accent); }
+  .hero__badges { list-style: none; display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .hero__badges li {
+    display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.45rem 0.9rem; border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.18); background: rgba(10, 10, 11, 0.45); font-size: var(--t-xs); font-weight: 600;
+  }
+  .hero__badges li::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--cobalt); }
+  @media (max-width: 1000px) { .hero__grid { grid-template-columns: 1fr; } .hero { min-height: auto; } }
+  @media (max-width: 600px) {
+    .hero h1 { font-size: clamp(2.2rem, 1.2rem + 6vw, 3rem); }
+    .hero__sub { font-size: var(--t-base); }
+    .hero__shade { background: linear-gradient(180deg, rgba(10, 10, 11, 0.55) 0%, rgba(10, 10, 11, 0.85) 55%, rgba(10, 10, 11, 1) 100%); }
+  }
 
   .sect { border-block: 1px solid var(--line); }
-  .sect__inner { display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem 1.5rem; padding-block: 1.1rem; }
+  .sect__inner { display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem 1.5rem; padding-block: 1.2rem; }
   .sect__inner p { margin: 0; color: var(--ink-soft); font-size: var(--t-sm); }
   .sect ul { list-style: none; display: flex; flex-wrap: wrap; gap: 0.5rem; }
   .sect a {
-    display: inline-flex; align-items: center; min-height: 40px; padding: 0 1rem; border-radius: var(--r-pill);
+    display: inline-flex; align-items: center; min-height: 40px; padding: 0 1.1rem; border-radius: 999px;
     border: 1.5px solid var(--line); text-decoration: none; font-weight: 600; font-size: var(--t-sm);
   }
-  .sect a:hover { border-color: var(--ink); color: var(--ink); }
+  .sect a:hover { border-color: var(--cobalt); color: var(--cobalt); }
+
+  .gal__aside { display: grid; gap: 1.25rem; justify-items: start; }
+
+  .why { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(1.5rem, 4vw, 3.5rem); }
+  .why__item { border-top: 1px solid rgba(255, 255, 255, 0.2); padding-top: 1.75rem; display: grid; gap: 0.8rem; align-content: start; }
+  .why__n { margin: 0; font-size: clamp(3.5rem, 2rem + 5vw, 6.5rem); font-weight: 520; font-stretch: 88%; line-height: 0.95; color: var(--cobalt); }
+  .why__item h3 { text-transform: uppercase; font-weight: 560; font-stretch: 88%; letter-spacing: 0.01em; }
+  .why__item p:last-child { color: #b9b9be; }
+  @media (max-width: 860px) { .why { grid-template-columns: 1fr; } }
 
   .case { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: clamp(2rem, 5vw, 5rem); align-items: center; }
-  .case__text { display: grid; gap: 1.1rem; justify-items: start; }
+  .case__text { display: grid; gap: 1.2rem; justify-items: start; }
   .case__k { margin: 0; color: var(--cobalt); font-weight: 620; }
   .case .btns { margin-top: 0.5rem; }
   @media (max-width: 900px) { .case { grid-template-columns: 1fr; } }
-
-  .flow { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1.5rem; }
-  .flow li { display: grid; gap: 0.35rem; align-content: start; border-top: 1px solid var(--line-dark); padding-top: 1.25rem; }
-  .flow span { font-size: 2.6rem; font-weight: 760; font-stretch: 125%; line-height: 1; color: #8f9cff; margin-bottom: 0.5rem; }
-  .flow strong { color: #fff; font-size: var(--t-md); line-height: 1.25; }
-  .flow em { font-style: normal; color: #aab3cc; font-size: var(--t-sm); }
-  @media (max-width: 900px) { .flow { grid-template-columns: 1fr 1fr; } }
-  @media (max-width: 520px) { .flow { grid-template-columns: 1fr; } }
 </style>
+
+<script>
+  const v = document.querySelector<HTMLVideoElement>("[data-hero-video]");
+  if (v && matchMedia("(prefers-reduced-motion: reduce)").matches) { v.removeAttribute("autoplay"); v.pause(); }
+</script>

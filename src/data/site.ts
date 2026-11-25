@@ -33,6 +33,12 @@ export const site = {
 export const whatsappLink = (text = "Bonjour Motion Eleven, je souhaite parler de mon projet.") =>
   `https://wa.me/${site.whatsapp}?text=${encodeURIComponent(text)}`;
 
+export const zones = [
+  { slug: "paris", city: "Paris", label: "Paris", href: "/creation-site-internet-paris/" },
+  { slug: "sarcelles", city: "Sarcelles", label: "Sarcelles", href: "/creation-site-internet-sarcelles/" },
+  { slug: "montmorency", city: "Montmorency", label: "Montmorency", href: "/creation-site-internet-montmorency/" },
+];
+
 export const nav = [
   {
     label: "Services",
@@ -53,8 +59,16 @@ export const nav = [
       { label: "Commerces", href: "/solutions/commerces/", desc: "Click & collect, catalogue, boutique" },
     ],
   },
+  {
+    label: "Zones",
+    href: "/creation-site-internet-paris/",
+    children: [
+      { label: "Paris", href: "/creation-site-internet-paris/", desc: "Création de site internet à Paris" },
+      { label: "Sarcelles", href: "/creation-site-internet-sarcelles/", desc: "Création de site internet à Sarcelles" },
+      { label: "Montmorency", href: "/creation-site-internet-montmorency/", desc: "Création de site internet à Montmorency" },
+    ],
+  },
   { label: "Modèles", href: "/modeles/" },
   { label: "Réalisations", href: "/realisations/" },
   { label: "Tarifs", href: "/tarifs/" },
-  { label: "À propos", href: "/a-propos/" },
 ];
