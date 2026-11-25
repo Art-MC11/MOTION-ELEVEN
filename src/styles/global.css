@@ -303,17 +303,3 @@ video[data-autoplay] { background: #000; }
 }
 .motion .kin.kin-in .kw { opacity: 1; filter: none; transform: none; }
 
-/* Cascade de pastilles qui s'écartent au défilement */
-.pills { --k: clamp(0, calc((var(--p, 1) - 0.12) / 0.42), 1); display: grid; gap: 0.9rem; justify-items: start; }
-.pill {
-  display: inline-flex; align-items: center; gap: 0.7rem; padding: 0.85rem 1.4rem 0.85rem 1.1rem; border-radius: 999px;
-  font-size: clamp(1.1rem, 0.9rem + 1vw, 1.7rem); font-weight: 600; white-space: nowrap;
-  background: var(--deep); border: 1.5px solid var(--line); color: var(--ink);
-  margin-left: calc(var(--i) * clamp(1.2rem, 4vw, 3.5rem));
-  transform: translate(calc((1 - var(--k)) * var(--i) * -3rem), calc((1 - var(--k)) * var(--i) * -4.2rem)) scale(calc(0.82 + var(--k) * 0.18));
-  opacity: calc(0.35 + var(--k) * 0.65);
-}
-.pill::before { content: ""; width: 10px; height: 10px; border-radius: 50%; background: var(--cobalt); flex: none; }
-.pill:nth-child(2n) { background: var(--cobalt); color: var(--on-accent); border-color: var(--cobalt); }
-.pill:nth-child(2n)::before { background: var(--on-accent); }
-.rm .pill { transform: none; opacity: 1; }

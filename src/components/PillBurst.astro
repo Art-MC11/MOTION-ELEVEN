@@ -1,0 +1,95 @@
+---
+// Explosion de pastilles : empilées au centre, elles partent dans les angles
+// et sur les bords de l'écran pendant le défilement, puis révèlent le message central.
+const pills: { t: string; x: number; y: number; r: number; mx?: number; my?: number }[] = [
+  { t: "Attirer", x: -40, y: -34, r: -14 },
+  { t: "Captiver", x: 40, y: -34, r: 12 },
+  { t: "Convertir", x: -40, y: 34, r: 10 },
+  { t: "Fidéliser", x: 40, y: 34, r: -12 },
+  { t: "Vendre en ligne", x: 0, y: -35, r: -6, my: -30 },
+  { t: "Réserver", x: 0, y: 38, r: 7, my: 29 },
+  { t: "Automatiser", x: -44, y: 0, r: 8, mx: -60, my: -21 },
+  { t: "Se démarquer", x: 44, y: 0, r: -8, mx: 60, my: 21 },
+];
+---
+<section class="pb" data-scrub="pin" aria-labelledby="pb-title">
+  <div class="pb__sticky">
+    <span class="pb__ring" aria-hidden="true"></span>
+    <span class="pb__ring pb__ring--2" aria-hidden="true"></span>
+    <div class="pb__center">
+      <p class="pb__kicker">Un seul objectif</p>
+      <h2 id="pb-title" data-no-kinetic>Des clients qui vous contactent.</h2>
+      <a class="btn" href="#rendez-vous" data-track="cta_click" data-label="burst_rdv">Prendre rendez-vous</a>
+    </div>
+    {pills.map((p, i) => (
+      <span
+        class="pb__pill"
+        aria-hidden="true"
+        style={`--i:${i};--tx:${p.x};--ty:${p.y};--txm:${p.mx ?? p.x};--tym:${p.my ?? p.y};--r:${p.r}deg;--o:${(i % 4) - 1.5}`}
+      >{p.t}</span>
+    ))}
+  </div>
+</section>
+
+<style>
+  .pb {
+    position: relative; height: 230vh; --p: 0;
+    /* e : progression de l'explosion ; s : version adoucie (smoothstep) */
+    --e: clamp(0, calc((var(--p) - 0.06) / 0.58), 1);
+    --s: calc(var(--e) * var(--e) * (3 - 2 * var(--e)));
+  }
+  .pb__sticky { position: sticky; top: 0; height: 100vh; height: 100svh; overflow: hidden; display: grid; place-items: center; }
+
+  .pb__pill {
+    --X: var(--tx); --Y: var(--ty);
+    position: absolute; left: 50%; top: 50%; z-index: 2;
+    display: inline-flex; align-items: center; gap: 0.7rem; white-space: nowrap;
+    padding: 0.9rem 1.5rem 0.9rem 1.15rem; border-radius: 999px;
+    font-size: clamp(1rem, 0.8rem + 1.1vw, 1.75rem); font-weight: 620;
+    background: var(--deep); border: 1.5px solid var(--line); color: var(--ink);
+    box-shadow: 0 20px 50px -20px rgba(0, 0, 0, 0.8);
+    /* Pile légèrement décalée au départ, puis projection vers sa destination */
+    transform:
+      translate(-50%, -50%)
+      translate(
+        calc((1 - var(--s)) * var(--o) * 0.6rem + var(--s) * var(--X) * 1vw),
+        calc((1 - var(--s)) * (var(--i) - 3.5) * 0.7rem + var(--s) * var(--Y) * 1vh)
+      )
+      rotate(calc(var(--s) * var(--r)))
+      scale(calc(0.9 + var(--s) * 0.15));
+    /* Flou de mouvement au milieu de la trajectoire */
+    filter: blur(calc(var(--s) * (1 - var(--s)) * 18px));
+    will-change: transform, filter;
+  }
+  .pb__pill::before { content: ""; width: 10px; height: 10px; border-radius: 50%; background: var(--cobalt); flex: none; }
+  .pb__pill:nth-child(2n) { background: var(--cobalt); color: var(--on-accent); border-color: var(--cobalt); }
+  .pb__pill:nth-child(2n)::before { background: var(--on-accent); }
+
+  /* Onde de choc */
+  .pb__ring {
+    position: absolute; left: 50%; top: 50%; width: 60vmin; height: 60vmin; border-radius: 50%;
+    border: 2px solid var(--cobalt); pointer-events: none;
+    transform: translate(-50%, -50%) scale(calc(0.05 + var(--s) * 2.6));
+    opacity: calc((1 - var(--s)) * min(1, var(--e) * 8));
+  }
+  .pb__ring--2 { border-color: rgba(255, 255, 255, 0.35); transform: translate(-50%, -50%) scale(calc(0.05 + var(--s) * 1.8)); }
+
+  /* Message central révélé après l'explosion */
+  .pb__center {
+    position: relative; z-index: 1; display: grid; justify-items: center; gap: 1.25rem; text-align: center; padding-inline: var(--gutter);
+    opacity: clamp(0, calc((var(--s) - 0.45) * 2.6), 1);
+    transform: scale(calc(0.86 + clamp(0, calc((var(--s) - 0.45) * 2.6), 1) * 0.14));
+  }
+  .pb__kicker { margin: 0; color: var(--cobalt); font-weight: 650; }
+  .pb__center h2 { font-size: clamp(2.2rem, 1rem + 5vw, 5.5rem); max-width: 14ch; }
+
+  @media (max-width: 760px) {
+    .pb { height: 200vh; }
+    .pb__pill { --X: var(--txm); --Y: var(--tym); padding: 0.7rem 1.1rem 0.7rem 0.9rem; }
+  }
+  .rm .pb { height: auto; padding-block: var(--section); }
+  .rm .pb__sticky { position: relative; height: auto; display: grid; gap: 2rem; }
+  .rm .pb__pill { position: static; transform: none; filter: none; display: none; }
+  .rm .pb__ring { display: none; }
+  .rm .pb__center { opacity: 1; transform: none; }
+</style>

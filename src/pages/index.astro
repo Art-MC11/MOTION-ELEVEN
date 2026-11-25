@@ -4,6 +4,7 @@ import FunnelStart from "../components/FunnelStart.astro";
 import ServicesGrid from "../components/ServicesGrid.astro";
 import VideoWall from "../components/VideoWall.astro";
 import ShowreelExpand from "../components/ShowreelExpand.astro";
+import PillBurst from "../components/PillBurst.astro";
 import HorizontalReel from "../components/HorizontalReel.astro";
 import ShowreelModal from "../components/ShowreelModal.astro";
 import ProjectVisual from "../components/ProjectVisual.astro";
@@ -85,14 +86,11 @@ const project = projects[0];
   <section class="stm" data-scrub="through" data-words aria-label="Notre approche">
     <div class="wrap stm__grid">
       <p class="stm__text" data-split>Nous créons des sites, des vidéos et des outils qui donnent envie de vous appeler. Le design attire, la technique convertit, et vous gardez un seul interlocuteur.</p>
-      <div class="pills" aria-hidden="true">
-        <span class="pill" style="--i:0">Attirer</span>
-        <span class="pill" style="--i:1">Captiver</span>
-        <span class="pill" style="--i:2">Convertir</span>
-        <span class="pill" style="--i:3">Fidéliser</span>
-      </div>
     </div>
   </section>
+
+  <!-- Explosion de pastilles -->
+  <PillBurst />
 
   <!-- Showreel qui s'ouvre -->
   <ShowreelExpand />
@@ -228,8 +226,6 @@ const project = projects[0];
   .sect a:hover { border-color: var(--cobalt); color: var(--cobalt); }
 
   .stm { padding-block: clamp(5rem, 14vw, 11rem); overflow: hidden; }
-  .stm__grid { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: clamp(2.5rem, 6vw, 6rem); align-items: center; }
-  @media (max-width: 900px) { .stm__grid { grid-template-columns: 1fr; } }
   .stm__text {
     margin: 0; max-width: 24ch; font-size: clamp(2rem, 1rem + 4.2vw, 5rem); line-height: 1.08;
     font-weight: 560; font-stretch: 88%; text-transform: uppercase; letter-spacing: 0;
