@@ -255,3 +255,65 @@ ul { margin: 0; padding: 0; }
 
 /* Vidéos : ne jamais déborder, fond noir pendant le chargement */
 video[data-autoplay] { background: #000; }
+
+/* ==========================================================
+   Boutons « qui s'écartent » : au survol, le texte glisse et une
+   pastille fléchée s'ouvre à droite (inspiré des pills animées du showreel)
+   ========================================================== */
+.btn {
+  position: relative; overflow: hidden; isolation: isolate;
+  translate: var(--mx, 0) var(--my, 0);
+  transition: background-color 0.2s var(--ease), border-color 0.2s var(--ease), color 0.2s var(--ease),
+    padding 0.45s cubic-bezier(0.3, 1.4, 0.4, 1), translate 0.35s var(--ease);
+}
+.btn::after {
+  content: ""; position: absolute; top: 50%; right: 7px; width: 38px; height: 38px; border-radius: 999px;
+  translate: 0 -50%; scale: 0; opacity: 0;
+  background: var(--paper) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M7 17 17 7M9 7h8v8' fill='none' stroke='%23d4f80c' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / 16px no-repeat;
+  transition: scale 0.45s cubic-bezier(0.3, 1.5, 0.4, 1), opacity 0.2s, rotate 0.45s var(--ease);
+  rotate: -45deg;
+}
+.btn--ghost::after {
+  background-color: var(--cobalt);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M7 17 17 7M9 7h8v8' fill='none' stroke='%230a0a0b' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+}
+.btn--sm::after { width: 30px; height: 30px; right: 6px; background-size: 13px; }
+@media (hover: hover) {
+  .btn:not([disabled]):hover { padding-right: calc(1.75rem + 34px); }
+  .btn--sm:not([disabled]):hover { padding-right: calc(1.2rem + 28px); }
+  .btn:not([disabled]):hover::after { scale: 1; opacity: 1; rotate: 0deg; }
+}
+.btn--wide:hover, .fm__submit .btn:hover, .bk__submit:hover { padding-right: 1.75rem; }
+.btn--wide::after, .fm__submit .btn::after, .bk__submit::after { display: none; }
+
+/* Entrée du hero : les deux boutons partent l'un contre l'autre puis s'écartent */
+@keyframes btn-spread-l { from { opacity: 0; transform: translateX(55%) scale(0.86); } to { opacity: 1; transform: none; } }
+@keyframes btn-spread-r { from { opacity: 0; transform: translateX(-55%) scale(0.86); } to { opacity: 1; transform: none; } }
+@keyframes pill-pop { 0% { opacity: 0; transform: scale(0.4); } 70% { opacity: 1; transform: scale(1.08); } 100% { transform: none; } }
+.motion [data-spread] > :nth-child(1) { animation: btn-spread-l 0.9s cubic-bezier(0.25, 1.35, 0.4, 1) 0.45s both; }
+.motion [data-spread] > :nth-child(2) { animation: btn-spread-r 0.9s cubic-bezier(0.25, 1.35, 0.4, 1) 0.45s both; }
+.motion [data-pop] > * { animation: pill-pop 0.6s var(--ease) both; animation-delay: calc(0.9s + var(--i, 0) * 90ms); }
+
+/* Titres cinétiques : les mots arrivent avec un flou de mouvement */
+.kw { display: inline-block; }
+.motion .kin .kw {
+  opacity: 0; filter: blur(12px); transform: translateX(-0.5em) skewX(-14deg);
+  transition: opacity 0.7s var(--ease), filter 0.8s var(--ease), transform 0.9s cubic-bezier(0.2, 1, 0.3, 1);
+  transition-delay: calc(var(--i, 0) * 60ms + var(--d, 0ms));
+}
+.motion .kin.kin-in .kw { opacity: 1; filter: none; transform: none; }
+
+/* Cascade de pastilles qui s'écartent au défilement */
+.pills { --k: clamp(0, calc((var(--p, 1) - 0.12) / 0.42), 1); display: grid; gap: 0.9rem; justify-items: start; }
+.pill {
+  display: inline-flex; align-items: center; gap: 0.7rem; padding: 0.85rem 1.4rem 0.85rem 1.1rem; border-radius: 999px;
+  font-size: clamp(1.1rem, 0.9rem + 1vw, 1.7rem); font-weight: 600; white-space: nowrap;
+  background: var(--deep); border: 1.5px solid var(--line); color: var(--ink);
+  margin-left: calc(var(--i) * clamp(1.2rem, 4vw, 3.5rem));
+  transform: translate(calc((1 - var(--k)) * var(--i) * -3rem), calc((1 - var(--k)) * var(--i) * -4.2rem)) scale(calc(0.82 + var(--k) * 0.18));
+  opacity: calc(0.35 + var(--k) * 0.65);
+}
+.pill::before { content: ""; width: 10px; height: 10px; border-radius: 50%; background: var(--cobalt); flex: none; }
+.pill:nth-child(2n) { background: var(--cobalt); color: var(--on-accent); border-color: var(--cobalt); }
+.pill:nth-child(2n)::before { background: var(--on-accent); }
+.rm .pill { transform: none; opacity: 1; }

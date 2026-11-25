@@ -129,6 +129,56 @@ document.querySelectorAll<HTMLElement>("[data-words] [data-split]").forEach((el)
   el.innerHTML = el.textContent!.trim().split(/\s+/).map((w) => `<span class="w">${w}</span>`).join(" ");
 });
 
+// ---------- Titres cinétiques (mots avec flou de mouvement) ----------
+function setupKinetic() {
+  const heads = document.querySelectorAll<HTMLElement>("main h1, main h2");
+  heads.forEach((h) => {
+    if (h.closest("[data-words], .sx, .adm, dialog") || h.dataset.noKinetic !== undefined) return;
+    let i = 0;
+    const walk = (node: Node) => {
+      [...node.childNodes].forEach((n) => {
+        if (n.nodeType === 3) {
+          const parts = (n.textContent || "").split(/(\s+)/);
+          const frag = document.createDocumentFragment();
+          parts.forEach((part) => {
+            if (!part) return;
+            if (/^\s+$/.test(part)) { frag.appendChild(document.createTextNode(part)); return; }
+            const sp = document.createElement("span");
+            sp.className = "kw";
+            sp.style.setProperty("--i", String(i++));
+            sp.textContent = part;
+            frag.appendChild(sp);
+          });
+          n.parentNode!.replaceChild(frag, n);
+        } else if (n.nodeType === 1 && !(n as HTMLElement).classList.contains("kw")) walk(n);
+      });
+    };
+    walk(h);
+    h.classList.add("kin");
+  });
+  if (reduce || !("IntersectionObserver" in window)) { heads.forEach((h) => h.classList.add("kin-in")); return; }
+  const io = new IntersectionObserver((entries) => entries.forEach((e) => {
+    if (e.isIntersecting) { e.target.classList.add("kin-in"); io.unobserve(e.target); }
+  }), { threshold: 0.2 });
+  document.querySelectorAll(".kin").forEach((h) => io.observe(h));
+}
+
+// ---------- Boutons magnétiques (souris uniquement) ----------
+function setupMagnetic() {
+  if (reduce || !matchMedia("(hover: hover) and (pointer: fine)").matches) return;
+  document.querySelectorAll<HTMLElement>(".btn:not(.btn--wide)").forEach((b) => {
+    if (b.closest("form")) return;
+    b.addEventListener("pointermove", (e) => {
+      const r = b.getBoundingClientRect();
+      b.style.setProperty("--mx", `${((e.clientX - r.left) / r.width - 0.5) * 10}px`);
+      b.style.setProperty("--my", `${((e.clientY - r.top) / r.height - 0.5) * 8}px`);
+    });
+    b.addEventListener("pointerleave", () => { b.style.setProperty("--mx", "0px"); b.style.setProperty("--my", "0px"); });
+  });
+}
+
+setupKinetic();
+setupMagnetic();
 setupReveal();
 setupVideos();
 setupCounters();

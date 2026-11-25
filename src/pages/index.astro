@@ -60,7 +60,7 @@ const project = projects[0];
       <div class="hero__text">
         <h1>Votre présence digitale à la hauteur de vos ambitions.</h1>
         <p class="hero__sub">Sites internet, boutiques en ligne, automatisations et vidéos pour les entreprises de Paris et d'Île-de-France. Dès 590&nbsp;€&nbsp;HT.</p>
-        <div class="btns">
+        <div class="btns" data-spread>
           <a class="btn" href="#rendez-vous" data-track="cta_click" data-label="hero_rdv">Réserver un créneau</a>
           <a class="btn btn--ghost" href="/realisations/" data-track="cta_click" data-label="hero_realisations">Voir nos réalisations</a>
         </div>
@@ -68,10 +68,10 @@ const project = projects[0];
           <span aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z" fill="currentColor" /></svg></span>
           Voir le showreel
         </button>
-        <ul class="hero__badges">
-          <li>Devis gratuit sous 48 h</li>
-          <li>Maintenance incluse</li>
-          <li>Réponse sous 24 h</li>
+        <ul class="hero__badges" data-pop>
+          <li style="--i:0">Devis gratuit sous 48 h</li>
+          <li style="--i:1">Maintenance incluse</li>
+          <li style="--i:2">Réponse sous 24 h</li>
         </ul>
       </div>
       <div class="hero__funnel"><FunnelStart /></div>
@@ -83,8 +83,14 @@ const project = projects[0];
 
   <!-- Phrase révélée au défilement -->
   <section class="stm" data-scrub="through" data-words aria-label="Notre approche">
-    <div class="wrap">
+    <div class="wrap stm__grid">
       <p class="stm__text" data-split>Nous créons des sites, des vidéos et des outils qui donnent envie de vous appeler. Le design attire, la technique convertit, et vous gardez un seul interlocuteur.</p>
+      <div class="pills" aria-hidden="true">
+        <span class="pill" style="--i:0">Attirer</span>
+        <span class="pill" style="--i:1">Captiver</span>
+        <span class="pill" style="--i:2">Convertir</span>
+        <span class="pill" style="--i:3">Fidéliser</span>
+      </div>
     </div>
   </section>
 
@@ -221,7 +227,9 @@ const project = projects[0];
   }
   .sect a:hover { border-color: var(--cobalt); color: var(--cobalt); }
 
-  .stm { padding-block: clamp(5rem, 14vw, 11rem); }
+  .stm { padding-block: clamp(5rem, 14vw, 11rem); overflow: hidden; }
+  .stm__grid { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: clamp(2.5rem, 6vw, 6rem); align-items: center; }
+  @media (max-width: 900px) { .stm__grid { grid-template-columns: 1fr; } }
   .stm__text {
     margin: 0; max-width: 24ch; font-size: clamp(2rem, 1rem + 4.2vw, 5rem); line-height: 1.08;
     font-weight: 560; font-stretch: 88%; text-transform: uppercase; letter-spacing: 0;

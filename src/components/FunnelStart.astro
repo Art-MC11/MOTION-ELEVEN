@@ -15,9 +15,9 @@ const question = mode === "project" ? "De quoi avez-vous besoin ?" : "Quelle e
     <p class="fs__meta">Devis gratuit en 1 minute</p>
   </div>
   <div class="fs__bar" aria-hidden="true"><span></span></div>
-  <ul class="fs__opts">
-    {options.map((o) => (
-      <li>
+  <ul class="fs__opts" data-pop>
+    {options.map((o, i) => (
+      <li style={`--i:${i}`}>
         <a href={o.href} data-track="funnel_start" data-label={o.label}>
           {o.label}
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9" fill="none" stroke="currentColor" stroke-width="2" /></svg>

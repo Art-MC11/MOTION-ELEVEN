@@ -15,7 +15,7 @@ const { title, lede, primary = { label: "Parler de mon projet", href: "/devis/" 
       {kicker && <p class="ph__kicker">{kicker}</p>}
       <h1>{title}</h1>
       <p class="lede">{lede}</p>
-      {!noButtons && <div class="btns">
+      {!noButtons && <div class="btns" data-spread>
         <a class="btn" href={primary.href} data-track="cta_click" data-label={`hero_${primary.label}`}>{primary.label}</a>
         {secondary && <a class="btn btn--ghost" href={secondary.href}>{secondary.label}</a>}
       </div>}
