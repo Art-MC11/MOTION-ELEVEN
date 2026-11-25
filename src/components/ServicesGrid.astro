@@ -1,5 +1,8 @@
 ---
-import { poles } from "../data/content";
+import { poles, allClips } from "../data/content";
+// Chaque service est illustré par un extrait vidéo du showreel
+const clipFor: Record<string, string> = { web: "mosaique", shop: "mayime", auto: "cosmos", motion: "fun" };
+const clipOf = (k: string) => allClips.find((c) => c.slug === clipFor[k])!;
 const icons: Record<string, string> = {
   web: '<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18M7 6.5h.01M10 6.5h.01"/>',
   shop: '<path d="M6 7h12l-1 13H7L6 7z"/><path d="M9 7a3 3 0 0 1 6 0"/>',
@@ -10,7 +13,7 @@ const icons: Record<string, string> = {
 <div class="sg">
   {poles.map((p) => (
     <a class="sg__card" href={p.href}>
-      <div class="sg__img"><img src={p.img} alt="" width="960" height="723" loading="lazy" /></div>
+      <div class="sg__img"><video muted loop playsinline preload="none" poster={clipOf(p.key).poster} data-autoplay data-src={clipOf(p.key).src} aria-hidden="true"></video></div>
       <div class="sg__body">
         <span class="sg__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" set:html={icons[p.key]} /></span>
         <h3>{p.title}</h3>
@@ -30,8 +33,9 @@ const icons: Record<string, string> = {
   }
   .sg__card:hover { border-color: rgba(212, 248, 12, 0.6); transform: translateY(-3px); color: var(--ink); }
   .sg__img { aspect-ratio: 4 / 3; overflow: hidden; background: #000; }
-  .sg__img img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s var(--ease); }
-  .sg__card:hover .sg__img img { transform: scale(1.04); }
+  .sg__img video { display: block; }
+  .sg__img video { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s var(--ease); }
+  .sg__card:hover .sg__img video { transform: scale(1.06); }
   .sg__body { display: grid; gap: 0.9rem; align-content: start; padding: 1.5rem 1.4rem 1.6rem; }
   .sg__icon { width: 42px; height: 42px; border-radius: 12px; display: grid; place-items: center; background: var(--cobalt-tint); color: var(--cobalt); }
   .sg__icon svg { width: 22px; height: 22px; }

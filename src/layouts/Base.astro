@@ -62,6 +62,7 @@ const allSchema = [org, ...(breadcrumb ? [breadcrumb] : []), ...schema];
 <html lang="fr">
   <head>
     <meta charset="utf-8" />
+    <script is:inline>if(!matchMedia("(prefers-reduced-motion: reduce)").matches)document.documentElement.classList.add("motion");</script>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
     <meta name="description" content={description} />
@@ -91,6 +92,7 @@ const allSchema = [org, ...(breadcrumb ? [breadcrumb] : []), ...schema];
     {allSchema.map((s) => <script type="application/ld+json" set:html={JSON.stringify(s)} />)}
   </head>
   <body data-ga={site.gaId}>
+    <div class="progress" data-progress-bar aria-hidden="true"></div>
     <a class="skip" href="#contenu">Aller au contenu</a>
     <Header />
     <main id="contenu">
@@ -114,6 +116,7 @@ const allSchema = [org, ...(breadcrumb ? [breadcrumb] : []), ...schema];
     <CookieBanner />
     <script>
       import "../scripts/analytics";
+      import "../scripts/motion";
     </script>
   </body>
 </html>

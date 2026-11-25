@@ -225,3 +225,33 @@ ul { margin: 0; padding: 0; }
   position: absolute !important; width: 1px; height: 1px; overflow: hidden;
   clip: rect(0 0 0 0); white-space: nowrap;
 }
+
+/* ==========================================================
+   Animations au défilement (activées par la classe .motion)
+   ========================================================== */
+.motion [data-reveal] {
+  opacity: 0;
+  transform: translate3d(0, 34px, 0) scale(0.985);
+  filter: blur(8px);
+  transition:
+    opacity 0.9s var(--ease) var(--d, 0ms),
+    transform 1s var(--ease) var(--d, 0ms),
+    filter 0.9s var(--ease) var(--d, 0ms);
+  will-change: opacity, transform;
+}
+.motion [data-reveal].is-in { opacity: 1; transform: none; filter: none; }
+
+/* Barre de progression de lecture */
+.progress {
+  position: fixed; top: 0; left: 0; right: 0; height: 2px; z-index: 80;
+  background: var(--cobalt); transform: scaleX(0); transform-origin: 0 50%; pointer-events: none;
+}
+.rm .progress { display: none; }
+
+/* Mots révélés au défilement */
+[data-words] .w { color: rgba(242, 242, 238, 0.16); transition: color 0.35s var(--ease); }
+[data-words] .w.on { color: var(--ink); }
+.rm [data-words] .w { color: var(--ink); }
+
+/* Vidéos : ne jamais déborder, fond noir pendant le chargement */
+video[data-autoplay] { background: #000; }

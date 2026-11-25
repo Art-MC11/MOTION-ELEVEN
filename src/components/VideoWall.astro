@@ -1,0 +1,55 @@
+---
+// Mur de vidéos : deux bandes d'extraits qui glissent en sens inverse au défilement,
+// avec une perspective qui se redresse à mesure que la section arrive au centre.
+import { allClips } from "../data/content";
+const rowA = allClips.slice(0, 6);
+const rowB = [...allClips.slice(6), allClips[0]];
+---
+<section class="vw" data-scrub="through" aria-label="Extraits vidéo de notre showreel">
+  <div class="vw__stage">
+    {[rowA, rowB].map((row, r) => (
+      <div class:list={["vw__row", r === 1 && "vw__row--b"]}>
+        {row.map((c) => (
+          <button class="vw__card" type="button" data-showreel data-t={c.t} aria-label={`Lire le showreel : ${c.title}`}>
+            <video muted loop playsinline preload="none" poster={c.poster} data-autoplay data-src={c.src} aria-hidden="true"></video>
+            <span class="vw__cap"><em>{c.tag}</em><strong>{c.title}</strong></span>
+          </button>
+        ))}
+      </div>
+    ))}
+  </div>
+</section>
+
+<style>
+  .vw { position: relative; padding-block: clamp(3rem, 7vw, 6rem); overflow: hidden; --p: 0.5; }
+  .vw__stage {
+    display: grid; gap: clamp(0.6rem, 1.4vw, 1.1rem);
+    transform: perspective(1400px) rotateX(calc((0.5 - var(--p)) * 30deg)) scale(calc(1 - (0.5 - var(--p)) * (0.5 - var(--p)) * 0.5));
+    transform-origin: 50% 50%;
+  }
+  .vw__row {
+    display: flex; gap: clamp(0.6rem, 1.4vw, 1.1rem); width: max-content;
+    transform: translate3d(calc((var(--p) - 0.5) * -34vw - 6vw), 0, 0);
+    will-change: transform;
+  }
+  .vw__row--b { transform: translate3d(calc((var(--p) - 0.5) * 34vw - 18vw), 0, 0); }
+  .vw__card {
+    position: relative; flex: none; width: clamp(240px, 30vw, 480px); aspect-ratio: 16 / 9;
+    padding: 0; border: 1px solid var(--line); border-radius: 18px; overflow: hidden; background: #000; cursor: pointer;
+    color: var(--ink); text-align: left;
+  }
+  .vw__card video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform 0.7s var(--ease); }
+  .vw__card:hover video { transform: scale(1.06); }
+  .vw__card:hover { border-color: rgba(212, 248, 12, 0.7); }
+  .vw__cap {
+    position: absolute; inset: auto 0 0 0; display: grid; gap: 0.15rem; padding: 2.2rem 1rem 0.9rem;
+    background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+    opacity: 0; transform: translateY(8px); transition: opacity 0.3s, transform 0.3s var(--ease);
+  }
+  .vw__card:hover .vw__cap, .vw__card:focus-visible .vw__cap { opacity: 1; transform: none; }
+  .vw__cap em { font-style: normal; font-size: var(--t-xs); color: var(--cobalt); }
+  .vw__cap strong { font-weight: 560; font-stretch: 88%; text-transform: uppercase; font-size: 0.95rem; line-height: 1.2; }
+  @media (hover: none) { .vw__cap { opacity: 1; transform: none; } }
+  .rm .vw__stage, .rm .vw__row { transform: none; }
+  .rm .vw__row { width: auto; overflow-x: auto; padding-inline: var(--gutter); }
+</style>

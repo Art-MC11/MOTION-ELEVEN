@@ -247,11 +247,24 @@ export const models = [
 ];
 
 // Extraits du showreel (galerie vidéo) — t = début de l'extrait dans le showreel complet, en secondes
-export const reelClips = [
-  { slug: "ruban", title: "Motion 3D en prise de vue réelle", tag: "3D / Compositing", t: 6.3 },
-  { slug: "kavinsky", title: "Univers isométrique animé", tag: "Illustration animée", t: 16.5 },
-  { slug: "mayime", title: "Packaging produit en 3D", tag: "3D produit", t: 23.2 },
-  { slug: "automobile", title: "Publicité automobile", tag: "3D / Pub", t: 27.4 },
-  { slug: "cosmos", title: "Animation d'interface", tag: "UI motion", t: 30.8 },
-  { slug: "cinema", title: "Direction artistique cinéma", tag: "Effets / Étalonnage", t: 37.6 },
+export type Clip = { slug: string; src: string; poster: string; title: string; tag: string; t: number };
+const clip = (slug: string, title: string, tag: string, t: number): Clip => ({ slug, src: `/media/clip-${slug}.mp4`, poster: `/images/showreel/clip-${slug}.jpg`, title, tag, t });
+const reel = (slug: string, title: string, tag: string, t: number): Clip => ({ slug, src: `/media/reel-${slug}.mp4`, poster: `/images/showreel/reel-${slug}.jpg`, title, tag, t });
+
+// Extraits du showreel (t = seconde de départ dans le showreel complet)
+export const reelClips: Clip[] = [
+  clip("ruban", "Motion 3D en prise de vue réelle", "3D / Compositing", 6.3),
+  clip("kavinsky", "Univers isométrique animé", "Illustration animée", 16.5),
+  clip("mayime", "Packaging produit en 3D", "3D produit", 23.2),
+  clip("automobile", "Publicité automobile", "3D / Pub", 27.4),
+  clip("cosmos", "Animation d'interface", "UI motion", 30.8),
+  clip("cinema", "Direction artistique cinéma", "Effets / Étalonnage", 37.6),
 ];
+export const moreClips: Clip[] = [
+  reel("fun", "Typographie animée", "Motion typo", 7.4),
+  reel("mosaique", "Direction artistique multi-formats", "Identité", 10),
+  reel("annee", "Campagne de fin d'année", "Motion design", 19.2),
+  reel("voeux", "Vœux animés", "Motion design", 32.6),
+  reel("titres", "Générique et titrage", "Titrage", 39.4),
+];
+export const allClips: Clip[] = [...reelClips, ...moreClips];
