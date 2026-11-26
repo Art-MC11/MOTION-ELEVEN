@@ -21,5 +21,6 @@ Copiées depuis les dépôts officiels (novembre 2026) :
 - `email-html-mjml` : https://github.com/framix-team/skill-email-html-mjml
 - `design-auditor` : https://github.com/Ashutos1997/claude-design-auditor-skill
 - `motion-graphics` : https://awesomeclaude.ai/claude-motion-graphics-skill.md
+- `clean-video` : écrite pour Meir (scripts intégrés dans le SKILL.md)
 
 Licences des dépôts dans `licenses/`.
